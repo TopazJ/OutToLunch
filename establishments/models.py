@@ -13,4 +13,5 @@ class CreateEstablishment(event.Event):
 
 class UpdateEstablishment(event.Event):
     establishment_id = models.UUIDField()
-    # name =
+    name = models.CharField(max_length=100, null=False, blank=False)
+    location = models.CharField(max_length=100, null=False, blank=False)
