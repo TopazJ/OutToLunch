@@ -1,2 +1,4 @@
 venv
 .idea
+establishments/migrations
+db.sqlite3
