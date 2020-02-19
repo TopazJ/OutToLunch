@@ -9,9 +9,10 @@ def index(request):
 
 
 def create_establishment(request):
-    if request.method == 'POST':
-        heollo = 0  # josjvsj
-        print(heollo)
-    return HttpResponse("Hello establishments")
+    try:
+        if request.method == 'POST':
 
+            return HttpResponse("Added a new establishment")
 
+    except:
+        return HttpResponse("Something went wrong")
