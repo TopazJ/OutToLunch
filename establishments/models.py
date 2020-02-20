@@ -1,17 +1,18 @@
-import uuid
-
-from OutToLunch import event
 from django.db import models
+from establishments import name_max_length, location_max_length
+from event.models import Event
 
 
-# Create your models here.
-class CreateEstablishment(event.Event):
-    establishment_id = models.UUIDField(default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=100, null=False, blank=False)
-    location = models.CharField(max_length=100, null=False, blank=False)
+class EstablishmentCreatedEvent(Event):
+    name = models.CharField(max_length=name_max_length, null=False, blank=False)
+    location = models.CharField(max_length=location_max_length, null=False, blank=False)
 
 
-class UpdateEstablishment(event.Event):
-    establishment_id = models.UUIDField()
-    name = models.CharField(max_length=100, null=False, blank=False)
-    location = models.CharField(max_length=100, null=False, blank=False)
+class EstablishmentUpdatedEvent(Event):
+    establishment_id = models.UUIDField(null=False, blank=False)
+    name = models.CharField(max_length=name_max_length, null=True, blank=True)
+    location = models.CharField(max_length=location_max_length, null=True, blank=True)
+
+
+class EstablishmentDeletedEvent(Event):
+    establishment_id = models.UUIDField(null=False, blank=False)

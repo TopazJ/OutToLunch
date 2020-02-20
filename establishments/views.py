@@ -11,7 +11,7 @@ def index(request):
 def create_establishment(request):
     try:
         if request.method == 'POST':
-
+            print(request.body)
             return HttpResponse("Added a new establishment")
 
     except:
