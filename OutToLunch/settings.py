@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from .config import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -29,16 +30,18 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'establishments.apps.EstablishmentsConfig',
-    'event.apps.EventConfig',
-    'posts.apps.PostsConfig',
-    'comments.apps.CommentsConfig'
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'comments',
+    'posts',
+    'event',
+    'establishments',
+    'view',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -76,9 +79,19 @@ WSGI_APPLICATION = 'OutToLunch.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
+
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': 'users',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': DatabaseUser,
+        'PASSWORD': DatabasePassword,
+        'HOST': 'outtolunch.cotysnks4blq.us-west-2.rds.amazonaws.com',
+        'PORT': '3306',
+        'OPTIONS': {'init_command': "SET sql_mode='STRICT_TRANS_TABLES'", },
     }
 }
 
