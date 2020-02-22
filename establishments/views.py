@@ -1,6 +1,9 @@
+from django.forms import model_to_dict
 from django.shortcuts import render
 
 from django.http import HttpResponse
+
+from establishments.models import EstablishmentCreatedEvent
 
 
 # Create your views here.
@@ -9,10 +12,7 @@ def index(request):
 
 
 def create_establishment(request):
-    try:
-        if request.method == 'POST':
-            print(request.body)
-            return HttpResponse("Added a new establishment")
-
-    except:
-        return HttpResponse("Something went wrong")
+    # need to get views completed to show this.
+    # need to determine post vs get
+    #
+    return HttpResponse("Establishments")

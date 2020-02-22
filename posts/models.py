@@ -1,6 +1,8 @@
 from django.db import models
 from event.models import Event
-from posts import post_content_length, post_image_length
+
+post_content_length = 5000
+post_image_length = 10000
 
 
 class PostCreatedEvent(Event):
