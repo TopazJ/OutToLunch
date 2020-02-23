@@ -26,14 +26,8 @@
 
 .post {
   background: aliceblue;
-  position: absolute;
   padding-top: 10px;
   height: 400px;
   width: 800px;
-  left: 500px;
   border: 1px solid #5d6063;
-}
-
-.center {
-  position: relative;
 }

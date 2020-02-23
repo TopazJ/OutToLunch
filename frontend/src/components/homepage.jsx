@@ -14,6 +14,19 @@ class Homepage extends Component {
       { id: 5, userId: 6 }
     ]
   };
+
+  showThePostReviewButtonIfLoggedIn() {
+    if (this.state.loggedIn === true) {
+      return (
+        <button
+          class="btn btn-secondary"
+          style={{ position: "absolute", right: "10px" }}
+        >
+          Post New Review
+        </button>
+      );
+    }
+  }
   render() {
     return (
       <div class="background">
@@ -22,13 +35,8 @@ class Homepage extends Component {
         <br />
         <br />
         <b style={{ paddingLeft: "500px" }}>Most Recent Reviews</b>
+        {this.showThePostReviewButtonIfLoggedIn()}
 
-        <button
-          class="btn btn-secondary"
-          style={{ position: "absolute", right: "10px" }}
-        >
-          Post New Review
-        </button>
         {this.state.posts.map(posts => (
           <div>
             <br></br>
