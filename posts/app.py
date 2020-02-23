@@ -24,9 +24,10 @@ except pymysql.MySQLError as e:
 '''
 with conn.cursor() as cur:
     cur.execute("CREATE TABLE post ( post_id  varchar(36) NOT NULL, post_user varchar(36) NOT NULL, post_date TIMESTAMP,"
-                "post_content varchar(255) NOT NULL, post_photo_location varchar(255), PRIMARY KEY (post_id))")
-'''
+                "post_content varchar(5000) NOT NULL, post_photo_location varchar(500), establishment_id varchar(36) NOT NULL, PRIMARY KEY (post_id))")
+
 logger.info("SUCCESS: Connection to RDS MySQL instance succeeded")
+'''
 
 
 def respond(err, res=None):
@@ -48,21 +49,22 @@ def handler(event, context):
     operation = event['httpMethod']
     print(operation)
     if operation in operations:
-        payload = event['path'] if operation == 'GET' else json.loads(event['body'])
-        return respond(None, operations[operation](payload))
+        # payload = event['path'] if operation == 'GET' else json.loads(event['body'])
+        return respond(None, operations[operation](event))
 
 
 def addPost(postCreatedEvent):
-    data = postCreatedEvent['data']
+    data = json.loads(postCreatedEvent['body'])['data']
     newUUID = str(uuid.uuid4())
     with conn.cursor() as cur:
         #        query = 'INSERT INTO post (post_id, post_user, post_date, post_content, post_photo_location) values(UUID_TO_BIN(UUID()), "' + data['user_id'] + '", CURDATE(), "' + data['post_content'] + '", "' + data['post_photo_location']+ '")'
         if data['post_photo_location'] is None:
-            query = 'INSERT INTO post (post_id, post_user, post_date, post_content) values("' + newUUID + '", "' + data[
-                'user_id'] + '", NOW(), "' + data['post_content'] + '")'
+            query = 'INSERT INTO post (post_id, post_user, post_date, post_content, establishment_id) values("' + newUUID + '", "' + \
+                    data['user_id'] + '", NOW(), "' + data['post_content'] + '","' + data['establishment_id'] + '")'
         else:
             query = 'INSERT INTO post (post_id, post_user, post_date, post_content, post_photo_location) values("' + newUUID + '", "' + \
-                    data['user_id'] + '", NOW(), "' + data['post_content'] + '", "' + data['post_photo_location'] + '")'
+                    data['user_id'] + '", NOW(), "' + data['post_content'] + '", "' + data[
+                        'post_photo_location'] + '","' + data['establishment_id'] + '")'
         cur.execute(query)
         conn.commit()
         query = 'SELECT * FROM post WHERE post_id = %s'
@@ -73,25 +75,30 @@ def addPost(postCreatedEvent):
         return post
 
 
-def getPost(something):
-    if 'login' in something:
-        query = 'SELECT * FROM post ORDER BY post_date DESC LIMIT 10'
-        with conn.cursor() as cur:
-            cur.execute(query)
-            thePosts = cur.fetchall()
-            list = []
-            for row in thePosts:
-                post = convertResults(row)
-                list.append(post)
-            conn.commit()
-        return list
-
+def getPost(getRequestEvent):
+    path = getRequestEvent['path']
+    pageNumber = int(json.loads(getRequestEvent['body'])['page_number'])
+    if 'user' in path:
+        theUserId = path.replace('/posts/user/', '')
+        query = 'SELECT * FROM post WHERE post_user = "' + theUserId + '" ORDER BY post_date DESC LIMIT 10 OFFSET %s'
+    elif 'establishment' in path:
+        theEstablishmentId = path.replace('/posts/establishment/', '')
+        query = 'SELECT * FROM post WHERE establishment_id = "' + theEstablishmentId + '" ORDER BY post_date DESC LIMIT 10 OFFSET %s'
     else:
-        print('what other types of gets might their be')
+        query = 'SELECT * FROM post ORDER BY post_date DESC LIMIT 10 OFFSET %s'
+    with conn.cursor() as cur:
+        cur.execute(query, (pageNumber * 10))
+        thePosts = cur.fetchall()
+        list = []
+        for row in thePosts:
+            post = convertResults(row)
+            list.append(post)
+        conn.commit()
+    return list
 
 
 def convertResults(row):
     date = (row[2]).strftime("%d-%b-%Y %H:%M:%S.%f")
     post = {'post_id': row[0], 'user_id': row[1], 'post_date': date, 'post_content': row[3],
-            'post_photo_location': row[4]}
+            'post_photo_location': row[4], 'establishment_id': row[5]}
     return post
