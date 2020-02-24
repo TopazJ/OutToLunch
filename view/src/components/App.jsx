@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import {Switch, Route, BrowserRouter} from "react-router-dom";
 import LoginForm from "./LoginForm.jsx"
 import "./App.css"
+import "./styles.css"
 import NavBar from "./navigation/NavBar.jsx";
 import CreateAccount from "./CreateAccount.jsx";
 import Logout from "./Logout.jsx"
-import Home from './Home.jsx'
+import Homepage from "./Homepage.jsx";
 
 class App extends Component {
 
@@ -19,11 +20,6 @@ class App extends Component {
 
 
     state = {
-        homeLinks:[
-            {id:'about',text:'About'},
-            {id:'contact', text:'Contact'},
-            {id:'nowhere', text:'Nich, please change this navbar.'}
-        ],
         navLinks:[
             {id:'login', text:'Login', component:LoginForm, props:{login:this.login}},
             {id:'create-account', text:'Create Account', component:CreateAccount},
@@ -86,12 +82,18 @@ class App extends Component {
                                 key={link.id}
                                 path={"/" + link.id}
                                 render={() => (
-                                    <link.component props={link.props}/>
+                                    <React.Fragment>
+                                        <div className="homepage">
+                                            <link.component props={link.props}/>
+                                        </div>
+                                    </React.Fragment>
                                 )}
                             />
                         ))}
                         <Route path='*'>
-                            <Home/>
+                            <div className="homepage">
+                            <Homepage/>
+                            </div>
                         </Route>
                     </Switch>
                 </React.Fragment>
