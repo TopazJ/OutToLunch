@@ -7,7 +7,6 @@ from django.contrib.auth.models import User
 
 
 def status(request):
-    print('here')
     if request.user.is_authenticated:
         return JsonResponse({'status': 'user'})
     else:
@@ -54,8 +53,8 @@ def logout_user(request):
     return successful_message({})
 
 
-def error_message(error_message):
-    return JsonResponse({'status': 'error', 'message': error_message})
+def error_message(message):
+    return JsonResponse({'status': 'error', 'message': message})
 
 
 def successful_message(json_data):
