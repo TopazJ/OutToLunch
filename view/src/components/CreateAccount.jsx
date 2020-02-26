@@ -95,6 +95,26 @@ class CreateAccount extends Component{
                             required
                         />
                     </div>
+                    <div className="form-group">
+                        <label htmlFor="first-name">First Name</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="first-name"
+                            name="FName"
+                            onChange={this.handleInputChange}
+                            required
+                        />
+                        <label htmlFor="last-name">Last Name</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="last-name"
+                            name="LName"
+                            onChange={this.handleInputChange}
+                            required
+                        />
+                    </div>
                     <button type="submit" className="btn btn-primary">
                         Create Account
                     </button>
