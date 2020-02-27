@@ -1,0 +1,43 @@
+{
+    "name": "OutToLunch",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "webpack --mode development ./view/src/index.js --output ./view/static/frontend/main.js",
+        "build": "webpack --mode production ./view/src/index.js --output ./view/static/frontend/main.js",
+        "yeet": "webpack --mode development ./view/src/index.js --output ./view/static/frontend/main.js --watch"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/TopazJ/OutToLunch.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/TopazJ/OutToLunch/issues"
+    },
+    "homepage": "https://github.com/TopazJ/OutToLunch#readme",
+    "devDependencies": {
+        "@babel/core": "^7.7.2",
+        "@babel/preset-env": "^7.7.1",
+        "@babel/preset-react": "^7.7.0",
+        "babel-loader": "^8.0.6",
+        "babel-plugin-transform-class-properties": "^6.24.1",
+        "css-loader": "^3.4.2",
+        "prop-types": "^15.7.2",
+        "react": "^16.11.0",
+        "react-dom": "^16.11.0",
+        "style-loader": "^1.1.3",
+        "webpack": "^4.41.2",
+        "webpack-cli": "^3.3.10"
+    },
+    "dependencies": {
+        "django-react-csrftoken": "^1.0.4",
+        "react-bootstrap": "^1.0.0-beta.16",
+        "react-router": "^5.1.2",
+        "react-router-dom": "^5.1.2"
+    }
+}
