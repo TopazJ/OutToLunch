@@ -43,7 +43,9 @@ def respond(err, res=None):
 def handler(event, context):
     operations = {
         'POST': addPost,
-        'GET': getPost
+        'GET': getPost,
+        'DELETE': deletePost,
+        'PATCH': updatePost
     }
 
     operation = event['httpMethod']
@@ -77,7 +79,9 @@ def addPost(postCreatedEvent):
 
 def getPost(getRequestEvent):
     path = getRequestEvent['path']
-    pageNumber = int(json.loads(getRequestEvent['body'])['page_number'])
+    pageNumber = int(getRequestEvent['queryStringParameters']['page'])
+    print(pageNumber)
+    print(path)
     if 'user' in path:
         theUserId = path.replace('/posts/user/', '')
         query = 'SELECT * FROM post WHERE post_user = "' + theUserId + '" ORDER BY post_date DESC LIMIT 10 OFFSET %s'
@@ -95,6 +99,25 @@ def getPost(getRequestEvent):
             list.append(post)
         conn.commit()
     return list
+
+
+def deletePost(deletePostEvent):
+    path = deletePostEvent['path']
+    thePostId = path.replace('/posts/', '')
+    with conn.cursor() as cur:
+        query = 'UPDATE post SET post_content = "[deleted]", post_photo_location = NULL WHERE post_id = %s'
+        cur.execute(query, thePostId)
+        conn.commit()
+        query = 'SELECT * FROM post WHERE post_id = %s'
+        cur.execute(query, thePostId)
+        result = cur.fetchall()
+        deletedPost = convertResults(result[0])
+        conn.commit()
+        return deletedPost
+
+
+def updatePost(updatePostEvent):
+    print('I have not been defined yet! :( ')
 
 
 def convertResults(row):
