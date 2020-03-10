@@ -1,7 +1,12 @@
 package comments;
 
 import java.io.*;
-import java.sql.*;
+import java.sql.Date;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -14,6 +19,10 @@ import java.util.Scanner;
  */
 public class CommentDBManager 
 {
+	//set to true and then fill in the actual db credentials for
+	//maven compiling a jar for an AWS lambda.
+	private static final boolean lambdaCompile = false;
+	
 	//Insert Comment statement
 	private static final String INSERT_STATEMENT = "INSERT INTO comments.comment (commentID, postID, userID, parentID, content, date) VALUES (?,?,?,?,?,?)";
 	
@@ -44,39 +53,40 @@ public class CommentDBManager
 	void readDBCredentials(String filename)
 	{
 		//Read credentials from an ini file (doesn't work with lambda)
-		
-		File configFile = new File(filename);
-		try
+		if(!lambdaCompile)
 		{
-			Scanner fileScanner = new Scanner(configFile);
-			
-			//parse url
-			String line = fileScanner.nextLine();
-			url=line.substring(line.indexOf('=')+1);
-			
-			//parse user
-			line = fileScanner.nextLine();
-			user=line.substring(line.indexOf('=')+1);
-			
-			//parse password
-			line = fileScanner.nextLine();
-			password=line.substring(line.indexOf('=')+1);
-			
-			fileScanner.close();	
+			File configFile = new File(filename);
+			try
+			{
+				Scanner fileScanner = new Scanner(configFile);
+				
+				//parse url
+				String line = fileScanner.nextLine();
+				url=line.substring(line.indexOf('=')+1);
+				
+				//parse user
+				line = fileScanner.nextLine();
+				user=line.substring(line.indexOf('=')+1);
+				
+				//parse password
+				line = fileScanner.nextLine();
+				password=line.substring(line.indexOf('=')+1);
+				
+				fileScanner.close();	
+			}
+			catch(IOException e)
+			{
+				e.printStackTrace();
+				System.exit(-1);
+			}
 		}
-		catch(IOException e)
+		else
 		{
-			e.printStackTrace();
-			System.exit(-1);
+			//hard code the DB credentials when compiling with maven for lambda
+			url="";
+			user="";
+			password="";
 		}
-		
-		
-		//hard code the DB credentials when compiling with maven for lambda
-		/*
-		url="******************";
-		user="******************";
-		password="******************";
-		*/
 	}
 	
 	/**
@@ -263,6 +273,5 @@ public class CommentDBManager
 		
 		//close
 		dbManager.closeDBConnection();
-		
 	}
 }
