@@ -4,6 +4,10 @@
 package comments;
 
 import java.sql.Date;
+import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Comment class
@@ -32,7 +36,7 @@ public class Comment
 	private String content;
 	
 	//The date that the comment was made. Format: yyyy-mm-dd-hh:mm:ss
-	private Date date;
+	private LocalDate date;
 	
 	//getters and setters
 	public String getCommentID() {
@@ -75,16 +79,16 @@ public class Comment
 		this.content = content;
 	}
 
-	public Date getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 	
-	public Date getDateTimestamp() throws IllegalArgumentException
+	public LocalDate getDateTimestamp() throws IllegalArgumentException
 	{
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 	
@@ -103,8 +107,21 @@ public class Comment
 		return commentStr;
 	}
 	
-	//constructor
-	Comment(String commentID, String postID, String userID, String parentID, String content, Date date)
+	//constructor with java.sql.Date for JSON
+	@JsonCreator
+	Comment(@JsonProperty("commentID")String commentID, @JsonProperty("postID")String postID, @JsonProperty("userID")String userID, 
+			@JsonProperty("parentID")String parentID, @JsonProperty("content")String content, @JsonProperty("dateMs")long dateMs)
+	{
+		this.commentID = commentID;
+		this.postID = postID;
+		this.userID = userID;
+		this.parentID = parentID;
+		this.content = content;
+		this.date = new Date(dateMs).toLocalDate();
+	}
+	
+	//constructor with local date
+	Comment(String commentID, String postID, String userID, String parentID, String content, LocalDate date)
 	{
 		this.commentID = commentID;
 		this.postID = postID;
@@ -122,7 +139,7 @@ public class Comment
 		userID = "Missing userID";
 		parentID = "Missing parentID";
 		content = "Missing content";
-		date = new Date(0);
+		date = LocalDate.now();
 	}
 
 }

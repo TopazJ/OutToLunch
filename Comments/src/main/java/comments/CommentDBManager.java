@@ -2,6 +2,7 @@ package comments;
 
 import java.io.*;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -14,10 +15,13 @@ import java.util.Scanner;
 public class CommentDBManager 
 {
 	//Insert Comment statement
-	private static final String INSERT_STATEMENT = "INSERT INTO COMMENT (postID, userID, parentID, content, date) VALUES (?,?,?,?,?)";
+	private static final String INSERT_STATEMENT = "INSERT INTO comments.comment (commentID, postID, userID, parentID, content, date) VALUES (?,?,?,?,?,?)";
 	
 	//Query Comment statement
-	private static final String SELECT_STATEMENT = "SELECT * FROM COMMENT WHERE postID = (postID) VALUES (?)";
+	private static final String SELECT_STATEMENT = "SELECT * FROM comments.comment WHERE postID = (?)";
+	
+	//Delete Comment statement
+	private static final String DELETE_STATEMENT = "DELETE FROM comments.comment WHERE postID = (?)";
 	
 	//Connection to the DB
 	Connection dbConn;
@@ -39,6 +43,8 @@ public class CommentDBManager
 	 */
 	void readDBCredentials(String filename)
 	{
+		//Read credentials from an ini file (doesn't work with lambda)
+		
 		File configFile = new File(filename);
 		try
 		{
@@ -62,7 +68,15 @@ public class CommentDBManager
 		{
 			e.printStackTrace();
 			System.exit(-1);
-		}		
+		}
+		
+		
+		//hard code the DB credentials when compiling with maven for lambda
+		/*
+		url="******************";
+		user="******************";
+		password="******************";
+		*/
 	}
 	
 	/**
@@ -99,11 +113,12 @@ public class CommentDBManager
 		{
 			//prepare the statement		
 			PreparedStatement dbInsertPS = dbConn.prepareStatement(INSERT_STATEMENT);
-			dbInsertPS.setString(1, com.getPostID());
-			dbInsertPS.setString(2, com.getUserID());
-			dbInsertPS.setString(3, com.getParentID());
-			dbInsertPS.setString(4, com.getContent());
-			dbInsertPS.setDate(5, com.getDate());		
+			dbInsertPS.setString(1, com.getCommentID());		
+			dbInsertPS.setString(2, com.getPostID());
+			dbInsertPS.setString(3, com.getUserID());
+			dbInsertPS.setString(4, com.getParentID());
+			dbInsertPS.setString(5, com.getContent());
+			dbInsertPS.setDate(6, Date.valueOf(com.getDate()));		
 			
 			//execute
 			dbInsertPS.executeUpdate();
@@ -126,7 +141,7 @@ public class CommentDBManager
 	 * Query comments from the comment DB
 	 * Using a post ID.
 	 *
-	 * @param com Comment object to insert.
+	 * @param postID postID of the comment to delete
 	 */
 	void queryCommentsByPostID(String postID)
 	{
@@ -143,7 +158,15 @@ public class CommentDBManager
 			ArrayList<Comment> commentList= new ArrayList<Comment>();
 			while(resultSet.next())
 			{
-				Comment parseComment = new Comment();
+				Comment parseComment = new Comment
+					(
+						resultSet.getString("commentID"),
+						resultSet.getString("postID"),
+						resultSet.getString("userID"),
+						resultSet.getString("parentID"),
+						resultSet.getString("content"),
+						resultSet.getObject("date", LocalDate.class)	
+					);
 				commentList.add(parseComment);
 				System.out.println("Comment read: "+parseComment.toString());
 			}
@@ -161,6 +184,37 @@ public class CommentDBManager
 			System.exit(-1);
 		}
 	}	
+	
+	/**
+	 * delete all comments on a post from the comment DB
+	 * Using a post ID.
+	 *
+	 * @param postID postID of the comment to delete
+	 */
+	void deleteCommentsByPostID(String postID)
+	{
+		try 
+		{
+			//prepare the statement		
+			PreparedStatement dbDeletePS = dbConn.prepareStatement(DELETE_STATEMENT);
+			dbDeletePS.setString(1, postID);
+			
+			//execute
+			dbDeletePS.executeUpdate();
+			
+			dbDeletePS.close();
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		catch(NullPointerException n)
+		{
+			System.out.println("Error: DB not Inited.");
+			System.exit(-1);
+		}
+	}		
 	
 	/**
 	 * close DB connection
@@ -187,26 +241,28 @@ public class CommentDBManager
 	{
 		System.out.println("Hello Comment World!");
 		
-		//connect
-		
+		//connect to the database
 		CommentDBManager dbManager = new CommentDBManager();
 		dbManager.readDBCredentials("src/main/java/comments/config.ini");
 		
 		dbManager.initDBConnection();
-		/*
+		
 		//insert comment 1		
-		Comment comment1 = new Comment("cID1", "pID1", "uID1", "", "This is test comment 1.", new Date(System.currentTimeMillis()));
+		Comment comment1 = new Comment("cID1", "pID1", "uID1", "", "This is test comment 1.", LocalDate.now());
 		dbManager.insertCommentRow(comment1);
 		
 		//insert comment 2
-		Comment comment2 = new Comment("cID2", "pID1", "uID2", "cID1", "This is test comment 2.", new Date(System.currentTimeMillis()));
+		Comment comment2 = new Comment("cID2", "pID1", "uID2", "cID1", "This is test comment 2.", LocalDate.now());
 		dbManager.insertCommentRow(comment2);
 				
 		//read comments
 		dbManager.queryCommentsByPostID("pID1");
 		
+		//delete comments
+		dbManager.deleteCommentsByPostID("pID1");
+		
 		//close
 		dbManager.closeDBConnection();
-		*/
+		
 	}
 }
