@@ -18,6 +18,7 @@ def validate_create_save(user_id, post_content,
 
 def validate_post(post_id, user_id):
     # TODO Janna with her database
+    # request the post
     return True
 
 
