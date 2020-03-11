@@ -2,31 +2,26 @@
 
 
 def generatePostSQLQuery(newRecord):
-    postId = newRecord['data']['M']['post_id']['S']
-    postUser = newRecord['data']['M']['user_id']['S']
-    postDate = newRecord['timestamp']['S']
-    postRating = newRecord['data']['M']['post_rating']['N']
-    postSubject = newRecord['data']['M']['post_subject']['S']
-    postContent = newRecord['data']['M']['post_content']['S']
-    postEstablishment = newRecord['data']['M']['establishment_id']['S']
-    if newRecord['data']['M']['post_photo_location'] == {'NULL': True}:
-        query = ("INSERT INTO post (post_id, post_user, post_date, post_rating, post_subject, post_content,"
+    print(newRecord)
+    print(newRecord["data"]["post_id"])
+    if newRecord['data']['post_photo_location'] is None:
+         query = ("INSERT INTO post (post_id, post_user, post_date, post_rating, post_subject, post_content,"
                  " establishment_id) values(\"{}\", \"{}\", \"{}\", {}, \"{}\", \"{}\",\"{}\")"
-                 .format(postId, postUser, postDate, postRating, postSubject, postContent, postEstablishment))
+                 .format(newRecord["data"]["post_id"], newRecord["data"]["user_id"], newRecord["timestamp"], newRecord["data"]["post_rating"], newRecord["data"]["post_subject"], newRecord["data"]["post_content"], newRecord["data"]["establishment_id"]))
     else:
-        postPhotoLocation = newRecord['data']['M']['post_photo_location']['S']
-        query = ("INSERT INTO post (post_id, post_user, post_date, post_rating, post_subject, post_content,"
-                 " establishment_id, post_photo_location) values(\"{}\", \"{}\", \"{}\", {}, \"{}\", \"{}\",\"{}\","
-                 " \"{}\")".format(postId, postUser, postDate, postRating, postSubject, postContent, postEstablishment,
-                                   postPhotoLocation))
+         query = ("INSERT INTO post (post_id, post_user, post_date, post_rating, post_subject, post_content, post_photo_location"
+                 " establishment_id) values(\"{}\", \"{}\", \"{}\", {}, \"{}\", \"{}\",\"{}\")"
+                 .format(newRecord["data"]["post_id"], newRecord["data"]["user_id"], newRecord["timestamp"], newRecord["data"]["post_rating"], newRecord["data"]["post_subject"], newRecord["data"]["post_content"], newRecord["data"]["post_photo_location"], newRecord["data"]["establishment_id"]))
+
     return query
+
 
 def generatePostUpdatedSQLQuery(rewRecord):
     print("Complete me!")
 
 def generateDeletePostSQLQuery(newRecord):
     query = ('UPDATE post SET post_content = "[deleted]", post_photo_location = NULL WHERE post_id = {}'
-             .format(newRecord['data']['M']['post_id']['S']))
+             .format(newRecord['data']['post_id']))
     return query
 
 def generateGetPostSQLQuery(getRequestEvent):

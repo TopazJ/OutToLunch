@@ -4,7 +4,8 @@ import rds_config
 import pymysql
 import json
 from query_generation import *
-
+# import boto3
+from boto3.dynamodb.types import TypeDeserializer
 import uuid
 from datetime import datetime
 
@@ -47,18 +48,31 @@ def respond(err, res=None):
 
 def handler(event, context):
     if 'Records' in event:
-        record = event['Records'][0]['dynamodb']['NewImage']
-        if record['type']['S'] == "PostCreatedEvent":
-            print(record)
+        record = testSerializer(event['Records'][0]['dynamodb']['NewImage'])
+        if record['type'] == "PostCreatedEvent":
             addPost(record)
-        elif record['type']['S'] == "PostUpdatedEvent":
-            print("Complete me!")
-        elif record['type']['S'] == "PostDeletedEvent":
+        elif record['type'] == "PostUpdatedEvent":
+            print("complete me")
+            updatePost(record)
+        elif record['type'] == "PostDeletedEvent":
             deletePost(record)
         return None
     else:
         if event['httpMethod'] == "GET":
             return respond(None, getPost(event))
+
+
+def testSerializer(data):
+    deserializer = TypeDeserializer()
+    if isinstance(data, list):
+        return [deserialize(v) for v in data]
+    if isinstance(data, dict):
+        try:
+            return deserializer.deserialize(data)
+        except TypeError:
+            return {k: deserializer.deserialize(v) for k, v in data.items()}
+    else:
+        return data
 
 
 def getPost(getRequestEvent):
@@ -89,7 +103,13 @@ def deletePost(deletePostEvent):
 
 
 def updatePost(updatePostEvent):
-    print('I have not been defined yet! :( ')
+    postId = updatePostEvent["data"]["post_id"]
+    with conn.cursor() as cur:
+        for key, value in updatePostEvent["data"].items():
+            if key != "post_id":
+                query = 'UPDATE post SET {} = \"{}\" WHERE post_id = \"{}\"'.format(key, value, postId)
+                cur.execute(query)
+                conn.commit()
 
 
 def convertResults(row):
