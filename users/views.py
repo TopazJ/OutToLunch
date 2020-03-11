@@ -1,12 +1,19 @@
 from django.shortcuts import render, redirect
 import json
+from datetime import datetime
 from .models import *
+from event.PynamoDBModels import Event
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 # Create your views here.
 
 
 def status(request):
+
+    # yeet = {'commentID': 1234, 'content': 'this is a comment', 'children': [{'content': 'abc'}, {'content': 'abc'}]}
+    # test = Event(event_id=uuid.uuid4().__str__(), type='Comment', timestamp=datetime.now(), content=yeet)
+    # test.save()
+
     if request.user.is_authenticated:
         return JsonResponse({'status': 'user'})
     else:
