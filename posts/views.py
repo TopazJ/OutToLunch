@@ -11,17 +11,17 @@ from posts.validation import validate_create_save, validate_update_save, validat
 
 
 def index(request):
-    # works to retrive posts
+    # retrieves posts based on page #
     url = 'https://c8u8796f4d.execute-api.us-west-2.amazonaws.com/alpha/posts'
-    payload = {'page': '0'}
-
+    payload = {'page': request.GET['page']}
     r = requests.get(url, params=payload)
-    print(r.text)
 
+    #return r
     return redirect('/')
 
 
 def create_post(request):
+    # Needs to be changed to make sure
     """    {
         "type": "PostCreatedEvent",
         "eventId": "MYUNIQUEID",
@@ -38,13 +38,15 @@ def create_post(request):
     eventId = uuid.uuid4()
     user_id = uuid.uuid4()
     post_content = "controller test post content"
-    photo = 'null'
+    photo = None
     establishment = uuid.uuid4()
     data = {
         "user_id": str(user_id),
         "post_content": post_content,
         "post_photo_location": photo,
-        "establishment_id": str(establishment)
+        "establishment_id": str(establishment),
+        "post_rating": 1,
+        "post_subject": 'controller test'
     }
     date = 0
     payload = {'type': str(type), 'eventId': str(eventId), 'data': data, 'timestamp': str(date)}
