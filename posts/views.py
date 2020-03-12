@@ -1,3 +1,5 @@
+import uuid
+
 from django.forms import model_to_dict
 from django.shortcuts import render, redirect
 import json
@@ -9,6 +11,7 @@ from posts.validation import validate_create_save, validate_update_save, validat
 
 
 def index(request):
+    # works to retrive posts
     url = 'https://c8u8796f4d.execute-api.us-west-2.amazonaws.com/alpha/posts'
     payload = {'page': '0'}
 
@@ -19,16 +22,42 @@ def index(request):
 
 
 def create_post(request):
-    if request.method == 'POST':
+    """    {
+        "type": "PostCreatedEvent",
+        "eventId": "MYUNIQUEID",
+        "data": {
+            "user_id": "nana",
+            "post_content": "<blah blah blah>",
+            "post_photo_location": null,
+            "establishment_id": "someid"
+        },
+        "timestamp": "<datehere>"
+    }"""
+    url = 'https://c8u8796f4d.execute-api.us-west-2.amazonaws.com/alpha/posts'
+    type = "PostCreatedEvent"
+    eventId = uuid.uuid4()
+    user_id = uuid.uuid4()
+    post_content = "controller test post content"
+    photo = 'null'
+    establishment = uuid.uuid4()
+    data = {
+        "user_id": str(user_id),
+        "post_content": post_content,
+        "post_photo_location": photo,
+        "establishment_id": str(establishment)
+    }
+    date = 0
+    payload = {'type': str(type), 'eventId': str(eventId), 'data': data, 'timestamp': str(date)}
+    """
+    payload = "\"{\"commentID\":\"" + str(comment_id) + "\", \"postID\":\"" + str(post_id) + "\", \"userID\":\"" + str(
+        user_id) + "\", \"parentID\":\"" + str(parent_id) + "\", \"content\":\"" + str(
+        content) + "\", \"dateMS\":" + str(date) + '}\"'
+    """
+    print(payload)
+    r = requests.post(url, json=payload)
+    print(r.text)
 
-        data = json.loads(request.body)
-
-        return validate_create_save(user_id=data['user_id'],
-                                    post_content=data['post_content'],
-                                    post_photo_location=data['post_photo_location']
-                                    )
-    else:
-        return redirect('/')
+    return redirect('/')
 
 
 def update_post(request):
