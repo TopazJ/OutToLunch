@@ -3,7 +3,6 @@
 
 def generatePostSQLQuery(newRecord):
     print(newRecord)
-    print(newRecord["data"]["post_id"])
     if newRecord['data']['post_photo_location'] is None:
          query = ("INSERT INTO post (post_id, post_user, post_date, post_rating, post_subject, post_content,"
                  " establishment_id) values(\"{}\", \"{}\", \"{}\", {}, \"{}\", \"{}\",\"{}\")"

@@ -46,20 +46,36 @@ def respond(err, res=None):
     }
 
 
+logger.setLevel(logging.WARNING)
+
+
 def handler(event, context):
-    if 'Records' in event:
-        record = testSerializer(event['Records'][0]['dynamodb']['NewImage'])
-        if record['type'] == "PostCreatedEvent":
-            addPost(record)
-        elif record['type'] == "PostUpdatedEvent":
-            print("complete me")
-            updatePost(record)
-        elif record['type'] == "PostDeletedEvent":
-            deletePost(record)
-        return None
-    else:
-        if event['httpMethod'] == "GET":
-            return respond(None, getPost(event))
+    response = None
+    try:
+        if 'Records' in event:
+            record = testSerializer(event['Records'][0]['dynamodb']['NewImage'])
+            if record['type'] == "PostCreatedEvent":
+                addPost(record)
+            elif record['type'] == "PostUpdatedEvent":
+                print("complete me")
+                updatePost(record)
+            elif record['type'] == "PostDeletedEvent":
+                deletePost(record)
+            response = None
+        else:
+            if event['httpMethod'] == "GET":
+                response = respond(None, getPost(event))
+    except Exception as error:
+        logger.exception(error)
+        response = {
+            'status': 500,
+            'error': {
+                'type': type(error).__name__,
+                'description': str(error),
+            },
+        }
+    finally:
+        return response
 
 
 def testSerializer(data):
@@ -113,7 +129,8 @@ def updatePost(updatePostEvent):
 
 
 def convertResults(row):
-    date = (row[2])  # .strftime("%d-%b-%Y %H:%M:%S.%f")
+    date = (row[2]).strftime("%Y-%m-%d %H:%M")
     post = {'post_id': row[0], 'user_id': row[1], 'post_date': date, 'post_content': row[3],
             'post_photo_location': row[4], 'establishment_id': row[5]}
     return post
+
