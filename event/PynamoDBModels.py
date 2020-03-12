@@ -1,6 +1,7 @@
 from pynamodb.models import Model
 from pynamodb.attributes import UnicodeAttribute, MapAttribute, UTCDateTimeAttribute, NumberAttribute
 from OutToLunch.config import DynamoDBAccessKey, DynamoDBKeyID
+
 PostCreatedEvent = 'PostCreatedEvent'
 PostUpdatedEvent = 'PostUpdatedEvent'
 PostDeletedEvent = 'PostDeletedEvent'

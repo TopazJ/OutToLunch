@@ -22,11 +22,11 @@ def index(request):
 
 
 def add(request):
-    # pynamo db
+    # pynamo db works
 
     comment = Event(event_id=uuid.uuid4().__str__(), type='CommentCreatedEvent', timestamp=datetime.now(),
                     data=Comment(commentID='copy', postID='paste', userID='delete', parentID='test',
-                                 content="screech", dateMs=int(time.time()*1000)))
+                                 content="screech", dateMs=int(time.time() * 1000)))
     comment.save()
 
     if request.user.is_authenticated:
