@@ -9,11 +9,9 @@ from django.shortcuts import render, redirect
 # Create your views here.
 def index(request):
     # works to retrive comments
-    url = 'https://t5siew2vyb.execute-api.us-east-1.amazonaws.com/alpha/comment'
-    # payload = {'commentID': 'null', 'postID': 'testPID1', 'userID': 'null', 'content': 'null', 'dateMS': '0'}
-    payload = {'postID': 'testPID1'}
-    # payload = {}
-
+    url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/readCommentLambda'
+    payload = {'postID': request.GET['postID']}
+    # payload = {'postID': 'did'}
     r = requests.get(url, params=payload)
     print(r.text)
 
@@ -22,7 +20,7 @@ def index(request):
 
 def add(request):
     # works
-    url = 'https://t5siew2vyb.execute-api.us-east-1.amazonaws.com/alpha/comment'
+    url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/readCommentLambda'
     comment_id = uuid.uuid4()
     post_id = uuid.uuid4()
     user_id = uuid.uuid4()
