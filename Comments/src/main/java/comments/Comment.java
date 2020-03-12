@@ -3,8 +3,7 @@
  */
 package comments;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import java.sql.Timestamp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -44,7 +43,7 @@ public class Comment
 	private long dateMs;
 	
 	//The (local) date that the comment was made. Format: yyyy-mm-dd-hh:mm:ss
-	private LocalDate date;
+	private Timestamp date;
 	
 	//getters and setters
 	public String getCommentID() {
@@ -87,18 +86,35 @@ public class Comment
 		this.content = content;
 	}
 
-	public LocalDate getDate() {
+	public Timestamp getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
+	public long getDateMs()
+	{
+		return dateMs;
+	}
+	
+	public void setDate(Timestamp date) {
 		this.date = date;
 	}
 	
 	//setter for dateMs, also sets date automatically
 	public void setDateMs(long dateMs) {
 		this.dateMs = dateMs;
-		this.date = new Date(dateMs).toLocalDate();
+		this.date = new Timestamp(dateMs);
+	}
+	
+	//get JSON representation of 
+	public String toJSON()
+	{
+		String strJSON = "{ \"commentID\": \"" + getCommentID() + "\", ";
+		strJSON += "\"postID\": \"" + getPostID() + "\", ";
+		strJSON += "\"userID\": \"" + getUserID() + "\", ";
+		strJSON += "\"parentID\": \"" + getParentID() + "\", ";
+		strJSON += "\"content\": \"" + getContent() + "\", ";
+		strJSON += "\"date\": " + date.toString() + " }";
+		return strJSON;
 	}
 	
 	/**
@@ -123,13 +139,14 @@ public class Comment
 	}
 	
 	//constructor with local date
-	Comment(String commentID, String postID, String userID, String parentID, String content, LocalDate date)
+	Comment(String commentID, String postID, String userID, String parentID, String content, Timestamp date)
 	{
 		this.commentID = commentID;
 		this.postID = postID;
 		this.userID = userID;
 		this.parentID = parentID;
 		this.content = content;
+		this.dateMs = date.getTime();
 		this.date = date;
 	}
 	
@@ -142,6 +159,6 @@ public class Comment
 		parentID = "Missing parentID";
 		content = "Missing content";
 		dateMs = 0;
-		date = LocalDate.of(1970, 1, 1);
+		date = new Timestamp(0);
 	}
 }

@@ -1,13 +1,12 @@
 package comments;
 
 import java.io.*;
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -128,7 +127,7 @@ public class CommentDBManager
 			dbInsertPS.setString(3, com.getUserID());
 			dbInsertPS.setString(4, com.getParentID());
 			dbInsertPS.setString(5, com.getContent());
-			dbInsertPS.setDate(6, Date.valueOf(com.getDate()));		
+			dbInsertPS.setTimestamp(6, com.getDate());		
 			
 			//execute
 			dbInsertPS.executeUpdate();
@@ -152,9 +151,11 @@ public class CommentDBManager
 	 * Using a post ID.
 	 *
 	 * @param postID postID of the comment to delete
+	 * @return JSON string of the returned comments
 	 */
-	void queryCommentsByPostID(String postID)
+	public String queryCommentsByPostID(String postID)
 	{
+		String commentListJSON = "";		
 		try 
 		{
 			//prepare the statement		
@@ -175,13 +176,20 @@ public class CommentDBManager
 						resultSet.getString("userID"),
 						resultSet.getString("parentID"),
 						resultSet.getString("content"),
-						resultSet.getObject("date", LocalDate.class)	
+						resultSet.getTimestamp("date")	
 					);
 				commentList.add(parseComment);
-				System.out.println("Comment read: "+parseComment.toString());
 			}
 			
 			dbSelectPS.close();
+			
+			//Convert comment arraylist to JSON format
+			if(commentList.size() > 0)
+			{
+				for(int i=0; i<commentList.size()-1; i++)
+					commentListJSON += commentList.get(i).toJSON() + ", ";
+				commentListJSON += commentList.get(commentList.size()-1).toJSON();
+			}
 		} 
 		catch (SQLException e) 
 		{
@@ -193,6 +201,8 @@ public class CommentDBManager
 			System.out.println("Error: DB not Inited.");
 			System.exit(-1);
 		}
+		
+		return commentListJSON;
 	}	
 	
 	/**
@@ -258,15 +268,15 @@ public class CommentDBManager
 		dbManager.initDBConnection();
 		
 		//insert comment 1		
-		Comment comment1 = new Comment("cID1", "pID1", "uID1", "", "This is test comment 1.", LocalDate.now());
+		Comment comment1 = new Comment("cID1", "pID1", "uID1", "", "This is test comment 1.", new Timestamp(System.currentTimeMillis()));
 		dbManager.insertCommentRow(comment1);
 		
 		//insert comment 2
-		Comment comment2 = new Comment("cID2", "pID1", "uID2", "cID1", "This is test comment 2.", LocalDate.now());
+		Comment comment2 = new Comment("cID2", "pID1", "uID2", "cID1", "This is test comment 2.", new Timestamp(System.currentTimeMillis()));
 		dbManager.insertCommentRow(comment2);
 				
 		//read comments
-		dbManager.queryCommentsByPostID("pID1");
+		System.out.println(dbManager.queryCommentsByPostID("pID1"));
 		
 		//delete comments
 		dbManager.deleteCommentsByPostID("pID1");

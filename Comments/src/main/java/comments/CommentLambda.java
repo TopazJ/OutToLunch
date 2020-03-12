@@ -4,7 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
 /**
- * Lambda used to make queries of the comment database
+ * Lambda used to make comment insertion queries of the comment database
  * Based on https://www.youtube.com/watch?v=64dnqaixT3w&list=WL&index=3&t=4s
  * 
  * @author Jake Liu
@@ -22,24 +22,50 @@ public class CommentLambda implements RequestHandler<Comment, String>
 	//Write comments into the DB
 	public String insertRequest(Comment request, Context context) 
 	{	
-		
-		String logStr = "CommentLambda.insertRequest received.\n";
-		logStr += "Comment: " + request.toString() + "\n";
+		String logStr = "CommentLambda.insertRequest received.";
+		logStr += "Comment: " + request.toString() + ". ";
 		
 		//connect to the database
 		CommentDBManager dbManager = new CommentDBManager();
 		dbManager.readDBCredentials("src/main/java/comments/config.ini");
 		dbManager.initDBConnection();
-		logStr += "Connected to DB successfully\n";		
+		logStr += "Connected to DB successfully.";		
 		
 		//insert comment
 		dbManager.insertCommentRow(request);
-		logStr += "Comment inserted to DB successfully\n";		
+		logStr += "Comment inserted to DB successfully.";		
 		
 		//close
 		dbManager.closeDBConnection();		
 		
 		//report success
 		return logStr;
+	}
+	
+	/**
+	 * Read comments into the DB
+	 * 1-Hot Comment fields will be the search criteria.
+	 * TODO: implement functionality for more than just postID
+	 */
+	public String readRequest(Comment request, Context context)
+	{
+		//parse parameters
+		//TODO implement functionality for more than just postID
+		if(request.getPostID().equals("null"))
+			return "Error: invalid parameters.";
+		
+		//connect to the database
+		CommentDBManager dbManager = new CommentDBManager();
+		dbManager.readDBCredentials("src/main/java/comments/config.ini");
+		dbManager.initDBConnection();
+		
+		//read comment
+		String jsonResponse = dbManager.queryCommentsByPostID(request.getPostID());
+		
+		//close
+		dbManager.closeDBConnection();		
+		
+		//report success
+		return jsonResponse;
 	}
 }
