@@ -13,12 +13,22 @@ class Establishment(MapAttribute):
     user_id = UnicodeAttribute()
 
 
-class Event (Model):
+class Comment(MapAttribute):
+    commentID = UnicodeAttribute()
+    postID = UnicodeAttribute()
+    userID = UnicodeAttribute()
+    parentID = UnicodeAttribute()
+    content = NumberAttribute()
+    dateMs = NumberAttribute()
+
+
+class Event(Model):
     class Meta:
         table_name = 'OutToLunchEvents'
         region = 'us-west-2'
         aws_access_key_id = DynamoDBKeyID
         aws_secret_access_key = DynamoDBAccessKey
+
     event_id = UnicodeAttribute(hash_key=True)
     type = UnicodeAttribute()
     timestamp = UTCDateTimeAttribute()
