@@ -44,6 +44,8 @@ class HomepagePost extends Component {
                 }}
               >
                 <h1>Hidden Gem</h1> {this.state.id}
+                {"Uofc Bookstore"}
+                <br></br>
                 <img
                   src="https://www.ucalgary.ca/news/sites/default/files/styles/ucws_news_hero_image_desktop/public/2019-06/bookstore_011a0796_f.jpg?itok=aE9ylKnp"
                   style={{ width: "500px", height: "200px" }}
@@ -54,7 +56,7 @@ class HomepagePost extends Component {
                   starCount={10}
                   value={8}
                 />
-                <p>They do not sell food here.</p>
+                <p>{"They do not sell food here."}</p>
                 <button
                   className="btn btn-secondary"
                   style={{
