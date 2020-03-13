@@ -12,9 +12,19 @@ from event.PynamoDBModels import Comment, Event
 
 
 def index(request):
-    # works to retrive comments
+    # works to retrive comments (post ID only)
     url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/readCommentLambda'
-    payload = {'postID': request.GET['postID']}
+    type1 = 'postID'
+    type2 = 'parentID'
+    if request.GET.get(type1):
+        payload = {type1: request.GET[type1]}
+    elif request.GET.get(type2):
+        payload = {type2: request.GET[type2]}
+    else:
+        return redirect('/')
+
+    # we want to retrieve comments by parent as well
+    print(payload)
     r = requests.get(url, params=payload)
     print(r.text)
 
