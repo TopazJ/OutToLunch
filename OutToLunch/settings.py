@@ -25,7 +25,7 @@ SECRET_KEY = 'vdp+p^d)v=3wn2!sgg017w%#+ck*j80=8^0%dz%di93v0vwus='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'outtolunch.us-west-2.elasticbeanstalk.com']
 
 # Application definition
 
