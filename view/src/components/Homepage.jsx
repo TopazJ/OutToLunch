@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import HomepagePost from "./HomepagePost.jsx";
+import CreatePost from "./createPost.jsx";
 import "./styles.css";
 
 class Homepage extends Component {
@@ -36,6 +37,7 @@ class Homepage extends Component {
         {this.state.posts.map(post => (
           <HomepagePost key={post.id} userId={post.userId} />
         ))}
+        <CreatePost></CreatePost>
       </div>
     );
   }
