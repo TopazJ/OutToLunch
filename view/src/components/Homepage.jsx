@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import HomepagePost from "./HomepagePost.jsx";
+import CreatePost from "./createPost.jsx";
 import "./styles.css";
 
 class Homepage extends Component {
@@ -29,13 +30,14 @@ class Homepage extends Component {
   render() {
     return (
       <div className="background">
-        <br/>
+        <br />
         <b style={{ paddingLeft: "350px" }}>Most Recent Reviews</b>
         {this.showThePostReviewButtonIfLoggedIn()}
-        <br/>
+        <br />
         {this.state.posts.map(post => (
-            <HomepagePost key={post.id} userId={post.userId} />
+          <HomepagePost key={post.id} userId={post.userId} />
         ))}
+        <CreatePost></CreatePost>
       </div>
     );
   }
