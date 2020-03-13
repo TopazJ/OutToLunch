@@ -1,7 +1,5 @@
 from django.contrib import admin
-from establishments import models
+from .models import Establishment
 # Register your models here.
 
-admin.site.register(models.EstablishmentCreatedEvent)
-admin.site.register(models.EstablishmentDeletedEvent)
-admin.site.register(models.EstablishmentUpdatedEvent)
+admin.site.register(Establishment)
