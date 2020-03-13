@@ -11,7 +11,27 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from .config import *
+
+if 'DatabaseUser' in os.environ:
+    DbUser = os.environ['DatabaseUser']
+else:
+    from .config import *
+    DbUser = DatabaseUser
+
+if 'DatabasePassword' in os.environ:
+    DbPass = os.environ['DatabasePassword']
+else:
+    DbPass = DatabasePassword
+
+if 'DynamoDBKeyID' in os.environ:
+    DynamoKeyID = os.environ['DynamoDBKeyID']
+else:
+    DynamoKeyID = DynamoDBKeyID
+
+if 'DynamoDBAccessKey' in os.environ:
+    DynamoAccess = os.environ['DynamoDBAccessKey']
+else:
+    DynamoAccess = DynamoDBAccessKey
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -87,8 +107,8 @@ DATABASES = {
     'default': {
         'NAME': 'users',
         'ENGINE': 'django.db.backends.mysql',
-        'USER': DatabaseUser,
-        'PASSWORD': DatabasePassword,
+        'USER': DbUser,
+        'PASSWORD': DbPass,
         'HOST': 'outtolunch.cotysnks4blq.us-west-2.rds.amazonaws.com',
         'PORT': '3306',
         'OPTIONS': {'init_command': "SET sql_mode='STRICT_TRANS_TABLES'", },
