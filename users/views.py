@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 import json
+from datetime import datetime
 from .models import *
+from event.PynamoDBModels import *
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 
@@ -9,6 +11,12 @@ from django.contrib.auth import authenticate, login, logout
 
 
 def status(request):
+
+    # yeet = Post(establishment_id='null', post_content='null', post_id='null', post_photo_location='null',
+    #                      post_rating=5, post_subject='null', user_id='null')
+    # test = Event(event_id=uuid.uuid4().__str__(), type=PostCreatedEvent, timestamp=datetime.now(), data=yeet)
+    # test.save()
+
     if request.user.is_authenticated:
         return JsonResponse({'status': 'user'})
     else:
