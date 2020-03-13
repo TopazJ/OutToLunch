@@ -11,30 +11,24 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from .config import *
 
-DbUser = DatabaseUser
-DbPass = DatabasePassword
-DynamoKeyID = DynamoDBKeyID
-DynamoAccess = DynamoDBAccessKey
-StaticBucketName = StaticBucketAWSName
-StaticBucketKey = StaticBucketAWSKeyID
-StaticBucketAccess = StaticBucketAWSAccessID
-
-if 'DatabaseUser' in os.environ:
+if 'UsingEB' in os.environ:
     DbUser = os.environ['DatabaseUser']
-if 'DatabasePassword' in os.environ:
     DbPass = os.environ['DatabasePassword']
-if 'DynamoDBKeyID' in os.environ:
     DynamoKeyID = os.environ['DynamoDBKeyID']
-if 'DynamoDBAccessKey' in os.environ:
     DynamoAccess = os.environ['DynamoDBAccessKey']
-if 'StaticBucketAWSName' in os.environ:
     StaticBucketName = os.environ['StaticBucketAWSName']
-if 'StaticBucketKey' in os.environ:
     StaticBucketKey = os.environ['StaticBucketAWSKeyID']
-if 'StaticBucketAccess' in os.environ:
     StaticBucketAccess = os.environ['StaticBucketAWSAccessID']
+else:
+    from .config import *
+    DbUser = DatabaseUser
+    DbPass = DatabasePassword
+    DynamoKeyID = DynamoDBKeyID
+    DynamoAccess = DynamoDBAccessKey
+    StaticBucketName = StaticBucketAWSName
+    StaticBucketKey = StaticBucketAWSKeyID
+    StaticBucketAccess = StaticBucketAWSAccessID
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -173,5 +167,10 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
 # Tell the staticfiles app to use S3Boto3 storage when writing the collected static files (when
 # you run `collectstatic`).
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_LOCATION = 'static'
+STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+
+MEDIAFILES_LOCATION = 'media'
+DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+
 AWS_DEFAULT_ACL = None
