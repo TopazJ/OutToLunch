@@ -1,7 +1,7 @@
 from django.db import models
-
-from comments import CONTENT_LENGTH
 from event.models import Event
+
+CONTENT_LENGTH = 10000
 
 
 class CommentCreatedEvent(Event):

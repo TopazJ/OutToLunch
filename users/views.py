@@ -5,6 +5,8 @@ from .models import *
 from event.PynamoDBModels import *
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
+
+
 # Create your views here.
 
 
@@ -66,3 +68,10 @@ def error_message(message):
 
 def successful_message(json_data):
     return JsonResponse({**{'status': 'success'}, **json_data})
+
+
+def validate_user(user_id):
+    if SiteUser.objects.filter(id=user_id) is None:
+        return False
+    else:
+        return True

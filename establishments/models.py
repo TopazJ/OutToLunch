@@ -1,6 +1,8 @@
 from django.db import models
-from establishments import name_max_length, location_max_length
 from event.models import Event
+
+name_max_length = 100
+location_max_length = 100
 
 
 class EstablishmentCreatedEvent(Event):

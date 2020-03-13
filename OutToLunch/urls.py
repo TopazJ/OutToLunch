@@ -20,5 +20,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('users.urls')),
     path('establishments/', include('establishments.urls')),
+    path('posts/', include('posts.urls')),
+    path('comments/', include('comments.urls')),
     re_path(r'^(?:.*)/?$', include('view.urls')),
 ]
