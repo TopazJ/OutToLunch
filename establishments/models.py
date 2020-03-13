@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 from django.core.exceptions import ValidationError
+import json
 
 
 def validate_less_than_10(value):
@@ -17,3 +18,14 @@ class Establishment (models.Model):
     description = models.CharField(max_length=200)
     rating = models.IntegerField(default=0, validators=[validate_less_than_10])
     flag_counter = models.IntegerField(default=0)
+
+    def to_json(self):
+        json_data = {
+            'id': self.establishment_id,
+            'name': self.name,
+            'location': self.location,
+            'description': self.description,
+            'rating': self.rating,
+            'flags': self.flag_counter
+        }
+        return json_data
