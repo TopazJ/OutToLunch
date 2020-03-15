@@ -21,8 +21,9 @@ def index(request):
     return redirect('/')
 
 
-def add(request):
+def create(request):
     # pynamo db works
+    # TODO: make it take in the POST information
 
     comment = Event(event_id=uuid.uuid4().__str__(), type='CommentCreatedEvent', timestamp=datetime.now(),
                     data=Comment(commentID='copy', postID='paste', userID='delete', parentID='test',
@@ -33,23 +34,32 @@ def add(request):
         return JsonResponse({'status': 'user'})
     else:
         return JsonResponse({'status': 'anon'})
-    # # works
-    # url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/readCommentLambda'
-    # comment_id = uuid.uuid4()
-    # post_id = uuid.uuid4()
-    # user_id = uuid.uuid4()
-    # content = 'test_message from controller'
-    # parent_id = post_id
-    # date = 1000000
-    # payload = {'commentID': str(comment_id), 'postID': str(post_id), 'userID': str(user_id), 'parentID': str(parent_id),
-    #            'content': str(content), 'dateMs': str(date)}
-    # """
-    # payload = "\"{\"commentID\":\"" + str(comment_id) + "\", \"postID\":\"" + str(post_id) + "\", \"userID\":\"" + str(
-    #     user_id) + "\", \"parentID\":\"" + str(parent_id) + "\", \"content\":\"" + str(
-    #     content) + "\", \"dateMS\":" + str(date) + '}\"'
-    # """
-    # print(payload)
-    # r = requests.post(url, json=payload)
-    # print(r.text)
 
-    return redirect('/')
+
+def delete(request):
+    # pynamo db - untested
+    # TODO: make it take in the POST information,
+    # TODO: validate same user
+
+    comment = Event(event_id=uuid.uuid4().__str__(), type='CommentDeletedEvent', timestamp=datetime.now(),
+                    data=Comment(commentID='copy'))
+    comment.save()
+
+    if request.user.is_authenticated:
+        return JsonResponse({'status': 'user'})
+    else:
+        return JsonResponse({'status': 'anon'})
+
+
+def update(request):
+    # pynamo db - untested
+    # TODO: make it take in the POST information
+
+    comment = Event(event_id=uuid.uuid4().__str__(), type='CommentUpdatedEvent', timestamp=datetime.now(),
+                    data=Comment(commentID='copy', content="Jake should see this as an update only"))
+    comment.save()
+
+    if request.user.is_authenticated:
+        return JsonResponse({'status': 'user'})
+    else:
+        return JsonResponse({'status': 'anon'})

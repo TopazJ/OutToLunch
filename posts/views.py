@@ -1,12 +1,14 @@
 import uuid
+from datetime import datetime
 
 from django.forms import model_to_dict
 from django.shortcuts import render, redirect
 import json
 import requests
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 # Create your views here.
+from event.PynamoDBModels import Event, Post
 from posts.validation import validate_create_save, validate_update_save, validate_delete_save
 
 
@@ -16,69 +18,65 @@ def index(request):
     payload = {'page': request.GET['page']}
     r = requests.get(url, params=payload)
 
-    #return r
+    # return r
     return redirect('/')
 
 
-def create_post(request):
-    # Needs to be changed to make sure
-    """    {
-        "type": "PostCreatedEvent",
-        "eventId": "MYUNIQUEID",
-        "data": {
-            "user_id": "nana",
-            "post_content": "<blah blah blah>",
-            "post_photo_location": null,
-            "establishment_id": "someid"
-        },
-        "timestamp": "<datehere>"
-    }"""
-    url = 'https://c8u8796f4d.execute-api.us-west-2.amazonaws.com/alpha/posts'
-    type = "PostCreatedEvent"
-    eventId = uuid.uuid4()
-    user_id = uuid.uuid4()
-    post_content = "controller test post content"
-    photo = None
-    establishment = uuid.uuid4()
-    data = {
-        "user_id": str(user_id),
-        "post_content": post_content,
-        "post_photo_location": photo,
-        "establishment_id": str(establishment),
-        "post_rating": 1,
-        "post_subject": 'controller test'
-    }
-    date = 0
-    payload = {'type': str(type), 'eventId': str(eventId), 'data': data, 'timestamp': str(date)}
-    """
-    payload = "\"{\"commentID\":\"" + str(comment_id) + "\", \"postID\":\"" + str(post_id) + "\", \"userID\":\"" + str(
-        user_id) + "\", \"parentID\":\"" + str(parent_id) + "\", \"content\":\"" + str(
-        content) + "\", \"dateMS\":" + str(date) + '}\"'
-    """
-    print(payload)
-    r = requests.post(url, json=payload)
-    print(r.text)
+def create(request):
+    # pynamo db - untested
+    # TODO: make it take in the POST information
 
-    return redirect('/')
+    comment = Event(event_id=uuid.uuid4().__str__(),
+                    type='PostCreatedEvent',
+                    timestamp=datetime.now(),
+                    data=Post(establishment_id=uuid.uuid4().__str__(),
+                              post_content='bush did 9 11 to defeat the lizard people with holograms',
+                              post_id=uuid.uuid4().__str__(),
+                              post_photo_location='',
+                              post_rating=0, post_subject='the potential truth',
+                              user_id=uuid.uuid4().__str__()
+                              )
+                    )
+    comment.save()
 
-
-def update_post(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        return validate_update_save(post_id=data['post_id'],
-                                    user_id=data['user_id'],
-                                    post_content=data['post_content'],
-                                    post_photo_location=data['post_photo_location']
-                                    )
+    if request.user.is_authenticated:
+        return JsonResponse({'status': 'user'})
     else:
-        return redirect('/')
+        return JsonResponse({'status': 'anon'})
 
 
-def delete_post(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        return validate_delete_save(post_id=data['post_id'],
-                                    user_id=data['user_id'],
-                                    )
+def delete(request):
+    # pynamo db - untested
+    # TODO: make it take in the POST information
+
+    comment = Event(event_id=uuid.uuid4().__str__(),
+                    type='PostDeletedEvent',
+                    timestamp=datetime.now(),
+                    data=Post(post_id=uuid.uuid4().__str__())
+                    )
+    comment.save()
+
+    if request.user.is_authenticated:
+        return JsonResponse({'status': 'user'})
     else:
-        return redirect('/')
+        return JsonResponse({'status': 'anon'})
+
+
+def update(request):
+    # pynamo db - untested
+    # TODO: make it take in the POST information
+
+    comment = Event(event_id=uuid.uuid4().__str__(),
+                    type='PostUpdatedEvent',
+                    timestamp=datetime.now(),
+                    data=Post(
+                        post_content='bush did not do 9 11',
+                        post_id=uuid.uuid4().__str__()
+                    )
+                    )
+    comment.save()
+
+    if request.user.is_authenticated:
+        return JsonResponse({'status': 'user'})
+    else:
+        return JsonResponse({'status': 'anon'})

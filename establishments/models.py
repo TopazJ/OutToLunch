@@ -11,8 +11,8 @@ def validate_less_than_10(value):
         raise ValidationError("Invalid rating, should be greater than 0!")
 
 
-class Establishment (models.Model):
-    establishment_id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+class Establishment(models.Model):
+    establishment_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200)
     location = models.CharField(max_length=200)
     description = models.CharField(max_length=200)

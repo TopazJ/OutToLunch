@@ -38,6 +38,7 @@
         "django-react-csrftoken": "^1.0.4",
         "react-bootstrap": "^1.0.0-beta.16",
         "react-router": "^5.1.2",
-        "react-router-dom": "^5.1.2"
+        "react-router-dom": "^5.1.2",
+        "react-star-rating-component": "^1.4.1"
     }
 }
