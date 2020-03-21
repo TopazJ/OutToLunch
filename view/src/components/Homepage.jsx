@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import HomepagePost from "./HomepagePost.jsx";
 import CreatePost from "./createPost.jsx";
 import "./styles.css";
+import { Link } from "react-router-dom";
 
 class Homepage extends Component {
   state = {
@@ -19,12 +20,14 @@ class Homepage extends Component {
   showThePostReviewButtonIfLoggedIn() {
     if (this.state.loggedIn === true) {
       return (
-        <button
-          className="btn btn-secondary"
-          style={{ position: "absolute", right: "10px" }}
-        >
-          Post New Review
-        </button>
+        <Link to ="/create-post">
+          <button
+            className="btn btn-secondary"
+            style={{ position: "absolute", right: "10px" }}
+          >
+            Post New Review
+          </button>
+        </Link>
       );
     }
   }

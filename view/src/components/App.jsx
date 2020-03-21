@@ -7,6 +7,7 @@ import NavBar from "./navigation/NavBar.jsx";
 import CreateAccount from "./CreateAccount.jsx";
 import Logout from "./Logout.jsx"
 import Homepage from "./Homepage.jsx";
+import CreatePost from "./createPost.jsx";
 
 class App extends Component {
 
@@ -24,6 +25,7 @@ class App extends Component {
             {id:'login', text:'Login', component:LoginForm, props:{login:this.login}},
             {id:'create-account', text:'Create Account', component:CreateAccount},
         ],
+
         user:{
             status:'anon'
         }
@@ -90,6 +92,11 @@ class App extends Component {
                                 )}
                             />
                         ))}
+                        <Route path="create-post">
+                            <div className = "homepage">
+                                <CreatePost/>
+                            </div>
+                        </Route>
                         <Route path='*'>
                             <div className="homepage">
                             <Homepage/>
