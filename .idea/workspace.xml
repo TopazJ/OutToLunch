@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5225a379-3f6c-47e4-ae19-2441f0df3cfe" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/view/src/components/navigation/SideBar.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/view/src/components/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/view/src/components/App.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/view/src/components/Homepage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/view/src/components/Homepage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/src/components/LoginForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/view/src/components/LoginForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/src/components/HomepagePost.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/view/src/components/HomepagePost.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/src/components/createPost.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/view/src/components/createPost.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/view/static/frontend/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/view/static/frontend/main.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -90,9 +92,6 @@
       <method v="2" />
     </configuration>
   </component>
-  <component name="ServiceViewManager">
-    <option name="showServicesTree" value="false" />
-  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -107,7 +106,8 @@
       <workItem from="1582356544958" duration="2894000" />
       <workItem from="1582360263176" duration="4645000" />
       <workItem from="1582365172077" duration="251000" />
-      <workItem from="1584832581399" duration="1633000" />
+      <workItem from="1584832581399" duration="2820000" />
+      <workItem from="1584903270541" duration="10606000" />
     </task>
     <task id="LOCAL-00001" summary="Added starting layer of the view. User logins work for the most part, have to add better error messages to the user.">
       <created>1582364877304</created>
@@ -144,9 +144,13 @@
     <option name="LAST_COMMIT_MESSAGE" value="Fixed the website title and made an html file for Nich." />
   </component>
   <component name="WindowStateProjectService">
-    <state x="661" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1584832583053">
+    <state x="733" y="323" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1584919885614">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="661" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/-1920.7.1920.1040@0.0.1920.1040" timestamp="1584832583053" />
+    <state x="733" y="323" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040/-1920.7.1920.1040@0.0.1920.1040" timestamp="1584919885614" />
+    <state x="661" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1584903757025">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="661" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/-1920.7.1920.1040@0.0.1920.1040" timestamp="1584903757025" />
   </component>
 </project>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Switch, Route, BrowserRouter} from "react-router-dom";
+import {Switch, Route, BrowserRouter, useLocation} from "react-router-dom";
 import LoginForm from "./LoginForm.jsx"
 import "./App.css"
 import "./styles.css"
@@ -8,6 +8,7 @@ import CreateAccount from "./CreateAccount.jsx";
 import Logout from "./Logout.jsx"
 import Homepage from "./Homepage.jsx";
 import CreatePost from "./createPost.jsx";
+import Modal from "./Modal.jsx"
 
 class App extends Component {
 
@@ -92,7 +93,7 @@ class App extends Component {
                                 )}
                             />
                         ))}
-                        <Route path="create-post">
+                        <Route path="/create-post">
                             <div className = "homepage">
                                 <CreatePost/>
                             </div>

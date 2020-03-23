@@ -17,6 +17,7 @@ class CreatePost extends Component {
   render() {
     return (
       <div>
+
         <div className="container border post">
           <div className="row">
             <div className="col-sm">
@@ -27,6 +28,7 @@ class CreatePost extends Component {
                   paddingLeft: "20px"
                 }}
               >
+                <h2>Create New Review</h2>
                 <form>
                   <input
                     type="text"

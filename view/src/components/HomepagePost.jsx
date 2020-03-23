@@ -1,16 +1,21 @@
 import React, { Component } from "react";
 import StarRatingComponent from "react-star-rating-component";
+import {Link, useParams} from "react-router-dom";
 
 class HomepagePost extends Component {
-  state = {};
-  constructor() {
-    super();
-  }
+    //I don't need this
+  state = {postId: 0, postSubject: '', establishmentId: '', photoLocation: '',
+  postUser: 0, date: '', userImg: '', postRating: 0,
+      likes: 0, dislikes: 0, postContent: '', commentsNum: 0, comments:[]
+  };
+
+  renderHeaders=()=>{
+        console.log(this.props);
+    };
 
   render() {
-    console.log("props", this.props);
-    console.log("the userID is ", this.state.userId);
-
+    const { userId, key } = this.props;
+    console.log(userId);
     return (
       <div>
         <div className="container border post">
@@ -43,7 +48,7 @@ class HomepagePost extends Component {
                   paddingLeft: "150px"
                 }}
               >
-                <h1>Hidden Gem</h1> {this.state.id}
+                <h1>Hidden Gem</h1>
                 {"Uofc Bookstore"}
                 <br></br>
                 <img
@@ -57,6 +62,7 @@ class HomepagePost extends Component {
                   value={8}
                 />
                 <p>{"They do not sell food here."}</p>
+                 <Link to ={"/post/" + userId}>
                 <button
                   className="btn btn-secondary"
                   style={{
@@ -66,6 +72,7 @@ class HomepagePost extends Component {
                 >
                   View Comments ({0})
                 </button>
+                 </Link>
                 <br />
               </div>
             </div>

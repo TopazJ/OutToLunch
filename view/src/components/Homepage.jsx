@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import HomepagePost from "./HomepagePost.jsx";
 import CreatePost from "./createPost.jsx";
+import SideBar from "./navigation/SideBar.jsx"
 import "./styles.css";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+
+
 
 class Homepage extends Component {
   state = {
@@ -32,38 +35,11 @@ class Homepage extends Component {
     }
   }
 
-  displayPage() {
-    if (this.state.page === "posts") {
-      return (
-        <div className="background">
-          <div class="sidenav">
-            <a href="#">Reviews</a>
-            <a href="#">Establishments</a>
-            <a href="#">Account Settings</a>
-          </div>
-
-          <br />
-          <b style={{ paddingLeft: "350px" }}>Most Recent Reviews</b>
-          {this.showThePostReviewButtonIfLoggedIn()}
-          <br />
-          {this.state.posts.map(post => (
-            <HomepagePost key={post.id} userId={post.userId} />
-          ))}
-          <CreatePost></CreatePost>
-        </div>
-      );
-    }
-  }
 
   render() {
     return (
       <div className="background">
-        <div class="sidenav">
-          <a href="#">Reviews</a>
-          <a href="#">Establishments</a>
-          <a href="#">Account Settings</a>
-        </div>
-
+          <SideBar />
         <br />
         <b style={{ paddingLeft: "350px" }}>Most Recent Reviews</b>
         {this.showThePostReviewButtonIfLoggedIn()}
@@ -71,7 +47,6 @@ class Homepage extends Component {
         {this.state.posts.map(post => (
           <HomepagePost key={post.id} userId={post.userId} />
         ))}
-        <CreatePost></CreatePost>
       </div>
     );
   }
