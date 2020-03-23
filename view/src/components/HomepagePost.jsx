@@ -15,7 +15,6 @@ class HomepagePost extends Component {
 
   render() {
     const { userId, postId } = this.props;
-    console.log(postId);
     return (
       <div>
         <div className="container border post">

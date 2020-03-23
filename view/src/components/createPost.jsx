@@ -16,8 +16,8 @@ class CreatePost extends Component {
 
   render() {
     return (
-      <div>
-
+      <div className="background">
+        <br/>
         <div className="container border post">
           <div className="row">
             <div className="col-sm">
@@ -56,12 +56,12 @@ class CreatePost extends Component {
                     style={{ width: "700px", height: "200px" }}
                     placeholder="Write your review..."
                   />
-                  <br></br>
+                  <br/>
                   <input
                     type="file"
                     name="fileToUpload"
                     id="fileToUpload"
-                  ></input>
+                  />
                   <button
                     type="submit"
                     style={{
@@ -77,6 +77,7 @@ class CreatePost extends Component {
             </div>
           </div>
         </div>
+        <br/>
       </div>
     );
   }

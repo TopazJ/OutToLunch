@@ -45,9 +45,11 @@ class LoginForm extends React.Component {
   render() {
     return (
       <React.Fragment>
+        <div className="container post">
+          <div className="row">
+            <div className="col-sm">
         <form className="p-4" onSubmit={this.handleSubmit}>
           <CSRFToken />
-          <div className="form-group">
             <label htmlFor="username">Username</label>
             <input
               type="text"
@@ -58,7 +60,6 @@ class LoginForm extends React.Component {
               onChange={this.handleInputChange}
               required
             />
-          </div>
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input
@@ -75,6 +76,9 @@ class LoginForm extends React.Component {
             Sign in
           </button>
         </form>
+        </div>
+            </div>
+          </div>
       </React.Fragment>
     );
   }
