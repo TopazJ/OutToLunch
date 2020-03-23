@@ -57,6 +57,9 @@ class CreateAccount extends Component{
 
     render(){
         return <React.Fragment>
+            <div className="container post">
+          <div className="row">
+            <div className="col-sm">
                 <form className="p-4" onSubmit={this.handleSubmit}>
                     <CSRFToken />
                     <div className="form-group">
@@ -120,6 +123,9 @@ class CreateAccount extends Component{
                     </button>
                 </form>
             <p>{this.checkRedirect()}</p>
+            </div>
+          </div>
+            </div>
             </React.Fragment>
 
     }
