@@ -14,8 +14,8 @@ class HomepagePost extends Component {
     };
 
   render() {
-    const { userId, key } = this.props;
-    console.log(userId);
+    const { userId, postId } = this.props;
+    console.log(postId);
     return (
       <div>
         <div className="container border post">
@@ -62,7 +62,7 @@ class HomepagePost extends Component {
                   value={8}
                 />
                 <p>{"They do not sell food here."}</p>
-                 <Link to ={"/post/" + userId}>
+                 <Link to ={"/post/" + postId}>
                 <button
                   className="btn btn-secondary"
                   style={{

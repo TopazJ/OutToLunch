@@ -44,8 +44,8 @@ class Homepage extends Component {
         <b style={{ paddingLeft: "350px" }}>Most Recent Reviews</b>
         {this.showThePostReviewButtonIfLoggedIn()}
         <br />
-        {this.state.posts.map(post => (
-          <HomepagePost key={post.id} userId={post.userId} />
+        {this.state.posts.map((post, index) => (
+          <HomepagePost key={index} postId={post.id} userId={post.userId} />
         ))}
       </div>
     );

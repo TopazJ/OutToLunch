@@ -1,14 +1,16 @@
 import React, { Component } from "react";
-import {Switch, Route, BrowserRouter, useLocation} from "react-router-dom";
+import {Switch, Route, BrowserRouter, withRouter} from "react-router-dom";
+import { ModalRoute, ModalContainer } from "react-router-modal";
 import LoginForm from "./LoginForm.jsx"
 import "./App.css"
 import "./styles.css"
+import "react-router-modal/css/react-router-modal.css"
 import NavBar from "./navigation/NavBar.jsx";
 import CreateAccount from "./CreateAccount.jsx";
 import Logout from "./Logout.jsx"
 import Homepage from "./Homepage.jsx";
 import CreatePost from "./createPost.jsx";
-import Modal from "./Modal.jsx"
+import Post from "./Post.jsx"
 
 class App extends Component {
 
@@ -19,7 +21,6 @@ class App extends Component {
         this.setLogout = this.setLogout.bind(this);
         this.initButtons = this.initButtons.bind(this);
     }
-
 
     state = {
         navLinks:[
@@ -70,11 +71,10 @@ class App extends Component {
                 {id:'create-account', text:'Create Account', component:CreateAccount}],user: {status: "anon"}});
     }
 
-
     render() {
+        console.log(this.props.location);
         return (
-            <BrowserRouter>
-                <React.Fragment>
+            <React.Fragment>
                     <NavBar
                         initButtons={this.initButtons}
                         navLinks={this.state.homeLinks}
@@ -83,7 +83,7 @@ class App extends Component {
                         {this.state.navLinks.map(link => (
                             <Route
                                 key={link.id}
-                                path={"/" + link.id}
+                                exact path={"/" + link.id}
                                 render={() => (
                                     <React.Fragment>
                                         <div className="homepage">
@@ -93,21 +93,25 @@ class App extends Component {
                                 )}
                             />
                         ))}
-                        <Route path="/create-post">
+                        <Route exact path="/create-post">
                             <div className = "homepage">
                                 <CreatePost/>
                             </div>
                         </Route>
-                        <Route path='*'>
+                        <ModalRoute path="/post/:id" parentPath='/'>
+                            <Post/>
+                        </ModalRoute>
+                        <Route exact path='*'>
                             <div className="homepage">
                             <Homepage/>
                             </div>
                         </Route>
                     </Switch>
-                </React.Fragment>
-            </BrowserRouter>
+                    <ModalContainer/>
+            </React.Fragment>
+
         );
     }
 }
 
-export default App;
+export default withRouter(App);
