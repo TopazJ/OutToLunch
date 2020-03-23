@@ -9,10 +9,10 @@ class CreateAccount extends Component{
     }
 
     handleSubmit =(event)=>{
-         event.preventDefault();
+        event.preventDefault();
         const values = this.state.form;
-        console.log(values);
-        fetch('http://127.0.0.1:8000/auth/create/', {
+        let url = this.props.props.url + '/auth/create/';
+        fetch(url, {
             method: 'POST',
             body: JSON.stringify(values),
             headers: {
@@ -21,7 +21,6 @@ class CreateAccount extends Component{
             }
         }).then(res => res.json())
         .then(data => {
-            console.log(data);
             if (data.status!=='success'){
                 alert(data.message);
             }

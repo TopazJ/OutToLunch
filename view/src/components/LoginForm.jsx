@@ -23,7 +23,8 @@ class LoginForm extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
     const values = this.state.form;
-    fetch("http://127.0.0.1:8000/auth/login/", {
+    let url = this.props.props.url + '/auth/login/';
+    fetch(url, {
       method: "POST",
       body: JSON.stringify(values),
       headers: {

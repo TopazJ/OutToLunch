@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Switch, Route, BrowserRouter, withRouter} from "react-router-dom";
+import {Switch, Route, Redirect, withRouter} from "react-router-dom";
 import { ModalRoute, ModalContainer } from "react-router-modal";
 import LoginForm from "./LoginForm.jsx"
 import "./App.css"
@@ -23,16 +23,18 @@ class App extends Component {
     }
 
     state = {
+        url:this.props.url,
         navLinks:[
-            {id:'login', text:'Login', component:LoginForm, props:{login:this.login}},
-            {id:'create-account', text:'Create Account', component:CreateAccount},
+            {id:'login', text:'Login', component:LoginForm, props:{login:this.login, url:this.props.url}},
+            {id:'create-account', text:'Create Account', component:CreateAccount, props:{url:this.props.url}},
         ],
         location:this.props.location.pathname,
         loggedIn:false //You can make this true by default for testing everything with the user as logged in.
     };
 
     initButtons() {
-        fetch('http://127.0.0.1:8000/auth/status/', {
+        let url = this.state.url + '/auth/status/';
+        fetch(url, {
             method: 'GET',
         }).then(res => res.json())
             .then(data => {
@@ -48,14 +50,15 @@ class App extends Component {
 
     login() {
         this.setState({
-            navLinks: [{id: "logout", text: "Logout", component: Logout, props: {logout: this.logout}}],
+            navLinks: [{id: "logout", text: "Logout", component: Logout, props: {logout: this.logout, url:this.state.url}}],
             loggedIn:true
         });
     }
 
 
     logout(){
-        fetch("http://127.0.0.1:8000/auth/logout/", {
+        let url = this.state.url + '/auth/logout/';
+        fetch(url, {
             method:"GET"
         }).then(res => res.json())
             .then(data => {
@@ -68,8 +71,8 @@ class App extends Component {
     setLogout(){
         this.setState({
             navLinks:[
-                {id:'login', text:'Login', component:LoginForm, props:{login:this.login}},
-                {id:'create-account', text:'Create Account', component:CreateAccount}
+                {id:'login', text:'Login', component:LoginForm, props:{login:this.login, url:this.props.url}},
+                {id:'create-account', text:'Create Account', component:CreateAccount, props:{url:this.props.url}}
                 ],
             loggedIn:false
         });
@@ -104,10 +107,13 @@ class App extends Component {
                                 <CreatePost/>
                             </div>
                         </Route>
-                        <Route>
+                        <Route path="/">
                             <div className="homepage">
                             <Homepage loggedIn={this.state.loggedIn}/>
                             </div>
+                        </Route>
+                        <Route>
+                            <Redirect push to="/"/>
                         </Route>
                     </Switch>
                     <ModalContainer/>
