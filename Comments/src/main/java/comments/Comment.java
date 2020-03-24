@@ -20,11 +20,7 @@ public class Comment
 	//Primary key: comment id.
 	@JsonProperty("commentID")
 	private String commentID;
-	
-	//String id of the post this comment was made on
-	@JsonProperty("postID")
-	private String postID;
-	
+
 	//String ID of the user that made the comment
 	@JsonProperty("userID")
 	private String userID;
@@ -52,14 +48,6 @@ public class Comment
 
 	public void setCommentID(String commentID) {
 		this.commentID = commentID;
-	}
-
-	public String getPostID() {
-		return postID;
-	}
-
-	public void setPostID(String postID) {
-		this.postID = postID;
 	}
 
 	public String getUserID() {
@@ -109,7 +97,6 @@ public class Comment
 	public String toJSON()
 	{
 		String strJSON = "{ \"commentID\": \"" + getCommentID() + "\", ";
-		strJSON += "\"postID\": \"" + getPostID() + "\", ";
 		strJSON += "\"userID\": \"" + getUserID() + "\", ";
 		strJSON += "\"parentID\": \"" + getParentID() + "\", ";
 		strJSON += "\"content\": \"" + getContent() + "\", ";
@@ -123,7 +110,6 @@ public class Comment
 	public String toString()
 	{
 		String commentStr = "commentID: " + commentID;
-		commentStr += ", postID: " + postID;
 		commentStr += ", userID: " + userID;
 		commentStr += ", parentID: " + parentID;
 		commentStr += ", date: " + date.toString();		
@@ -134,15 +120,14 @@ public class Comment
 	
 	//constructor with java.sql.Date for JSON
 	//will use the class getters and setters, or default if not available
-	Comment(String commentID, String postID, String userID, String parentID, String content, long dateMs)
+	Comment(String commentID, String userID, String parentID, String content, long dateMs)
 	{
 	}
 	
 	//constructor with local date
-	Comment(String commentID, String postID, String userID, String parentID, String content, Timestamp date)
+	Comment(String commentID, String userID, String parentID, String content, Timestamp date)
 	{
 		this.commentID = commentID;
-		this.postID = postID;
 		this.userID = userID;
 		this.parentID = parentID;
 		this.content = content;
@@ -154,7 +139,6 @@ public class Comment
 	Comment()
 	{
 		commentID = "Missing commentID";
-		postID = "Missing postID";
 		userID = "Missing userID";
 		parentID = "Missing parentID";
 		content = "Missing content";

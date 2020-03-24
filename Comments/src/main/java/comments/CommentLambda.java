@@ -51,7 +51,7 @@ public class CommentLambda implements RequestHandler<Comment, String>
 	{
 		//parse parameters
 		//TODO implement functionality for more than just postID
-		if(request.getPostID().equals("null"))
+		if(request.getParentID().equals("null"))
 			return "Error: invalid parameters.";
 		
 		//connect to the database
@@ -60,7 +60,34 @@ public class CommentLambda implements RequestHandler<Comment, String>
 		dbManager.initDBConnection();
 		
 		//read comment
-		String jsonResponse = dbManager.queryCommentsByPostID(request.getPostID());
+		String jsonResponse = dbManager.queryCommentsByParentID(request.getParentID());
+		
+		//close
+		dbManager.closeDBConnection();		
+		
+		//report success
+		return jsonResponse;
+	}
+	
+	/**
+	 * Delete comments from the DB
+	 * 1-Hot Comment fields will be the search criteria.
+	 * TODO: implement functionality for more than just parentID
+	 */
+	public String deleteRequest(Comment request, Context context)
+	{
+		//parse parameters
+		//TODO implement functionality for more than just postID
+		if(request.getParentID().equals("null"))
+			return "Error: invalid parameters.";
+		
+		//connect to the database
+		CommentDBManager dbManager = new CommentDBManager();
+		dbManager.readDBCredentials("src/main/java/comments/config.ini");
+		dbManager.initDBConnection();
+		
+		//read comment
+		String jsonResponse = dbManager.deleteCommentsByParentID(request.getParentID());
 		
 		//close
 		dbManager.closeDBConnection();		
