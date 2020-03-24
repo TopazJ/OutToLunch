@@ -150,7 +150,12 @@ def updatePost(updatePostEvent):
 
 def convertResults(row):
     """converts database query results into a json"""
-    date = (row[2]).strftime("%Y-%m-%d %H:%M")
+    try:
+        date = (row[2]).strftime("%Y-%m-%d %H:%M")
+    except AttributeError as err:
+        logger.exception(err)
+        date = "0000-00-00 00:00"
     post = {'post_id': row[0], 'user_id': row[1], 'post_date': date, 'post_content': row[3],
-            'post_photo_location': row[4], 'establishment_id': row[5], 'upvotes': row[6], 'downvotes': row[7]}
+            'post_photo_location': row[4], 'establishment_id': row[5], 'post_rating': row[6],
+            'post_subject': row[7], 'upvote': row[8], 'downvote': row[9]}
     return post
