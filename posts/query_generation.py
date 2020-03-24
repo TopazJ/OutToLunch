@@ -1,8 +1,7 @@
 
-
-
+#Assumption that initial post will have zero upvotes and zero downvotes so no need to insert into table
 def generatePostSQLQuery(newRecord):
-    print(newRecord)
+    """creates string query from PostCreatedEvent to insert Post"""
     if newRecord['data']['post_photo_location'] is None:
          query = ("INSERT INTO post (post_id, post_user, post_date, post_rating, post_subject, post_content,"
                  " establishment_id) values(\"{}\", \"{}\", \"{}\", {}, \"{}\", \"{}\",\"{}\")"
@@ -14,16 +13,14 @@ def generatePostSQLQuery(newRecord):
 
     return query
 
-
-def generatePostUpdatedSQLQuery(rewRecord):
-    print("Complete me!")
-
 def generateDeletePostSQLQuery(newRecord):
-    query = ('UPDATE post SET post_content = "[deleted]", post_photo_location = NULL WHERE post_id = {}'
+    """generates a delete query that sets values to [deleted], zero or null but leaves subject untouched"""
+    query = ('UPDATE post SET post_content = "[deleted]", post_photo_location = NULL, upvote = 0, downvote = 0 WHERE post_id = {}'
              .format(newRecord['data']['post_id']))
     return query
 
 def generateGetPostSQLQuery(getRequestEvent):
+    """generates the select query to retrieve post requests based on the GET path and query parameters"""
     path = getRequestEvent['path']
     pageNumber = int(getRequestEvent['queryStringParameters']['page'])
     if 'user' in path:
