@@ -12,18 +12,22 @@ from event.PynamoDBModels import Comment, Event
 
 
 def index(request):
-    # works to retrive comments (post ID only)
+    # works to retrive comments (post ID only) - deprecated
     url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/readCommentLambda'
-    type1 = 'postID'
-    type2 = 'parentID'
-    if request.GET.get(type1):
-        payload = {type1: request.GET[type1]}
-    elif request.GET.get(type2):
-        payload = {type2: request.GET[type2]}
+    post = 'postID'
+    parent = 'parentID'
+    params = 'content'
+    if request.GET.get(post):
+        payload = {post: request.GET[post]}
+    elif request.GET.get(parent):
+        if request.GET.get(params):
+            payload = {parent: request.GET[parent], params: request.GET[params]}
+        else:
+            payload = {parent: request.GET[parent]}
     else:
+
         return redirect('/')
 
-    # we want to retrieve comments by parent as well
     print(payload)
     r = requests.get(url, params=payload)
     print(r.text)
@@ -32,11 +36,11 @@ def index(request):
 
 
 def create(request):
-    # pynamo db works
+    # pynamo db - untested
     # TODO: make it take in the POST information
 
     comment = Event(event_id=uuid.uuid4().__str__(), type='CommentCreatedEvent', timestamp=datetime.now(),
-                    data=Comment(commentID='copy', postID='paste', userID='delete', parentID='test',
+                    data=Comment(commentID='copy', userID='delete', parentID='test',
                                  content="screech", dateMs=int(time.time() * 1000)))
     comment.save()
 

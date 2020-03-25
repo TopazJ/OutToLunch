@@ -25,7 +25,6 @@ class Post(MapAttribute):
 
 class Comment(MapAttribute):
     commentID = UnicodeAttribute()
-    postID = UnicodeAttribute()
     userID = UnicodeAttribute()
     parentID = UnicodeAttribute()
     content = NumberAttribute()
