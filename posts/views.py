@@ -8,7 +8,7 @@ import requests
 from django.http import HttpResponse, JsonResponse
 
 # Create your views here.
-from event.PynamoDBModels import Event, Post
+from event.PynamoDBModels import Event, CreatePost
 from posts.validation import validate_create_save, validate_update_save, validate_delete_save
 
 
@@ -29,13 +29,13 @@ def create(request):
     comment = Event(event_id=uuid.uuid4().__str__(),
                     type='PostCreatedEvent',
                     timestamp=datetime.now(),
-                    data=Post(establishment_id=uuid.uuid4().__str__(),
-                              post_content='bush did 9 11 to defeat the lizard people with holograms',
-                              post_id=uuid.uuid4().__str__(),
-                              post_photo_location='',
-                              post_rating=0, post_subject='the potential truth',
-                              user_id=uuid.uuid4().__str__()
-                              )
+                    data=CreatePost(establishment_id=uuid.uuid4().__str__(),
+                                    post_content='bush did 9 11 to defeat the lizard people with holograms',
+                                    post_id=uuid.uuid4().__str__(),
+                                    post_photo_location='',
+                                    post_rating=0, post_subject='the potential truth',
+                                    user_id=uuid.uuid4().__str__()
+                                    )
                     )
     comment.save()
 
@@ -52,7 +52,7 @@ def delete(request):
     comment = Event(event_id=uuid.uuid4().__str__(),
                     type='PostDeletedEvent',
                     timestamp=datetime.now(),
-                    data=Post(post_id=uuid.uuid4().__str__())
+                    data=CreatePost(post_id=uuid.uuid4().__str__())
                     )
     comment.save()
 
@@ -69,7 +69,7 @@ def update(request):
     comment = Event(event_id=uuid.uuid4().__str__(),
                     type='PostUpdatedEvent',
                     timestamp=datetime.now(),
-                    data=Post(
+                    data=CreatePost(
                         post_content='bush did not do 9 11',
                         post_id=uuid.uuid4().__str__()
                     )

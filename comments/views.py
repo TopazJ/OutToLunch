@@ -8,7 +8,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from event.PynamoDBModels import Comment, Event
+from event.PynamoDBModels import CreateComment, Event, UpdateComment, WipeComment
 
 
 def index(request):
@@ -36,27 +36,12 @@ def index(request):
 
 
 def create(request):
-    # pynamo db - untested
+    # pynamo db - tested
     # TODO: make it take in the POST information
 
     comment = Event(event_id=uuid.uuid4().__str__(), type='CommentCreatedEvent', timestamp=datetime.now(),
-                    data=Comment(commentID='copy', userID='delete', parentID='test',
-                                 content="screech", dateMs=int(time.time() * 1000)))
-    comment.save()
-
-    if request.user.is_authenticated:
-        return JsonResponse({'status': 'user'})
-    else:
-        return JsonResponse({'status': 'anon'})
-
-
-def delete(request):
-    # pynamo db - untested
-    # TODO: make it take in the POST information,
-    # TODO: validate same user
-
-    comment = Event(event_id=uuid.uuid4().__str__(), type='CommentDeletedEvent', timestamp=datetime.now(),
-                    data=Comment(commentID='copy'))
+                    data=CreateComment(commentID='copy', userID='delete', parentID='test',
+                                       content="screech", dateMs=int(time.time() * 1000)))
     comment.save()
 
     if request.user.is_authenticated:
@@ -68,9 +53,37 @@ def delete(request):
 def update(request):
     # pynamo db - untested
     # TODO: make it take in the POST information
+    # TODO: validate same user
 
     comment = Event(event_id=uuid.uuid4().__str__(), type='CommentUpdatedEvent', timestamp=datetime.now(),
-                    data=Comment(commentID='copy', content="Jake should see this as an update only"))
+                    data=UpdateComment(commentID="16056ff1-6bde-11ea-a989-0ac9002d85a0",
+                                       userID='mohamedID',
+                                       parentID='yeet',
+                                       content="Victor loves feet",
+                                       dateMs=0,
+                                       numChildren=0
+                                       ))
+    comment.save()
+
+    if request.user.is_authenticated:
+        return JsonResponse({'status': 'user'})
+    else:
+        return JsonResponse({'status': 'anon'})
+
+
+def delete(request):
+    # pynamo db - tested
+    # TODO: make it take in the POST information,
+    # TODO: validate same user
+    # usage
+    comment = Event(event_id=uuid.uuid4().__str__(), type='CommentWipedEvent', timestamp=datetime.now(),
+                    data=WipeComment(commentID="copy",
+                                     userID='wipe',
+                                     parentID='null',
+                                     content="wipe",
+                                     dateMs=0,
+                                     numChildren=0
+                                     ))
     comment.save()
 
     if request.user.is_authenticated:

@@ -13,22 +13,41 @@ CommentUpdatedEvent = 'CommentUpdatedEvent'
 CommentDeletesEvent = 'CommentDeleteEvent'
 
 
-class Post(MapAttribute):
-    establishment_id = UnicodeAttribute()
-    post_content = UnicodeAttribute()
+class CreatePost(MapAttribute):
     post_id = UnicodeAttribute()
-    post_photo_location = UnicodeAttribute()
+    post_user = UnicodeAttribute()
+    post_date = UnicodeAttribute()
     post_rating = NumberAttribute()
     post_subject = UnicodeAttribute()
-    user_id = UnicodeAttribute()
+    post_content = UnicodeAttribute()
+    post_photo_location = UnicodeAttribute()
+    establishment_id = UnicodeAttribute()
 
 
-class Comment(MapAttribute):
+class CreateComment(MapAttribute):
     commentID = UnicodeAttribute()
     userID = UnicodeAttribute()
     parentID = UnicodeAttribute()
-    content = NumberAttribute()
+    content = UnicodeAttribute()
     dateMs = NumberAttribute()
+
+
+class UpdateComment(MapAttribute):
+    commentID = UnicodeAttribute()
+    userID = UnicodeAttribute()
+    parentID = UnicodeAttribute()
+    content = UnicodeAttribute()
+    dateMs = NumberAttribute()
+    numChildren = NumberAttribute()
+
+
+class WipeComment(MapAttribute):
+    commentID = UnicodeAttribute()
+    userID = UnicodeAttribute()
+    parentID = UnicodeAttribute()
+    content = UnicodeAttribute()
+    dateMs = NumberAttribute()
+    numChildren = NumberAttribute()
 
 
 class Event(Model):
