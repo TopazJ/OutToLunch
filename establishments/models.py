@@ -16,7 +16,7 @@ class Establishment(models.Model):
     name = models.CharField(max_length=200)
     location = models.CharField(max_length=200)
     description = models.CharField(max_length=200)
-    rating = models.IntegerField(default=0, validators=[validate_less_than_10])
+    rating = models.FloatField(default=0, validators=[validate_less_than_10])
     flag_counter = models.IntegerField(default=0)
 
     def to_json(self):
@@ -29,3 +29,7 @@ class Establishment(models.Model):
             'flags': self.flag_counter
         }
         return json_data
+
+    def __str__(self):
+        return 'id: %s, name: %s, location: %s, description: %s, rating: %s, flags: %s' % (
+            self.establishment_id, self.name, self.location, self.description, self.rating, self.flag_counter)

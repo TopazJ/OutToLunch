@@ -1,6 +1,6 @@
 from pynamodb.models import Model
-from pynamodb.attributes import UnicodeAttribute, MapAttribute, UTCDateTimeAttribute, NumberAttribute
-from OutToLunch.settings import DynamoKeyID, DynamoAccess
+from pynamodb.attributes import UnicodeAttribute, MapAttribute, UTCDateTimeAttribute, NumberAttribute, BooleanAttribute
+from OutToLunch.config import DynamoDBAccessKey, DynamoDBKeyID
 
 PostCreatedEvent = 'PostCreatedEvent'
 PostUpdatedEvent = 'PostUpdatedEvent'
@@ -14,22 +14,42 @@ CommentDeletesEvent = 'CommentDeleteEvent'
 
 
 class Post(MapAttribute):
-    establishment_id = UnicodeAttribute()
-    post_content = UnicodeAttribute()
     post_id = UnicodeAttribute()
-    post_photo_location = UnicodeAttribute()
-    post_rating = NumberAttribute()
-    post_subject = UnicodeAttribute()
-    user_id = UnicodeAttribute()
+    user_id = UnicodeAttribute(null=True)
+    post_rating = NumberAttribute(null=True)
+    post_subject = UnicodeAttribute(null=True)
+    establishment_id = UnicodeAttribute(null=True)
+    post_content = UnicodeAttribute(null=True)
+    post_photo_location = UnicodeAttribute(null=True)
+    post_date = UnicodeAttribute(null=True)
+    downvote = BooleanAttribute(null=True)
+    upvote = BooleanAttribute(null=True)
 
 
-class Comment(MapAttribute):
+class CreateComment(MapAttribute):
     commentID = UnicodeAttribute()
-    postID = UnicodeAttribute()
     userID = UnicodeAttribute()
     parentID = UnicodeAttribute()
-    content = NumberAttribute()
+    content = UnicodeAttribute()
     dateMs = NumberAttribute()
+
+
+class UpdateComment(MapAttribute):
+    commentID = UnicodeAttribute()
+    userID = UnicodeAttribute()
+    parentID = UnicodeAttribute()
+    content = UnicodeAttribute()
+    dateMs = NumberAttribute()
+    numChildren = NumberAttribute()
+
+
+class WipeComment(MapAttribute):
+    commentID = UnicodeAttribute()
+    userID = UnicodeAttribute()
+    parentID = UnicodeAttribute()
+    content = UnicodeAttribute()
+    dateMs = NumberAttribute()
+    numChildren = NumberAttribute()
 
 
 class Event(Model):

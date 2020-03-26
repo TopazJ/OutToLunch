@@ -1,48 +1,45 @@
 from django.forms import model_to_dict
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 import json
-from .models import Establishment
-from .logic import *
+from establishments.models import Establishment
+from establishments.logic import *
 from django.views.decorators.csrf import csrf_exempt
 
-def index (request):
-    redirect('/')
+
+def index(request):
+    payload = {'data': {}}
+    if request.GET.get('establishment_id'):
+        establishment = Establishment.objects.get(request.GET['establishment_id'])
+        payload['data'][0] = establishment.to_json()
+    else:
+        # get the 10 first ones
+        establishments = Establishment.objects.all().order_by('-rating')[0:10]
+
+        for i in range(len(establishments)):
+            payload['data'][i] = establishments[i].to_json()
+        print(payload)
+    return JsonResponse(payload)
 
 
-@csrf_exempt
-def get_one_establishment(request):
-    if request.method == 'GET':
-        data = json.load(request.body)
-        establishment_list = Establishment.objects.get()
-        if establishment_list is not None:
-            print ("got here")
-            response_data = establishment_list.get().to_json()
-            return successfulMessage(response_data)
-        else:
-            redirect('/')
+def create(request):
+    establishment = Establishment(name="Bakechef's shifty testing cousin",
+                                  location="UofC",
+                                  description="Strange and ephemereal version of bakechef",
+                                  rating=3)
+    establishment.save()
+    return redirect('/')
 
 
-# def buy_trade(request):
-#     if request.method == 'POST':
-#         data = json.loads(request.body)
-#         transaction = buy_trade_transaction_creation(request.user.get_username(), symbol=data['stock'],
-#                                                      quantity=data['quantity'])
-#         if transaction is not None:
-#             response_data = model_to_dict(transaction)
-#             # response_data = serializers.serialize('json', [transaction])
-#             return successfulMessage(response_data)
-#         else:
-#             return errorMessage("Unable to create transaction")
+def delete(request):
+    if request.GET.get("establishment_id"):
+        Establishment.objects.get(establishment_id=request.GET["establishment_id"]).delete()
+    return redirect('/')
 
 
-# Create your views here.
+def update(request):
+    establishment = Establishment.objects.get(establishment_id="c1c2572c-3bf9-460f-8cb3-9678aadc56a6")
+    establishment.location = "University of Calgary"
+    establishment.save()
+    return redirect('/')
 
-
-# def index(request):
-#     return HttpResponse("Hello establishments")
-#
-#
-# def create_establishment(request):
-#     # need to get views completed to show this.
-#     # need to determine post vs get
-#     return HttpResponse("Establishments")
