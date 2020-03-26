@@ -103,9 +103,13 @@ def testSerializer(data):
 
 def getPost(getRequestEvent):
     """retrieves posts based on most recent, establishment or user"""
-    if 'search' in getRequestEvent['path']:
+    path = getRequestEvent['path']
+    if 'search' in path:
         return searchPosts(getRequestEvent['queryStringParameters']['search_criteria'],
                            int(getRequestEvent['queryStringParameters']['page']))
+    elif 'validate' in path:
+        thePostId = path.replace('/posts/validate/', '')
+        return validateUser(thePostId)
     else:
         query = generateGetPostSQLQuery(getRequestEvent)
         with conn.cursor() as cur:
@@ -186,3 +190,12 @@ def searchPosts(searchCriteria, pageNumber):
             conn.commit()
     nonDuplicateResults = [i for n, i in enumerate(duplicateResults) if i not in duplicateResults[n + 1:]]
     return nonDuplicateResults[(10 * pageNumber):((10 * pageNumber) - 1)]
+
+
+def validateUser(postId):
+    query = ('SELECT post_user FROM post WHERE post_id =\"{}\"'.format(postId))
+    with conn.cursor() as cur:
+        cur.execute(query)
+        theUserId = cur.fetchone()
+    conn.commit()
+    return {"user_id": theUserId[0]}

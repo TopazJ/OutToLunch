@@ -1,4 +1,5 @@
 
+
 #Assumption that initial post will have zero upvotes and zero downvotes so no need to insert into table
 def generatePostSQLQuery(newRecord):
     """creates string query from PostCreatedEvent to insert Post"""
@@ -24,11 +25,11 @@ def generateGetPostSQLQuery(getRequestEvent):
     path = getRequestEvent['path']
     pageNumber = int(getRequestEvent['queryStringParameters']['page'])
     if 'user' in path:
-        theUserId = path.replace('/posts/user/', '')
+        theUserId = getRequestEvent['queryStringParameters']['post_user']
         query = ('SELECT * FROM post WHERE post_user = \"{}\" ORDER BY post_date DESC LIMIT 10 OFFSET {}'
                  .format(theUserId, (pageNumber*10)))
     elif 'establishment' in path:
-        theEstablishmentId = path.replace('/posts/establishment/', '')
+        theEstablishmentId = getRequestEvent['queryStringParameters']['establishment_id']
         query = ('SELECT * FROM post WHERE establishment_id = \"{}\" ORDER BY post_date DESC LIMIT 10 OFFSET {}'
                  .format(theEstablishmentId, (pageNumber*10)))
     else:
