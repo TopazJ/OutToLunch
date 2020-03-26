@@ -42,3 +42,10 @@ def update(request):
     establishment.save()
     return redirect('/')
 
+def search(request):
+    payload = {'data': {}}
+    establishments = Establishment.objects.get(name__contains=request.GET.get("search"));
+    for i in range(len(establishments)):
+        payload['data'][i] = establishments[i].to_json()
+
+    return JsonResponse(payload)
