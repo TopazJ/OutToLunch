@@ -42,13 +42,12 @@ def create(request):
                     type='PostCreatedEvent',
                     timestamp=datetime.now(),
                     data=Post(post_id=uuid.uuid4().__str__(),
+                              user_id=uuid.uuid4().__str__(),
+                              post_rating=0,
+                              post_subject='the post subject - test',
                               establishment_id=uuid.uuid4().__str__(),
-                              user_id="testID",
-                              post_content='test_post',
-
-                              post_photo_location='',
-                              post_rating=0, post_subject='the potential truth',
-
+                              post_content='test_post content',
+                              post_photo_location='null'
                               )
                     )
     comment.save()
@@ -86,7 +85,7 @@ def delete(request):
     comment = Event(event_id=uuid.uuid4().__str__(),
                     type='PostDeletedEvent',
                     timestamp=datetime.now(),
-                    data=Post(post_id="1e4d4de2-6bc6-11ea-a989-0ac9002d85a0")
+                    data=Post(post_id="f8598dff-bbfb-b427-87b9c6dcf761")
                     )
     comment.save()
 

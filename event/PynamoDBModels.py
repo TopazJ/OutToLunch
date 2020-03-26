@@ -1,5 +1,5 @@
 from pynamodb.models import Model
-from pynamodb.attributes import UnicodeAttribute, MapAttribute, UTCDateTimeAttribute, NumberAttribute
+from pynamodb.attributes import UnicodeAttribute, MapAttribute, UTCDateTimeAttribute, NumberAttribute, BooleanAttribute
 from OutToLunch.config import DynamoDBAccessKey, DynamoDBKeyID
 
 PostCreatedEvent = 'PostCreatedEvent'
@@ -15,13 +15,15 @@ CommentDeletesEvent = 'CommentDeleteEvent'
 
 class Post(MapAttribute):
     post_id = UnicodeAttribute()
-    post_user = UnicodeAttribute(null=True)
-    post_date = UnicodeAttribute(null=True)
+    user_id = UnicodeAttribute(null=True)
     post_rating = NumberAttribute(null=True)
     post_subject = UnicodeAttribute(null=True)
+    establishment_id = UnicodeAttribute(null=True)
     post_content = UnicodeAttribute(null=True)
     post_photo_location = UnicodeAttribute(null=True)
-    establishment_id = UnicodeAttribute(null=True)
+    post_date = UnicodeAttribute(null=True)
+    downvote = BooleanAttribute(null=True)
+    upvote = BooleanAttribute(null=True)
 
 
 class CreateComment(MapAttribute):
