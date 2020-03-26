@@ -6,7 +6,7 @@ class Comment extends Component {
   state = {};
   render() {
     return (
-      <div style={{ background: "#fff0f1" }} class="border">
+      <div style={{ background: "#fff0f1" }} className="border">
         <div
           style={{
             position: "absolute",

@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5225a379-3f6c-47e4-ae19-2441f0df3cfe" name="Default Changelist" comment="Fixed it so that modals actually appear on top of the things.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/view/src/components/Comment.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/view/src/components/Comment.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/src/components/Post.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/view/src/components/Post.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +93,7 @@
       <workItem from="1582365172077" duration="251000" />
       <workItem from="1584832581399" duration="2820000" />
       <workItem from="1584903270541" duration="10606000" />
-      <workItem from="1585180802994" duration="14743000" />
+      <workItem from="1585180802994" duration="14853000" />
     </task>
     <task id="LOCAL-00001" summary="Added starting layer of the view. User logins work for the most part, have to add better error messages to the user.">
       <created>1582364877304</created>
