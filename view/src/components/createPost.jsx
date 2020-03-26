@@ -53,7 +53,6 @@ class CreatePost extends Component {
                   />
                   <br></br>
                   <textarea
-                    type="text"
                     className="form-control"
                     required
                     style={{ width: "700px", height: "200px" }}

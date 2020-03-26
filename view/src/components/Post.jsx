@@ -77,7 +77,6 @@ class Post extends Component {
           ))}
           <div style={{ paddingLeft: "25px" }}>
             <textarea
-              type="text"
               required
               style={{ width: "700px", height: "100px" }}
               placeholder="Write a comment..."

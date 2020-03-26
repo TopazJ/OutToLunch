@@ -28,7 +28,6 @@ class Comment extends Component {
           <p>Why would you review the bookstore are you stupid?</p>
 
           <textarea
-            type="text"
             required
             style={{ width: "450px", height: "50px" }}
             placeholder="Respond to this comment"
