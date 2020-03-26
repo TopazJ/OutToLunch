@@ -37,7 +37,7 @@ class CreatePost extends Component {
                     style={{ width: "700px" }}
                     placeholder="Title"
                   />
-                  <br></br>
+                  <br/>
                   <input
                     className="form-control"
                     type="text"
@@ -51,7 +51,7 @@ class CreatePost extends Component {
                     value={this.rating}
                     onStarClick={this.onStarClick.bind(this)}
                   />
-                  <br></br>
+                  <br/>
                   <textarea
                     className="form-control"
                     required
