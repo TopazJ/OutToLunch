@@ -31,13 +31,15 @@ class CreatePost extends Component {
                 <h2>Create New Review</h2>
                 <form>
                   <input
+                    className="form-control"
                     type="text"
                     required
                     style={{ width: "700px" }}
                     placeholder="Title"
                   />
-                  <br></br>
+                  <br/>
                   <input
+                    className="form-control"
                     type="text"
                     required
                     style={{ width: "300px" }}
@@ -49,9 +51,9 @@ class CreatePost extends Component {
                     value={this.rating}
                     onStarClick={this.onStarClick.bind(this)}
                   />
-                  <br></br>
+                  <br/>
                   <textarea
-                    type="text"
+                    className="form-control"
                     required
                     style={{ width: "700px", height: "200px" }}
                     placeholder="Write your review..."

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 class NavBar extends Component {
   constructor(props) {
@@ -17,13 +17,16 @@ class NavBar extends Component {
     return (
       <React.Fragment>
         <nav id="theNavBar" className="navbar fixed-top navbar-light bg-light">
-          <a className="navbar-brand pacifico" href="/">
-            <img
-              src="https://cdn1.iconfinder.com/data/icons/school-11/100/Meal-512.png"
-              className="thumbnail"
-            />
-            <b>Out to Lunch🥪</b>
-          </a>
+          <Link to={"/Homepage"}>
+            <div className="navbar-brand pacifico">
+              <img
+                src="https://cdn1.iconfinder.com/data/icons/school-11/100/Meal-512.png"
+                className="thumbnail"
+              />
+
+              <b>Out to Lunch🥪</b>
+            </div>
+          </Link>
           <div className="navbarsearch">
             <form>
               <input

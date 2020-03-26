@@ -11,6 +11,7 @@ import Logout from "./Logout.jsx"
 import Homepage from "./Homepage.jsx";
 import CreatePost from "./createPost.jsx";
 import SideBar from "./navigation/SideBar.jsx";
+import EstablishmentsPage from "./EstablishmentsPage.jsx";
 
 class App extends Component {
 
@@ -86,7 +87,7 @@ class App extends Component {
                         navLinks={this.state.homeLinks}
                         buttonLinks={this.state.navLinks}/>
                     <div className='homepage'>
-                        <SideBar /> {/*TODO Sidebar needs to receive the options it lists as props as these will change with the user's status.*/}
+                        <SideBar loggedIn={this.state.loggedIn}/> {/*TODO Sidebar needs to receive the options it lists as props as these will change with the user's status.*/}
                     </div>
                     <Switch>
                         {this.state.navLinks.map(link => (
@@ -105,6 +106,11 @@ class App extends Component {
                         <Route path="/create-post">
                             <div className="homepage">
                                 <CreatePost/>
+                            </div>
+                        </Route>
+                        <Route path="/establishments">
+                            <div className="homepage">
+                                <EstablishmentsPage/>
                             </div>
                         </Route>
                         <Route path="/">
