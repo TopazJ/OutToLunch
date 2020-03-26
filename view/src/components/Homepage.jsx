@@ -15,7 +15,6 @@ class Homepage extends Component {
       { id: 4, userId: 2 },
       { id: 5, userId: 6 }
     ],
-    page: "posts",
     location: this.props.location.pathname.includes("/post/") ? '/' : this.props.location.pathname
   };
 
@@ -43,7 +42,6 @@ class Homepage extends Component {
   render() {
       return (
           <div className="background">
-              <br />
               <b style={{ paddingLeft: "350px" }}>Most Recent Reviews</b>
               {this.showThePostReviewButtonIfLoggedIn()}
               <br />

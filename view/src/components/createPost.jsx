@@ -31,6 +31,7 @@ class CreatePost extends Component {
                 <h2>Create New Review</h2>
                 <form>
                   <input
+                    class="form-control"
                     type="text"
                     required
                     style={{ width: "700px" }}
@@ -38,6 +39,7 @@ class CreatePost extends Component {
                   />
                   <br></br>
                   <input
+                    class="form-control"
                     type="text"
                     required
                     style={{ width: "300px" }}
@@ -52,6 +54,7 @@ class CreatePost extends Component {
                   <br></br>
                   <textarea
                     type="text"
+                    class="form-control"
                     required
                     style={{ width: "700px", height: "200px" }}
                     placeholder="Write your review..."
