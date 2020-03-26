@@ -53,23 +53,18 @@ class Homepage extends Component {
         {this.showThePostReviewButtonIfLoggedIn()}
         <br />
         <Switch>
-          <Route path="/test">
+          <Route path="/post/:id">
             <Post />
           </Route>
-          <div>
-            <ModalRoute path="/post/:id" parentPath={this.state.location}>
-              <Post />
-            </ModalRoute>
-            <Route>
-              {this.state.posts.map((post, index) => (
-                <HomepagePost
-                  key={index}
-                  postId={post.id}
-                  userId={post.userId}
-                />
-              ))}
-            </Route>
-          </div>
+          <Route>
+            {this.state.posts.map((post, index) => (
+              <HomepagePost
+                key={index}
+                postId={post.id}
+                userId={post.userId}
+              />
+            ))}
+          </Route>
         </Switch>
       </div>
     );

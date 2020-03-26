@@ -20,7 +20,7 @@ class Post extends Component {
 
   render() {
     return (
-      <div>
+      <div className="background container border post">
         <div style={{ background: "aliceblue" }}>
           <div
             style={{
