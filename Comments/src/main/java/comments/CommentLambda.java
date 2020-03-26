@@ -1,5 +1,7 @@
 package comments;
 
+import java.util.ArrayList;
+
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
@@ -19,7 +21,11 @@ public class CommentLambda implements RequestHandler<Comment, String>
 		return "Lambda received the following comment: " + request.toString();
 	}
 	
-	//Write comments into the DB
+	/**
+	 * Write comments into the DB
+	 * 
+	 * @return Confirmation of wiping. ["Success: "]
+	 */
 	public String insertRequest(Comment request, Context context) 
 	{	
 		String logStr = "CommentLambda.insertRequest received.";
@@ -39,19 +45,132 @@ public class CommentLambda implements RequestHandler<Comment, String>
 		dbManager.closeDBConnection();		
 		
 		//report success
-		return logStr;
+		return "Success: " + logStr;
 	}
 	
 	/**
-	 * Read comments into the DB
-	 * 1-Hot Comment fields will be the search criteria.
-	 * TODO: implement functionality for more than just postID
+	 * Read comments from the DB based on parameters
+	 * specified by the given comment.
+	 * 
+	 * Read all children of a parent:
+	 * 	request{ parentID: <parentID>, all else: "null" } 
+	 * 
+	 * Read the n oldest/youngest 1st gen children of a parent: 
+	 * 	request{ parentID: <parentID>, content: [n:<n>,offset:<offset>], all else: "null" }
+	 *
+	 * Read all comments made by a user:
+	 *  request{ userID: <userID>, all else: "null"}
+	 *  
+	 * @param request Comment with parameters for query
+	 * @param context AWS Lambda context
+	 * @return JSON list of read comments.
 	 */
 	public String readRequest(Comment request, Context context)
 	{
+		//connect to the database
+		CommentDBManager dbManager = new CommentDBManager();
+		dbManager.readDBCredentials("src/main/java/comments/config.ini");
+		dbManager.initDBConnection();
+				
 		//parse parameters
-		//TODO implement functionality for more than just postID
+		int n=0, offset=0;
+		char mode = 'c';
 		if(request.getParentID().equals("null"))
+			return "Error: invalid parameters.";
+		if(!request.getContent().equals("null"))
+		{
+			ArrayList<String> flankers = new ArrayList<String>();
+			flankers.add("[n:");		flankers.add(",");
+			flankers.add("offset:");	flankers.add("]");
+			ArrayList<String> values = dbManager.parseValues(request.getContent(), flankers);
+			if(values.size() > 0)
+			{
+				n = Integer.parseInt(values.get(0));
+				offset = Integer.parseInt(values.get(1));			
+				mode = 'a';
+			}
+		}
+		if(!request.getUserID().equals("null") && !request.getUserID().equals("Missing userID") && !request.getUserID().equals(""))
+			mode='u';
+		
+		//read comment	
+		String jsonResponse = "Error: No comments read.";
+		if(mode=='c')
+			jsonResponse = dbManager.queryCommentsByParentID(request.getParentID());
+		if(mode=='a')
+			jsonResponse = dbManager.queryCommentsByAge(request.getParentID(), n, offset);
+		if(mode=='u')
+			jsonResponse = dbManager.queryCommentsByColumnID("userID", request.getUserID());
+			
+		//close
+		dbManager.closeDBConnection();		
+		
+		//report success
+		return jsonResponse;
+		
+	}
+	
+	/**
+	 * Wipe a comment from the DB.
+	 * Wiping means replacing the userID and/or comment content
+	 * with a [deleted] message.
+	 * request
+	 * {
+	 *  commentID = <commentID>
+	 * 	userID = ["wipe"|"null"]
+	 * 	content = ["wipe"|"null"]
+	 * }
+	 * all other fields = "null" or 0
+	 * 
+	 * @param request Comment request.
+	 * @param context Lambda context.
+	 * @return Confirmation of wiping. ["Success: "|"Error: "]
+	 */
+	public String wipeRequest(Comment request, Context context)
+	{
+		if(request.getCommentID().equals("null"))
+			return "Error: invalid parameters.";
+			
+		//connect to the database
+		CommentDBManager dbManager = new CommentDBManager();
+		dbManager.readDBCredentials("src/main/java/comments/config.ini");
+		dbManager.initDBConnection();
+		
+		//wipe comment
+		char mode = 'e';
+		boolean userWipe = request.getUserID().equals("wipe");
+		boolean contentWipe = request.getContent().equals("wipe");
+		if(userWipe && contentWipe)mode = 'b';
+		else if(userWipe)mode = 'u';
+		else if(contentWipe)mode = 'c';
+		dbManager.wipeCommentByCommentID(request.getCommentID(), mode);
+		
+		//close
+		dbManager.closeDBConnection();	
+		
+		//report success
+		return "Success: Comment with commentID="+request.getCommentID()+" wiped.";
+	}
+	
+	/**
+	 * Update a comment based on the commentID
+	 * request
+	 * {
+	 *  "commentID": <commentID>,
+	 *  "userID": <userID>,
+	 *  "content": <content>,
+	 *  "numChildren": <numChildren>,
+	 * 	all else: <updated info>
+	 * }
+	 * 
+	 * @param request Comment request.
+	 * @param context Lambda context.
+	 * @return Confirmation of wiping. ["Success: "|"Error: "]
+	 */
+	public String updateRequest(Comment request, Context context)
+	{
+		//parse parameters
+		if(request.getCommentID().equals("null"))
 			return "Error: invalid parameters.";
 		
 		//connect to the database
@@ -59,26 +178,28 @@ public class CommentLambda implements RequestHandler<Comment, String>
 		dbManager.readDBCredentials("src/main/java/comments/config.ini");
 		dbManager.initDBConnection();
 		
-		//read comment
-		String jsonResponse = dbManager.queryCommentsByParentID(request.getParentID());
+		//update comment
+		dbManager.updateCommentByCommentID(request.getCommentID(), request.getUserID(), request.getContent(), request.getNumChildren());
 		
 		//close
-		dbManager.closeDBConnection();		
+		dbManager.closeDBConnection();	
 		
 		//report success
-		return jsonResponse;
+		return "Success: Comment with commentID=" + request.getCommentID() + " updated.";
 	}
 	
 	/**
-	 * Delete comments from the DB
-	 * 1-Hot Comment fields will be the search criteria.
-	 * TODO: implement functionality for more than just parentID
+	 * Delete comments from the DB using comment fields
+	 * Delete all children of parent ID: request{"parentID": <parentID>, "all else":null}
+	 *
+	 * @param request Comment detailing parameters to delete comments by.
+	 * @param context AWS Lambda context;
+	 * @return Confirmation of deletion. ["Success: "|"Error: "]
 	 */
 	public String deleteRequest(Comment request, Context context)
 	{
 		//parse parameters
-		//TODO implement functionality for more than just postID
-		if(request.getParentID().equals("null"))
+		if(request.getParentID().equals("null") && request.getCommentID().equals("null"))
 			return "Error: invalid parameters.";
 		
 		//connect to the database

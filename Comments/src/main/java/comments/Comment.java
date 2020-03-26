@@ -38,6 +38,10 @@ public class Comment
 	//(String) milliseconds since 1970-01-01 of the date
 	private long dateMs;
 	
+	@JsonProperty("numChildren")
+	//Number of child replies to this comment
+	private int numChildren;
+	
 	//The (local) date that the comment was made. Format: yyyy-mm-dd-hh:mm:ss
 	private Timestamp date;
 	
@@ -53,7 +57,7 @@ public class Comment
 	public String getUserID() {
 		return userID;
 	}
-
+	
 	public void setUserID(String userID) {
 		this.userID = userID;
 	}
@@ -93,6 +97,16 @@ public class Comment
 		this.date = new Timestamp(dateMs);
 	}
 	
+	public int getNumChildren()
+	{
+		return numChildren;
+	}
+	
+	public void setNumChildren(int numChildren)
+	{
+		this.numChildren = numChildren;
+	}
+	
 	//get JSON representation of 
 	public String toJSON()
 	{
@@ -100,7 +114,8 @@ public class Comment
 		strJSON += "\"userID\": \"" + getUserID() + "\", ";
 		strJSON += "\"parentID\": \"" + getParentID() + "\", ";
 		strJSON += "\"content\": \"" + getContent() + "\", ";
-		strJSON += "\"date\": " + date.toString() + " }";
+		strJSON += "\"date\": " + date.toString() + ", ";
+		strJSON += "\"numChildren\": " + Integer.toString(numChildren) + " }";
 		return strJSON;
 	}
 	
@@ -114,18 +129,19 @@ public class Comment
 		commentStr += ", parentID: " + parentID;
 		commentStr += ", date: " + date.toString();		
 		commentStr += ", content: " + content;
+		commentStr += ", numChildren: " + Integer.toString(numChildren);
 		
 		return commentStr;
 	}
 	
 	//constructor with java.sql.Date for JSON
 	//will use the class getters and setters, or default if not available
-	Comment(String commentID, String userID, String parentID, String content, long dateMs)
+	Comment(String commentID, String userID, String parentID, String content, long dateMs, int numChildren)
 	{
 	}
 	
 	//constructor with local date
-	Comment(String commentID, String userID, String parentID, String content, Timestamp date)
+	Comment(String commentID, String userID, String parentID, String content, Timestamp date, int numChildren)
 	{
 		this.commentID = commentID;
 		this.userID = userID;
@@ -133,6 +149,7 @@ public class Comment
 		this.content = content;
 		this.dateMs = date.getTime();
 		this.date = date;
+		this.numChildren = numChildren;
 	}
 	
 	//default constructor
@@ -144,5 +161,6 @@ public class Comment
 		content = "Missing content";
 		dateMs = 0;
 		date = new Timestamp(0);
+		numChildren = 0;
 	}
 }
