@@ -13,15 +13,15 @@ CommentUpdatedEvent = 'CommentUpdatedEvent'
 CommentDeletesEvent = 'CommentDeleteEvent'
 
 
-class CreatePost(MapAttribute):
+class Post(MapAttribute):
     post_id = UnicodeAttribute()
-    post_user = UnicodeAttribute()
-    post_date = UnicodeAttribute()
-    post_rating = NumberAttribute()
-    post_subject = UnicodeAttribute()
-    post_content = UnicodeAttribute()
-    post_photo_location = UnicodeAttribute()
-    establishment_id = UnicodeAttribute()
+    post_user = UnicodeAttribute(null=True)
+    post_date = UnicodeAttribute(null=True)
+    post_rating = NumberAttribute(null=True)
+    post_subject = UnicodeAttribute(null=True)
+    post_content = UnicodeAttribute(null=True)
+    post_photo_location = UnicodeAttribute(null=True)
+    establishment_id = UnicodeAttribute(null=True)
 
 
 class CreateComment(MapAttribute):
