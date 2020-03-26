@@ -11,6 +11,7 @@ import uuid
 from datetime import datetime
 
 commonWords = ['the', 'of', 'and', 'a', 'to', 'in', 'is', 'you', 'that', 'it', 'was', 'for']
+unableToUpdate = ['post_id', 'post_user', 'establishment_id', 'upvote', 'downvote', 'date']
 
 # rds settings
 
@@ -61,12 +62,15 @@ def handler(event, context):
     try:
         if 'Records' in event:
             record = testSerializer(event['Records'][0]['dynamodb']['NewImage'])
-            if record['type'] == "PostCreatedEvent":
+            type = record['type']
+            if type == "PostCreatedEvent":
                 addPost(record)
-            elif record['type'] == "PostUpdatedEvent":
+            elif type == "PostUpdatedEvent":
                 updatePost(record)
-            elif record['type'] == "PostDeletedEvent":
+            elif type == "PostDeletedEvent":
                 deletePost(record)
+            elif type == "PostVoteEvent":
+                votePost(record)
             response = None
         else:
             if event['httpMethod'] == "GET":
@@ -144,18 +148,50 @@ def updatePost(updatePostEvent):
     postId = updatePostEvent["data"]["post_id"]
     with conn.cursor() as cur:
         for key, value in updatePostEvent["data"].items():
-            if key != "post_id":
-                if key == "upvote":
-                    if value:
-                        query = 'UPDATE post SET upvote = upvote+1 WHERE post_id = \"{}\"'.format(postId)
-                        cur.execute(query)
-                elif key == "downvote":
-                    if value:
-                        query = 'UPDATE post SET downvote = downvote+1 WHERE post_id = \"{}\"'.format(postId)
-                        cur.execute(query)
-                else:
-                    query = 'UPDATE post SET {} = \"{}\" WHERE post_id = \"{}\"'.format(key, value, postId)
-                    cur.execute(query)
+            if key not in unableToUpdate:
+                query = 'UPDATE post SET {} = \"{}\" WHERE post_id = \"{}\"'.format(key, value, postId)
+                cur.execute(query)
+        conn.commit()
+
+
+def votePost(votePostEvent):
+    userID = votePostEvent["data"]["user_id"]
+    postID = votePostEvent["data"]["post_id"]
+    vote = int(votePostEvent["data"]["vote"])
+    query = ('SELECT * FROM vote WHERE post_id = \"{}\" AND user_id = \"{}\"'.format(postID, userID))
+    with conn.cursor() as cur:
+        affectedRow = cur.execute(query)
+        if affectedRow > 0:
+            row = cur.fetchone()
+            if vote > 0 and not row[2]:
+                query = (
+                    'UPDATE vote SET upvote = true, downvote = false WHERE post_id = \"{}\" AND user_id = \"{}\"'.format(
+                        postID, userID))
+                cur.execute(query)
+                query = 'UPDATE post SET upvote = upvote+1, downvote = downvote-1 WHERE post_id = \"{}\"'.format(postID)
+                cur.execute(query)
+            elif vote < 0 and not row[3]:
+                query = (
+                    'UPDATE vote SET upvote = false, downvote = true WHERE post_id = \"{}\" AND user_id = \"{}\"'.format(
+                        postID, userID))
+                cur.execute(query)
+                query = 'UPDATE post SET upvote = upvote-1, downvote = downvote+1 WHERE post_id = \"{}\"'.format(postID)
+                cur.execute(query)
+        else:
+            if vote > 0:
+                query = (
+                    'INSERT INTO vote (user_id, post_id, upvote, downvote) VALUES ( \"{}\",  \"{}\", true, false)'.format(
+                        userID, postID))
+                cur.execute(query)
+                query = 'UPDATE post SET upvote = upvote+1 WHERE post_id = \"{}\"'.format(postID)
+                cur.execute(query)
+            else:
+                query = (
+                    'INSERT INTO vote (user_id, post_id, upvote, downvote) VALUES ( \"{}\",  \"{}\", false, true)'.format(
+                        userID, postID))
+                cur.execute(query)
+                query = 'UPDATE post SET downvote = downvote+1 WHERE post_id = \"{}\"'.format(postID)
+                cur.execute(query)
         conn.commit()
 
 
