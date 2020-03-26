@@ -30,6 +30,7 @@ def create(request):
     establishment.save()
     return redirect('/')
 
+
 def delete(request):
     if request.GET.get("establishment_id"):
         Establishment.objects.get(establishment_id=request.GET["establishment_id"]).delete()
@@ -41,6 +42,7 @@ def update(request):
     establishment.location = "University of Calgary"
     establishment.save()
     return redirect('/')
+
 
 def search(request):
     payload = {'data': {}}
