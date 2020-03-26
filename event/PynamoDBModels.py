@@ -56,8 +56,8 @@ class Event(Model):
     class Meta:
         table_name = 'OutToLunchEvents'
         region = 'us-west-2'
-        aws_access_key_id = DynamoDBKeyID
-        aws_secret_access_key = DynamoDBAccessKey
+        aws_access_key_id = DynamoKeyID
+        aws_secret_access_key = DynamoAccess
 
     event_id = UnicodeAttribute(hash_key=True)
     type = UnicodeAttribute()
