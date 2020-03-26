@@ -1,4 +1,5 @@
 import uuid
+from users.models import SiteUser
 from django.db import models
 from django.core.exceptions import ValidationError
 import json
@@ -17,19 +18,27 @@ class Establishment(models.Model):
     location = models.CharField(max_length=200)
     description = models.CharField(max_length=200)
     rating = models.FloatField(default=0, validators=[validate_less_than_10])
-    flag_counter = models.IntegerField(default=0)
+    rating_count = models.IntegerField(default=0)
+    owner = models.ForeignKey(SiteUser,on_delete=models.DO_NOTHING, null=True)
+    image = models.CharField(max_length=1000000, null=True)
 
-    def to_json(self):
+    def to_json(self, canedit):
         json_data = {
             'id': self.establishment_id,
             'name': self.name,
             'location': self.location,
             'description': self.description,
             'rating': self.rating,
-            'flags': self.flag_counter
+            'rating_count': self.rating_count,
+            'edit': canedit
         }
         return json_data
 
     def __str__(self):
-        return 'id: %s, name: %s, location: %s, description: %s, rating: %s, flags: %s' % (
+        return 'id: %s, name: %s, location: %s, description: %s, rating: %s, flag_counter: %s' % (
             self.establishment_id, self.name, self.location, self.description, self.rating, self.flag_counter)
+
+
+class Flag_counter(models.Model):
+    user = models.ForeignKey(SiteUser, on_delete=models.CASCADE)
+    establishment = models.ForeignKey(Establishment, on_delete=models.CASCADE)

@@ -14,26 +14,10 @@ from event.PynamoDBModels import CreateComment, Event, UpdateComment, WipeCommen
 def index(request):
     # works to retrive comments (post ID only) - deprecated
     url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/readCommentLambda'
-    post = 'postID'
-    parent = 'parentID'
-    params = 'content'
-    if request.GET.get(post):
-        payload = {post: request.GET[post]}
-    elif request.GET.get(parent):
-        if request.GET.get(params):
-            payload = {parent: request.GET[parent], params: request.GET[params]}
-        else:
-            payload = {parent: request.GET[parent]}
-    else:
-
-        return redirect('/')
-
-    print(payload)
+    data = json.loads(request.body)
+    payload = {'ParentID': data['parentID']}
     r = requests.get(url, params=payload)
-    print(r.text)
-
-    return redirect('/')
-
+    return JsonResponse(r.json())
 
 def create(request):
     # pynamo db - tested
