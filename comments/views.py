@@ -15,9 +15,11 @@ def index(request):
     # works to retrive comments (post ID only) - deprecated
     url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/readCommentLambda'
     data = json.loads(request.body)
-    payload = {'ParentID': data['parentID']}
+    payload = {'parentID': data['parentID']}
     r = requests.get(url, params=payload)
-    return JsonResponse(r.json())
+    #TODO This results in a string. Needs to be changed to JSON format.
+    return JsonResponse({"data": r.text})
+
 
 def create(request):
     # pynamo db - tested
