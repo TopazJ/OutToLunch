@@ -32,7 +32,7 @@ class Comment extends Component {
             required
             style={{ width: "450px", height: "50px" }}
             placeholder="Respond to this comment"
-            class="form-control"
+            className="form-control"
           />
           <div style={{ paddingBottom: "10px" }}>
             <button className="btn btn-secondary"> Post Comment </button>

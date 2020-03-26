@@ -81,7 +81,7 @@ class Post extends Component {
               required
               style={{ width: "700px", height: "100px" }}
               placeholder="Write a comment..."
-              class="form-control"
+              className="form-control"
             />
             <div style={{ paddingBottom: "10px" }}>
               <button className="btn btn-primary"> Post Comment </button>
