@@ -27,7 +27,7 @@ def index(request):
 
 
 def create(request):
-    # pynamo db - untested
+    # pynamo db - tested
     # TODO: make it take in the POST information
 
     """ post_id = UnicodeAttribute()
@@ -59,7 +59,7 @@ def create(request):
 
 
 def update(request):
-    # pynamo db - untested
+    # pynamo db - tested
     # TODO: make it take in the POST information
 
     comment = Event(event_id=uuid.uuid4().__str__(),
@@ -79,7 +79,7 @@ def update(request):
 
 
 def delete(request):
-    # pynamo db - untested
+    # pynamo db - tested
     # TODO: make it take in the POST information
 
     comment = Event(event_id=uuid.uuid4().__str__(),
