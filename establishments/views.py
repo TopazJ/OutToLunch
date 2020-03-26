@@ -23,17 +23,19 @@ def index(request):
 
 
 def create(request):
-    establishment = Establishment(name="Bakechef's shifty testing cousin",
-                                  location="UofC",
-                                  description="Strange and ephemereal version of bakechef",
-                                  rating=3)
-    establishment.save()
+    # establishment = Establishment(name="Bakechef's shifty testing cousin",
+    #                               location="UofC",
+    #                               description="Strange and ephemereal version of bakechef",
+    #                               rating=3)
+    # establishment.save()
+    #if
     return redirect('/')
 
 
 def delete(request):
-    if request.GET.get("establishment_id"):
-        Establishment.objects.get(establishment_id=request.GET["establishment_id"]).delete()
+    data = json.loads(request.body)
+    if request.POST.get("establishment_id"):
+        Establishment.objects.get(establishment_id=data["establishment_id"]).delete()
     return redirect('/')
 
 
@@ -45,9 +47,10 @@ def update(request):
 
 
 def search(request):
-    payload = {'data': {}}
-    establishments = Establishment.objects.get(name__contains=request.GET.get("search"));
-    for i in range(len(establishments)):
-        payload['data'][i] = establishments[i].to_json()
+    payload = {'data': []}
+    data = json.loads(request.body)
+    establishments = Establishment.objects.filter(name__contains=data['search']);
+    for establishment in establishments:
+        payload['data'].append(establishment.to_json())
 
     return JsonResponse(payload)
