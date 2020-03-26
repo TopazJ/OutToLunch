@@ -3,11 +3,14 @@ import logging
 import rds_config
 import pymysql
 import json
+import re
 from query_generation import *
 # import boto3
 from boto3.dynamodb.types import TypeDeserializer
 import uuid
 from datetime import datetime
+
+commonWords = ['the', 'of', 'and', 'a', 'to', 'in', 'is', 'you', 'that', 'it', 'was', 'for']
 
 # rds settings
 
@@ -100,16 +103,20 @@ def testSerializer(data):
 
 def getPost(getRequestEvent):
     """retrieves posts based on most recent, establishment or user"""
-    query = generateGetPostSQLQuery(getRequestEvent)
-    with conn.cursor() as cur:
-        cur.execute(query)
-        thePosts = cur.fetchall()
-        list = []
-        for row in thePosts:
-            post = convertResults(row)
-            list.append(post)
-        conn.commit()
-    return list
+    if 'search' in getRequestEvent['path']:
+        return searchPosts(getRequestEvent['queryStringParameters']['search_criteria'],
+                           int(getRequestEvent['queryStringParameters']['page']))
+    else:
+        query = generateGetPostSQLQuery(getRequestEvent)
+        with conn.cursor() as cur:
+            cur.execute(query)
+            thePosts = cur.fetchall()
+            list = []
+            for row in thePosts:
+                post = convertResults(row)
+                list.append(post)
+            conn.commit()
+        return list
 
 
 def addPost(postCreatedEvent):
@@ -159,3 +166,23 @@ def convertResults(row):
             'post_photo_location': row[4], 'establishment_id': row[5], 'post_rating': row[6],
             'post_subject': row[7], 'upvote': row[8], 'downvote': row[9]}
     return post
+
+
+# https://www.geeksforgeeks.org/python-removing-duplicate-dicts-in-list/
+def searchPosts(searchCriteria, pageNumber):
+    searchWords = re.findall(r'\w+', searchCriteria)
+    duplicateResults = []
+    for word in searchWords:
+        if word not in commonWords and len(word) > 1:
+            query = (
+                'SELECT DISTINCT * FROM post WHERE post_content LIKE \"%{}%\" OR post_subject LIKE \"%{}%\" ORDER BY post_date DESC'.format(
+                    word, word))
+            with conn.cursor() as cur:
+                cur.execute(query)
+                thePosts = cur.fetchall()
+                for row in thePosts:
+                    post = convertResults(row)
+                    duplicateResults.append(post)
+            conn.commit()
+    nonDuplicateResults = [i for n, i in enumerate(duplicateResults) if i not in duplicateResults[n + 1:]]
+    return nonDuplicateResults[(10 * pageNumber):((10 * pageNumber) - 1)]
