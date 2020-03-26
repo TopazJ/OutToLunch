@@ -30,7 +30,6 @@ def create(request):
     establishment.save()
     return redirect('/')
 
-
 def delete(request):
     if request.GET.get("establishment_id"):
         Establishment.objects.get(establishment_id=request.GET["establishment_id"]).delete()
