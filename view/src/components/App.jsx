@@ -84,7 +84,7 @@ class App extends Component {
                         navLinks={this.state.homeLinks}
                         buttonLinks={this.state.navLinks}/>
                     <div className='homepage'>
-                        <SideBar /> {/*TODO Sidebar needs to receive the options it lists as props as these will change with the user's status.*/}
+                        <SideBar loggedIn={this.state.loggedIn}/> {/*TODO Sidebar needs to receive the options it lists as props as these will change with the user's status.*/}
                     </div>
                     <Switch>
                         {this.state.navLinks.map(link => (
