@@ -1,12 +1,13 @@
 import React, { Component } from "react";
+import {Link} from "react-router-dom";
 
 class SideBar extends Component {
   render() {
 
     return (
         <div className="sidenav">
-            <a href="#">Reviews</a>
-            <a href="#">Establishments</a>
+            <Link to ={"/Homepage"}>Reviews</Link>
+            <Link to ={"/establishments"}>Establishments</Link>
             <a href="#">Account Settings</a>
         </div>
     );

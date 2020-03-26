@@ -11,6 +11,7 @@ import Logout from "./Logout.jsx"
 import Homepage from "./Homepage.jsx";
 import CreatePost from "./createPost.jsx";
 import SideBar from "./navigation/SideBar.jsx";
+import EstablishmentsPage from "./EstablishmentsPage.jsx";
 
 class App extends Component {
 
@@ -102,6 +103,11 @@ class App extends Component {
                         <Route path="/create-post">
                             <div className="homepage">
                                 <CreatePost/>
+                            </div>
+                        </Route>
+                        <Route path="/establishments">
+                            <div className="homepage">
+                                <EstablishmentsPage/>
                             </div>
                         </Route>
                         <Route>

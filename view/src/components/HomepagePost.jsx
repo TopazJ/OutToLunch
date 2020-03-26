@@ -69,7 +69,7 @@ class HomepagePost extends Component {
                     right: "20px"
                   }}
                 >
-                  View Comments ({0})
+                  View Comments ({1})
                 </button>
                  </Link>
                 <br />
