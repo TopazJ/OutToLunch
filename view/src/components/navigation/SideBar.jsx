@@ -6,7 +6,7 @@ class SideBar extends Component {
     if (this.props.loggedIn === true) {
       //just put true there for testing (remove this.props.loggedIn).
       return (
-        <a href="#">Account Settings</a>
+         <Link to ={"/account-settings"}>Account Settings</Link>
       );
     }
   }

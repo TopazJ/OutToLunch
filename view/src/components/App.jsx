@@ -11,6 +11,8 @@ import Homepage from "./Homepage.jsx";
 import CreatePost from "./createPost.jsx";
 import SideBar from "./navigation/SideBar.jsx";
 import EstablishmentsPage from "./EstablishmentsPage.jsx";
+import CreateEstablishment from "./CreateEstablishment.jsx";
+import AccountSettings from "./AccountSettings.jsx";
 
 class App extends Component {
 
@@ -29,7 +31,7 @@ class App extends Component {
             {id:'create-account', text:'Create Account', component:CreateAccount, props:{url:this.props.url}},
         ],
         location:this.props.location.pathname,
-        loggedIn:false, //You can make this true by default for testing everything with the user as logged in.
+        loggedIn:true, //You can make this true by default for testing everything with the user as logged in.
         userId:0,
         userElo:0
     };
@@ -87,7 +89,7 @@ class App extends Component {
             return (
                 <Route path="/create-establishment">
                     <div className="homepage">
-                        <CreatePost userId={this.state.userId}/>
+                        <CreateEstablishment userId={this.state.userId}/>
                     </div>
                 </Route>);
         }
@@ -116,6 +118,11 @@ class App extends Component {
                                 )}
                             />
                         ))}
+                        <Route path="/account-settings">
+                            <div className="homepage">
+                                <AccountSettings userId={this.state.userId}/>
+                            </div>
+                        </Route>
                         <Route path="/create-post">
                             <div className="homepage">
                                 <CreatePost userId={this.state.userId}/>
