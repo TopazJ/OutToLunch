@@ -17,44 +17,56 @@ def index(request):
     data = json.loads(request.body)
     payload = {'parentID': data['parentID']}
     r = requests.get(url, params=payload)
-    # TODO This results in a string. Needs to be changed to JSON format.
-    return JsonResponse({"data": json.loads(r.json())})
+    return JsonResponse({'data': json.loads(r.json())})
 
 
 def create(request):
     # pynamo db - tested
     # TODO: make it take in the POST information
-
-    comment = Event(event_id=uuid.uuid4().__str__(), type='CommentCreatedEvent', timestamp=datetime.now(),
-                    data=CreateComment(commentID='copy', userID='delete', parentID='test',
-                                       content="screech", dateMs=int(time.time() * 1000)))
-    comment.save()
-
-    if request.user.is_authenticated:
-        return JsonResponse({'status': 'user'})
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            data = json.loads(request.body)
+            comment = Event(event_id=uuid.uuid4().__str__(),
+                            type='CommentCreatedEvent',
+                            timestamp=datetime.now(),
+                            data=CreateComment(commentID=uuid.uuid4().__str__(),
+                                               userID=data["userID"],
+                                               parentID=data['parentID'],
+                                               content=data['content'],
+                                               dateMs=int(time.time() * 1000)))
+            comment.save()
+            return JsonResponse({'success': 'success'})
+        else:
+            return JsonResponse({'error': 'You have to login first in order to post!'})
     else:
-        return JsonResponse({'status': 'anon'})
+        return redirect('/')
+
 
 
 def update(request):
     # pynamo db - untested
     # TODO: make it take in the POST information
     # TODO: validate same user
-
-    comment = Event(event_id=uuid.uuid4().__str__(), type='CommentUpdatedEvent', timestamp=datetime.now(),
-                    data=UpdateComment(commentID="16056ff1-6bde-11ea-a989-0ac9002d85a0",
-                                       userID='mohamedID',
-                                       parentID='yeet',
-                                       content="Victor loves feet",
-                                       dateMs=0,
-                                       numChildren=0
-                                       ))
-    comment.save()
-
-    if request.user.is_authenticated:
-        return JsonResponse({'status': 'user'})
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            data = json.loads(request.body)
+            comment = Event(event_id=uuid.uuid4().__str__(),
+                            type='CommentUpdatedEvent',
+                            timestamp=datetime.now(),
+                            data=UpdateComment(commentID=data['comentID'],
+                                               userID=data['userID'],
+                                               parentID=data['parentID'],
+                                               content=data['content'],
+                                               dateMs=data['dateMS'],
+                                               numChildren=0
+                                               ))
+            comment.save()
+            return JsonResponse({'success': 'success'})
+        else:
+            return JsonResponse({'error': 'You have to login first in order to post!'})
     else:
-        return JsonResponse({'status': 'anon'})
+        return redirect('/')
+
 
 
 def delete(request):
@@ -62,17 +74,23 @@ def delete(request):
     # TODO: make it take in the POST information,
     # TODO: validate same user
     # usage
-    comment = Event(event_id=uuid.uuid4().__str__(), type='CommentWipedEvent', timestamp=datetime.now(),
-                    data=WipeComment(commentID="copy",
-                                     userID='wipe',
-                                     parentID='null',
-                                     content="wipe",
-                                     dateMs=0,
-                                     numChildren=0
-                                     ))
-    comment.save()
-
-    if request.user.is_authenticated:
-        return JsonResponse({'status': 'user'})
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            data = json.loads(request.body)
+            comment = Event(event_id=uuid.uuid4().__str__(),
+                            type='CommentWipedEvent',
+                            timestamp=datetime.now(),
+                            data=WipeComment(commentID=data['commentID'],
+                                             userID=data['userID'],
+                                             parentID=data['parentID'],
+                                             content=data['content'],
+                                             dateMs=data['dateMS'],
+                                             numChildren=0
+                                             ))
+            comment.save()
+            return JsonResponse({'success': 'success'})
+        else:
+            return JsonResponse({'error': 'You have to login first in order to post!'})
     else:
-        return JsonResponse({'status': 'anon'})
+        return redirect('/')
+
