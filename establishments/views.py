@@ -8,19 +8,15 @@ from users.models import SiteUser
 from django.views.decorators.csrf import csrf_exempt
 
 
-def index(request):
+def index(request, page):
     payload = {'data': []}
-    data = json.loads(request.body)
-    page = data['page']
-    page *= 10
-    # get the 10 first ones
+    page *= 10  # get 10 per page
     establishments = Establishment.objects.all().order_by('-rating')[page:page+10]
     for establishment in establishments:
-        canedit = False
+        can_edit = False
         if request.user.is_authenticated and establishment.owner is request.user:
-             canedit = True
-        payload['data'].append(establishment.to_json(canedit))
-    print(payload)
+            can_edit = True
+        payload['data'].append(establishment.to_json(can_edit))
     return JsonResponse(payload)
 
 
@@ -71,13 +67,13 @@ def flag(request):
             data = json.loads(request.body)
             user = SiteUser.objects.get(id=request.user.id)
             establishment = Establishment.objects.get(establishment_id=data["establishment_id"])
-            if Flag_counter.objects.get(establishment = establishment, user=user).exists():
+            if FlagCounter.objects.get(establishment = establishment, user=user).exists():
                 return JsonResponse({"error": "You've already flagged this establishment!"})
             else:
-                if Flag_counter.objects.filter(establishment = establishment).count() is 9:
+                if FlagCounter.objects.filter(establishment = establishment).count() is 9:
                     establishment.delete()
                 else:
-                    flag_count = Flag_counter(establishment=establishment, user=user)
+                    flag_count = FlagCounter(establishment=establishment, user=user)
                     flag_count.save()
 
             return JsonResponse({"success": "success"})

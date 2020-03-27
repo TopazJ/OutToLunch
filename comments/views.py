@@ -18,7 +18,7 @@ def index(request):
     payload = {'parentID': data['parentID']}
     r = requests.get(url, params=payload)
     # TODO This results in a string. Needs to be changed to JSON format.
-    return JsonResponse({"data": r.text})
+    return JsonResponse({"data": json.loads(r.json())})
 
 
 def create(request):

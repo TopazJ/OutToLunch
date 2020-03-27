@@ -4,6 +4,7 @@ from OutToLunch.config import DynamoDBAccessKey, DynamoDBKeyID
 
 PostCreatedEvent = 'PostCreatedEvent'
 PostUpdatedEvent = 'PostUpdatedEvent'
+PostVoteEvent = 'PostVoteEvent'
 PostDeletedEvent = 'PostDeletedEvent'
 AccountCreatedEvent = 'AccountCreatedEvent'
 AccountUpdatedEvent = 'AccountUpdatedEvent'
@@ -14,7 +15,7 @@ CommentDeletesEvent = 'CommentDeleteEvent'
 
 
 class Post(MapAttribute):
-    post_id = UnicodeAttribute()
+    post_id = UnicodeAttribute(null=False)
     user_id = UnicodeAttribute(null=True)
     post_rating = NumberAttribute(null=True)
     post_subject = UnicodeAttribute(null=True)
@@ -22,8 +23,12 @@ class Post(MapAttribute):
     post_content = UnicodeAttribute(null=True)
     post_photo_location = UnicodeAttribute(null=True)
     post_date = UnicodeAttribute(null=True)
-    downvote = BooleanAttribute(null=True)
-    upvote = BooleanAttribute(null=True)
+
+
+class PostUpdate(MapAttribute):
+    user_id = UnicodeAttribute(null=False)
+    post_id = UnicodeAttribute(null=False)
+    vote = NumberAttribute(null=False)
 
 
 class CreateComment(MapAttribute):

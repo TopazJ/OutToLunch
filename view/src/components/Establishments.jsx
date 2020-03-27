@@ -16,8 +16,9 @@ class Establishments extends Component {
           <div className="row">
             <div className="col-sm">
               <div>
-                <h1>Korean BBQ House</h1>
+                <h1>{this.props.name}</h1>
                 <div style={{ paddingBottom: "20px" }}>
+                    <Link to={'/establishments/'+this.props.id+'/'}>
                   <button
                     className="btn btn-secondary"
                     style={{
@@ -27,6 +28,7 @@ class Establishments extends Component {
                   >
                     Read reviews
                   </button>
+                    </Link>
                 </div>
                 <br />
               </div>

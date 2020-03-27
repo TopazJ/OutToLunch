@@ -15,24 +15,13 @@ class Homepage extends Component {
       { id: 3, userId: 0 },
       { id: 4, userId: 2 },
       { id: 5, userId: 6 }
-    ],
-    location: this.props.location.pathname.includes("/post/")
-      ? "/"
-      : this.props.location.pathname
+    ]
   };
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (
-      !this.props.location.pathname.includes("/post/") &&
-      this.props.location.hostname !== prevProps.location.hostname
-    ) {
-      this.setState({ location: this.props.location.pathname });
-    }
-  }
+
 
   showThePostReviewButtonIfLoggedIn() {
     if (this.props.loggedIn === true) {
-      //just put true there for testing (remove this.props.loggedIn).
       return (
         <Link to="/create-post">
           <button
@@ -54,7 +43,7 @@ class Homepage extends Component {
         <br />
         <Switch>
           <Route path="/post/:id">
-            <Post />
+            <Post back = {this.props.location.pathname}/>
           </Route>
           <Route>
             {this.state.posts.map((post, index) => (
@@ -62,6 +51,14 @@ class Homepage extends Component {
                 key={index}
                 postId={post.id}
                 userId={post.userId}
+                date = {post.date}
+                content = {post.content}
+                photo = {post.photoURL}
+                rating = {post.rating}
+                subject = {post.subject}
+                upvotes = {post.upvotes}
+                downvotes = {post.downvotes}
+                comments = {post.comments}
               />
             ))}
           </Route>

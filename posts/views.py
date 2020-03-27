@@ -13,13 +13,20 @@ from event.PynamoDBModels import Event, Post
 from posts.validation import *
 
 
-def index(request):
+def index(request, page):
     # retrieves posts based on page #
-    url = 'https://c8u8796f4d.execute-api.us-west-2.amazonaws.com/alpha/posts'
-    data = json.loads(request.body)
-    payload = {"page" : data["page"]}
+    url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/posts'
+    payload = {"page": page.__int__()}
     r = requests.get(url, params=payload)
-    return JsonResponse({"data":r.json()})
+    return JsonResponse({"data": r.json()})
+
+
+def establishment_posts(request, establishment_id, page):
+    url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/posts/establishment'
+    payload = {"page": page.__int__(), "establishment_id": establishment_id}
+    print(payload)
+    r = requests.get(url, params=payload)
+    return JsonResponse({"data": r.json()})
 
 
 def create(request):

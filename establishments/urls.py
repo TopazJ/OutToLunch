@@ -6,7 +6,7 @@ from establishments import views
 app_name = 'establishments'
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('<int:page>/', views.index, name='most_recent'),
     path('create/', views.create, name='create'),
     path('update/', views.update, name='update'),
     path('search/', views.search, name='search'),

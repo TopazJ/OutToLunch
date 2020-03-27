@@ -11,14 +11,8 @@ from django.contrib.auth import authenticate, login, logout
 
 
 def status(request):
-
-    # yeet = Post(establishment_id='null', post_content='null', post_id='null', post_photo_location='null',
-    #                      post_rating=5, post_subject='null', user_id='null')
-    # test = Event(event_id=uuid.uuid4().__str__(), type=PostCreatedEvent, timestamp=datetime.now(), data=yeet)
-    # test.save()
-
     if request.user.is_authenticated:
-        return JsonResponse({'status': 'user'})
+        return JsonResponse({'status': 'user', 'elo': request.user.elo})
     else:
         return JsonResponse({'status': 'anon'})
 

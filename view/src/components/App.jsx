@@ -30,7 +30,8 @@ class App extends Component {
             {id:'create-account', text:'Create Account', component:CreateAccount, props:{url:this.props.url}},
         ],
         location:this.props.location.pathname,
-        loggedIn:false //You can make this true by default for testing everything with the user as logged in.
+        loggedIn:false, //You can make this true by default for testing everything with the user as logged in.
+        userElo:0
     };
 
     initButtons() {
@@ -40,7 +41,7 @@ class App extends Component {
         }).then(res => res.json())
             .then(data => {
                 if (data.status==='user'){
-                    this.login();
+                    this.login(data.elo);
                 }
                 else{
                     this.setLogout();
@@ -49,9 +50,10 @@ class App extends Component {
             .catch(err => console.error("Error:", err));
     };
 
-    login() {
+    login(elo) {
         this.setState({
             navLinks: [{id: "logout", text: "Logout", component: Logout, props: {logout: this.logout, url:this.state.url}}],
+            userElo: elo,
             loggedIn:true
         });
     }
@@ -77,6 +79,17 @@ class App extends Component {
                 ],
             loggedIn:false
         });
+    }
+
+    createRouteForCreateEstablishment() {
+        if (this.state.userElo>=1000) {
+            return (
+                <Route path="/create-establishment">
+                    <div className="homepage">
+                        <CreatePost/>
+                    </div>
+                </Route>);
+        }
     }
 
     render() {
@@ -108,14 +121,15 @@ class App extends Component {
                                 <CreatePost/>
                             </div>
                         </Route>
+                        {this.createRouteForCreateEstablishment()}
                         <Route path="/establishments">
                             <div className="homepage">
-                                <EstablishmentsPage/>
+                                <EstablishmentsPage loggedIn={this.state.loggedIn} userElo={this.state.userElo}/>
                             </div>
                         </Route>
                         <Route path="/">
                             <div className="homepage">
-                            <Homepage loggedIn={this.state.loggedIn}/>
+                            <Homepage url={'/'} loggedIn={this.state.loggedIn}/>
                             </div>
                         </Route>
                         <Route>
