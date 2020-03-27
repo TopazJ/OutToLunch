@@ -1,6 +1,6 @@
 from pynamodb.models import Model
 from pynamodb.attributes import UnicodeAttribute, MapAttribute, UTCDateTimeAttribute, NumberAttribute, BooleanAttribute
-from OutToLunch.settings import DynamoDBAccessKey, DynamoDBKeyID
+from OutToLunch.settings import DynamoAccess, DynamoKeyID
 
 PostCreatedEvent = 'PostCreatedEvent'
 PostUpdatedEvent = 'PostUpdatedEvent'
@@ -61,8 +61,8 @@ class Event(Model):
     class Meta:
         table_name = 'OutToLunchEvents'
         region = 'us-west-2'
-        aws_access_key_id = DynamoDBKeyID
-        aws_secret_access_key = DynamoDBAccessKey
+        aws_access_key_id = DynamoKeyID
+        aws_secret_access_key = DynamoAccess
 
     event_id = UnicodeAttribute(hash_key=True)
     type = UnicodeAttribute()
