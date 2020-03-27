@@ -19,6 +19,7 @@ def index(request):
     r = requests.get(url, params=payload)
     return JsonResponse({'data': json.loads(r.json())})
 
+
 def create(request):
     # pynamo db - tested
     # TODO: make it take in the POST information
