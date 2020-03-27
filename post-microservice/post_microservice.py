@@ -5,11 +5,11 @@ import pymysql
 import json
 import re
 from query_generation import *
-# import boto3
 from boto3.dynamodb.types import TypeDeserializer
 import uuid
 from datetime import datetime
 
+# variables
 commonWords = ['the', 'of', 'and', 'a', 'to', 'in', 'is', 'you', 'that', 'it', 'was', 'for']
 unableToUpdate = ['post_id', 'post_user', 'establishment_id', 'upvote', 'downvote', 'date']
 
@@ -108,14 +108,17 @@ def testSerializer(data):
 def getPost(getRequestEvent):
     """retrieves posts based on most recent, establishment or user"""
     path = getRequestEvent['path']
+    try:
+        pageNumber = int(getRequestEvent['queryStringParameters']['page'])
+    except TypeError as err:
+        pageNumber = 0
     if 'search' in path:
-        return searchPosts(getRequestEvent['queryStringParameters']['search_criteria'],
-                           int(getRequestEvent['queryStringParameters']['page']))
+        return searchPosts(getRequestEvent['queryStringParameters']['search_criteria'], pageNumber)
     elif 'validate' in path:
         thePostId = path.replace('/posts/validate/', '')
         return validateUser(thePostId)
     else:
-        query = generateGetPostSQLQuery(getRequestEvent)
+        query = generateGetPostSQLQuery(getRequestEvent, pageNumber)
         with conn.cursor() as cur:
             cur.execute(query)
             thePosts = cur.fetchall()
@@ -225,7 +228,7 @@ def searchPosts(searchCriteria, pageNumber):
                     duplicateResults.append(post)
             conn.commit()
     nonDuplicateResults = [i for n, i in enumerate(duplicateResults) if i not in duplicateResults[n + 1:]]
-    return nonDuplicateResults[(10 * pageNumber):((10 * pageNumber) - 1)]
+    return nonDuplicateResults[(sizeOfPage * pageNumber):((sizeOfPage + sizeOfPage * pageNumber) - 1)]
 
 
 def validateUser(postId):

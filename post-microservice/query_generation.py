@@ -1,4 +1,4 @@
-
+sizeOfPage = 10
 
 #Assumption that initial post will have zero upvotes and zero downvotes so no need to insert into table
 def generatePostSQLQuery(newRecord):
@@ -20,18 +20,20 @@ def generateDeletePostSQLQuery(newRecord):
              .format(newRecord['data']['post_id']))
     return query
 
-def generateGetPostSQLQuery(getRequestEvent):
+def generateGetPostSQLQuery(getRequestEvent, pageNumber):
     """generates the select query to retrieve post requests based on the GET path and query parameters"""
     path = getRequestEvent['path']
-    pageNumber = int(getRequestEvent['queryStringParameters']['page'])
     if 'user' in path:
         theUserId = getRequestEvent['queryStringParameters']['post_user']
-        query = ('SELECT * FROM post WHERE post_user = \"{}\" ORDER BY post_date DESC LIMIT 10 OFFSET {}'
-                 .format(theUserId, (pageNumber*10)))
+        query = ('SELECT * FROM post WHERE post_user = \"{}\" ORDER BY post_date DESC LIMIT {} OFFSET {}'
+                 .format(theUserId, sizeOfPage, (pageNumber*sizeOfPage)))
     elif 'establishment' in path:
         theEstablishmentId = getRequestEvent['queryStringParameters']['establishment_id']
-        query = ('SELECT * FROM post WHERE establishment_id = \"{}\" ORDER BY post_date DESC LIMIT 10 OFFSET {}'
-                 .format(theEstablishmentId, (pageNumber*10)))
+        query = ('SELECT * FROM post WHERE establishment_id = \"{}\" ORDER BY post_date DESC LIMIT {} OFFSET {}'
+                 .format(theEstablishmentId, sizeOfPage, (pageNumber*sizeOfPage)))
+    elif len(path) > len("/posts/"):
+        thePostId = path.replace('/posts/', '')
+        query = 'SELECT * FROM post WHERE post_id = \"{}\"'.format(thePostId)
     else:
-        query = 'SELECT * FROM post ORDER BY post_date DESC LIMIT 10 OFFSET {}'.format((pageNumber*10))
+        query = 'SELECT * FROM post ORDER BY post_date DESC LIMIT {} OFFSET {}'.format(sizeOfPage, (pageNumber*sizeOfPage))
     return query
