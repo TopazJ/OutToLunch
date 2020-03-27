@@ -17,7 +17,7 @@ class NavBar extends Component {
     return (
       <React.Fragment>
         <nav id="theNavBar" className="navbar fixed-top navbar-light bg-light">
-          <Link to={"/Homepage"}>
+          <Link to="/">
             <div className="navbar-brand pacifico">
               <img
                 src="https://cdn1.iconfinder.com/data/icons/school-11/100/Meal-512.png"

@@ -12,7 +12,7 @@ from django.contrib.auth import authenticate, login, logout
 
 def status(request):
     if request.user.is_authenticated:
-        return JsonResponse({'status': 'user', 'elo': request.user.elo})
+        return JsonResponse({'status': 'user', 'elo': request.user.elo, 'userid': request.user.id})
     else:
         return JsonResponse({'status': 'anon'})
 

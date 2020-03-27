@@ -2,16 +2,17 @@ import React, { Component } from "react";
 import "./styles.css";
 import Establishments from "./Establishments.jsx";
 import {Route, Switch, withRouter} from "react-router";
-import Post from "./Post.jsx";
-import HomepagePost from "./HomepagePost.jsx";
 import Homepage from "./Homepage.jsx"
 import {Link} from "react-router-dom";
+import Loader from 'react-loader-spinner'
+
 
 class EstablishmentsPage extends Component {
   state = {
-    page: 0,
-    establishments: [
-    ]
+      loading:true,
+      moreData:true,
+      page: 0,
+      establishments: []
   };
 
   constructor(props){
@@ -19,24 +20,59 @@ class EstablishmentsPage extends Component {
       this.retrieveEstablishments();
   }
 
+  componentDidMount() {
+       window.addEventListener('scroll', this.handleScroll);
+  }
+
+  componentWillUnmount() {
+      window.removeEventListener('scroll', this.handleScroll);
+  }
+
+  handleScroll = () => {
+     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight-5 && !this.state.loading && this.state.moreData) {
+         this.setState({loading: true});
+         this.retrieveEstablishments();
+    }
+  };
+
+  spinnerWhenLoading() {
+      if (this.state.loading){
+          return (
+                <div style={{ paddingLeft: "350px" }}>
+                    <Loader
+                     type="Oval"
+                     color="#17a2b8"
+                     height={100}
+                     width={100}
+	                />
+                </div>);
+      }
+  }
+
   retrieveEstablishments = () => {
-    fetch('http://127.0.0.1:8000/establishments/'+this.state.page+'/', {
+    fetch(this.props.request+'/establishments/'+this.state.page+'/', {
             method: 'GET',
         }).then(res => res.json())
         .then(data => {
-            data.data.map(x=>{
-                this.setState(state => ({
-                    establishments: [
-                        ...state.establishments,
-                        {
-                            id: x.id,
-                            name: x.name,
-                        }
-                    ]
-                }));
-            });
-           let increment = this.state.page + 1;
-           this.setState({page: increment});
+            this.setState({loading:false});
+            if (data.data.length > 0) {
+                data.data.map(x => {
+                    this.setState(state => ({
+                        establishments: [
+                            ...state.establishments,
+                            {
+                                id: x.id,
+                                name: x.name,
+                            }
+                        ]
+                    }));
+                });
+                let increment = this.state.page + 1;
+                this.setState({page: increment});
+            }
+            else {
+                this.setState({moreData: false});
+            }
         })
         .catch(err => console.error("Error:", err));
   };
@@ -59,22 +95,26 @@ class EstablishmentsPage extends Component {
 
   render() {
       return (
-          <div className="background">
-              {this.showTheCreateEstablishmentButtonIfLoggedIn()}
-              <Switch>
-                <Route path="/establishments/:id" component={props => <Homepage url={props.match.params.id} loggedIn={this.props.loggedIn}/>}>
-          </Route>
-          <Route>
-          {this.state.establishments.map((establishment, index) => (
-              <div key={index}>
-                <br />
-                <Establishments id={establishment.id} name={establishment.name} />
-                <br />
-              </div>
-            ))}
-             </Route>
+          <Switch>
+              <Route path="/establishments/:id/">
+                  <Homepage request = {this.props.request}
+                             url={this.props.location.pathname.replace('establishments/','')}
+                             loggedIn={this.props.loggedIn}/>
+              </Route>
+               <Route path="/establishments/">
+                   <div className="background">
+                       {this.showTheCreateEstablishmentButtonIfLoggedIn()}
+                       {this.state.establishments.map((establishment, index) => (
+                            <div key={index}>
+                                <br />
+                                <Establishments id={establishment.id} name={establishment.name} />
+                                <br />
+                            </div>
+                       ))}
+                       {this.spinnerWhenLoading()}
+                    </div>
+               </Route>
         </Switch>
-          </div>
     );
   }
 }

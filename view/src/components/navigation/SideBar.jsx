@@ -14,7 +14,7 @@ class SideBar extends Component {
 
     return (
         <div className="sidenav">
-            <Link to ={"/Homepage"}>Reviews</Link>
+            <Link to ={"/"}>Reviews</Link>
             <Link to ={"/establishments"}>Establishments</Link>
             {this.showTheAccountSettingsIfLoggedIn()}
         </div>

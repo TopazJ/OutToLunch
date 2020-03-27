@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 from establishments.models import *
-
+from comments.views import get_comment_count
 from django.forms import model_to_dict
 from django.shortcuts import redirect
 import json
@@ -18,15 +18,30 @@ def index(request, page):
     url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/posts'
     payload = {"page": page.__int__()}
     r = requests.get(url, params=payload)
-    return JsonResponse({"data": r.json()})
+    return JsonResponse(compile_data(r.json()))
 
 
 def establishment_posts(request, establishment_id, page):
     url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/posts/establishment'
     payload = {"page": page.__int__(), "establishment_id": establishment_id}
-    print(payload)
     r = requests.get(url, params=payload)
-    return JsonResponse({"data": r.json()})
+    return JsonResponse(compile_data(r.json()))
+
+
+def post_details(request, post_id):
+    pass
+
+
+def compile_data(post_data_list):
+    to_return = {'data': []}
+    for post_data in post_data_list:
+        post_data['count'] = get_comment_count(post_data['post_id'])['count']
+        user = SiteUser.objects.get(id=post_data['user_id'])
+        post_data['username'] = user.username
+        post_data['user_image'] = user.image
+        post_data['establishment_name'] = Establishment.objects.get(establishment_id=post_data['establishment_id']).name
+        to_return['data'].append(post_data)
+    return to_return
 
 
 def create(request):

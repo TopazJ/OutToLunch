@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import StarRatingComponent from "react-star-rating-component";
 import Comment from "./Comment.jsx";
+import Loader from 'react-loader-spinner'
 
 /*
 some placeholder stuff
@@ -15,8 +16,88 @@ some placeholder stuff
 */
 class Post extends Component {
   state = {
-    comments: [{ id: 1, userId: 0 }]
+    loading: true,
+    moreData: true,
+    page: 0,
+    post: {},
+    comments: [] //[{ id: 1, userId: 0 }]
   };
+
+  constructor(props){
+    super(props);
+    if (this.props.post){
+      this.state.post = this.props.post;
+    }
+    else{
+      //TODO Run a fetch here using the id.
+      console.log(this.props.id);
+    }
+    this.retrieveComments();
+  }
+
+  componentDidMount() {
+       window.addEventListener('scroll', this.handleScroll);
+  }
+
+  componentWillUnmount() {
+      window.removeEventListener('scroll', this.handleScroll);
+  }
+
+  handleScroll = () => {
+     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight-5 && !this.state.loading && this.state.moreData) {
+         this.setState({loading: true});
+         this.retrieveComments();
+    }
+  };
+
+
+  retrieveComments = () => {
+    fetch(this.props.request+'/comments/'+this.state.post.postId+'/'+this.state.page+'/', {
+            method: 'GET',
+        }).then(res => res.json())
+        .then(data => {
+            this.setState({loading:false});
+            if (data.data.length > 0) {
+                data.data.map(x => {
+                    this.setState(state => ({
+                        comments: [
+                            ...state.comments,
+                            {
+                                commentId: x.commentID,
+                                userId: x.userID,
+                                parentId: x.parentID,
+                                username: x.username,
+                                userImage: x.userImage,
+                                date: x.commentDate,
+                                content: x.content,
+                                children: x.numChildren
+                            }
+                        ]
+                    }));
+                });
+                let increment = this.state.page + 1;
+                this.setState({page: increment});
+            }
+            else {
+                this.setState({moreData: false});
+            }
+        }).catch(err => console.error("Error:", err));
+  };
+
+  spinnerWhenLoading() {
+      if (this.state.loading){
+          return (
+                <div style={{ paddingLeft: "350px" }}>
+                    <Loader
+                     type="Oval"
+                     color="#17a2b8"
+                     height={100}
+                     width={100}
+	                />
+                </div>
+              );
+      }
+  }
 
   render() {
     return (
@@ -31,14 +112,14 @@ class Post extends Component {
           >
             <img
               style={{ width: "100px", height: "100px" }}
-              src="https://assets.change.org/photos/4/vh/lu/WuVhLusAlwWUVYe-800x450-noPad.jpg?1554879504"
+              src={this.state.post.userImage}
             />
 
-            <p>TheCoolerNich</p>
+            <p>{this.state.post.username}</p>
             <div className="btn-group" role="group" aria-label="Basic example">
-              <button style={{ width: "50px" }}>🍽{0}</button>
+              <button style={{ width: "50px" }}>🍽{this.state.post.upvotes}</button>
 
-              <button style={{ width: "50px" }}>🤮{0}</button>
+              <button style={{ width: "50px" }}>🤮{this.state.post.downvotes}</button>
             </div>
           </div>
 
@@ -48,11 +129,12 @@ class Post extends Component {
               paddingRight: "100px"
             }}
           >
-            <h1>Hidden Gem</h1>
-            {"Uofc Bookstore"}
+            <h1>{this.state.post.subject}</h1>
+            {this.state.post.establishmentName}
             <br/>
             <img
               src="https://www.ucalgary.ca/news/sites/default/files/styles/ucws_news_hero_image_desktop/public/2019-06/bookstore_011a0796_f.jpg?itok=aE9ylKnp"
+              //TODO the image url stuff goes here when I figure that out.
               style={{ width: "500px", height: "200px" }}
             />
             <br />
@@ -60,21 +142,31 @@ class Post extends Component {
               name="rate1"
               editing={false}
               starCount={10}
-              value={8}
+              value={this.state.post.rating}
             />
-            <p>{"They do not sell food here."}</p>
+            <p>{this.state.post.content}</p>
             <br />
           </div>
         </div>
         <div style={{ background: "#fff7f0" }}>
           <h2 style={{ paddingLeft: "10px" }}>Comments:</h2>
-          {this.state.comments.map(comments => (
-            <div>
+          {this.state.comments.map((comment, index) => (
+            <div key={index}>
               <br />
-              <Comment key={comments.id} userId={comments.userId} />
+              <Comment key={index}
+                       userId={comment.userId}
+                       commentId={comment.commentID}
+                       parentId={comment.parentID}
+                       username={comment.username}
+                       userImage={comment.userImage}
+                       date={comment.commentDate}
+                       content={comment.content}
+                       children={comment.numChildren}
+              />
               <br />
             </div>
           ))}
+          {this.spinnerWhenLoading()}
           <div style={{ paddingLeft: "25px" }}>
             <textarea
               required
