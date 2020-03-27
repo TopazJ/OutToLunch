@@ -4,9 +4,11 @@ import { Link } from "react-router-dom";
 
 class Comment extends Component {
 
+    // TODO Shamez -> Figure out how to do inner comment lazy loading. Show replies does not currently work.
+
     showRepliesButtonIfChildren() {
         if (this.props.children > 0){
-            return (<a href='#'>Show replies</a>);
+            return (<a href='#'>{"See replies (" + this.props.children + ")"}</a>);
         }
     }
 
@@ -32,8 +34,7 @@ class Comment extends Component {
               }}
             >
               <p>{this.props.content}
-
-                {this.showRepliesButtonIfChildren()}
+                <br/>
 
               </p>
 
@@ -46,6 +47,8 @@ class Comment extends Component {
               <div style={{ paddingBottom: "10px" }}>
                 <button className="btn btn-secondary"> Post Comment </button>
               </div>
+
+                {this.showRepliesButtonIfChildren()}
             </div>
           </div>
         );

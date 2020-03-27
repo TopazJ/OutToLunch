@@ -15,7 +15,6 @@ from event.PynamoDBModels import CreateComment, Event, UpdateComment, WipeCommen
 def index(request, post_id, page):
     url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/readCommentLambda'
     payload = {'parentID': post_id, 'content': '[n:20,offset:'+str(page.__int__()*20)+']'}
-    print(payload)
     r = requests.get(url, params=payload)
     to_return = {'data': []}
     try:

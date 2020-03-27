@@ -26,11 +26,10 @@ class Post extends Component {
   constructor(props){
     super(props);
     if (this.props.post){
-      this.state.post = this.props.post;
+        this.state.post = this.props.post;
     }
     else{
-      //TODO Run a fetch here using the id.
-      console.log(this.props.id);
+        this.state.post.postId = this.props.id;
     }
     this.retrieveComments();
   }
@@ -161,7 +160,7 @@ class Post extends Component {
                        userImage={comment.userImage}
                        date={comment.commentDate}
                        content={comment.content}
-                       children={comment.numChildren}
+                       children={comment.children}
               />
               <br />
             </div>
