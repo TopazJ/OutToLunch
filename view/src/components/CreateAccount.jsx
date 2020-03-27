@@ -9,10 +9,10 @@ class CreateAccount extends Component{
     }
 
     handleSubmit =(event)=>{
-         event.preventDefault();
+        event.preventDefault();
         const values = this.state.form;
-        console.log(values);
-        fetch('http://127.0.0.1:8000/auth/create/', {
+        let url = this.props.props.url + '/auth/create/';
+        fetch(url, {
             method: 'POST',
             body: JSON.stringify(values),
             headers: {
@@ -21,7 +21,6 @@ class CreateAccount extends Component{
             }
         }).then(res => res.json())
         .then(data => {
-            console.log(data);
             if (data.status!=='success'){
                 alert(data.message);
             }
@@ -57,6 +56,9 @@ class CreateAccount extends Component{
 
     render(){
         return <React.Fragment>
+            <div className="container post">
+          <div className="row">
+            <div className="col-sm">
                 <form className="p-4" onSubmit={this.handleSubmit}>
                     <CSRFToken />
                     <div className="form-group">
@@ -120,6 +122,9 @@ class CreateAccount extends Component{
                     </button>
                 </form>
             <p>{this.checkRedirect()}</p>
+            </div>
+          </div>
+            </div>
             </React.Fragment>
 
     }

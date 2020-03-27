@@ -1,48 +1,93 @@
 from django.forms import model_to_dict
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 import json
-from .models import Establishment
-from .logic import *
+from establishments.models import *
+from establishments.logic import *
+from users.models import SiteUser
 from django.views.decorators.csrf import csrf_exempt
 
-def index (request):
-    redirect('/')
+
+def index(request, page):
+    payload = {'data': []}
+    page *= 10  # get 10 per page
+    establishments = Establishment.objects.all().order_by('-rating')[page:page+10]
+    for establishment in establishments:
+        can_edit = False
+        if request.user.is_authenticated and establishment.owner is request.user:
+            can_edit = True
+        payload['data'].append(establishment.to_json(can_edit))
+    return JsonResponse(payload)
 
 
-@csrf_exempt
-def get_one_establishment(request):
-    if request.method == 'GET':
-        data = json.load(request.body)
-        establishment_list = Establishment.objects.get()
-        if establishment_list is not None:
-            print ("got here")
-            response_data = establishment_list.get().to_json()
-            return successfulMessage(response_data)
+def create(request):
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            data = json.loads(request.body)
+            if request.user.elo >= 1000:
+                establishment = Establishment(name=data['name'],
+                                              location= data['location'],
+                                              description=data['description'],
+                                              rating=0,
+                                              owner=request.user,
+                                              rating_count=0)
+                establishment.save()
+                return JsonResponse({"success": "success"})
+            else:
+                return JsonResponse({"error": "You do not have enough elo!"})
         else:
-            redirect('/')
+            return JsonResponse({"error": "You are not logged in you silly goose!"})
+    else:
+        return redirect('/')
 
 
-# def buy_trade(request):
-#     if request.method == 'POST':
-#         data = json.loads(request.body)
-#         transaction = buy_trade_transaction_creation(request.user.get_username(), symbol=data['stock'],
-#                                                      quantity=data['quantity'])
-#         if transaction is not None:
-#             response_data = model_to_dict(transaction)
-#             # response_data = serializers.serialize('json', [transaction])
-#             return successfulMessage(response_data)
-#         else:
-#             return errorMessage("Unable to create transaction")
+def update(request):
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            data = json.loads(request.body)
+            instance = Establishment.objects.get(establishment_id=data["establishment_id"], owner=request.user)
+            if instance is not None:
+                for attr, value in data["data"].items():
+                    if attr != 'rating' and attr != 'rating_count':
+                        setattr(instance, attr, value)
+                instance.full_clean()
+                instance.save()
+                return JsonResponse({"success": "success"})
+            else:
+                return JsonResponse({"error": "You do not have editing right for this establishment!"})
+        else:
+            return JsonResponse({"error": "You are not logged in you silly goose!"})
+    else:
+        return redirect('/')
 
 
-# Create your views here.
+def flag(request):
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            data = json.loads(request.body)
+            user = SiteUser.objects.get(id=request.user.id)
+            establishment = Establishment.objects.get(establishment_id=data["establishment_id"])
+            if FlagCounter.objects.get(establishment = establishment, user=user).exists():
+                return JsonResponse({"error": "You've already flagged this establishment!"})
+            else:
+                if FlagCounter.objects.filter(establishment = establishment).count() is 9:
+                    establishment.delete()
+                else:
+                    flag_count = FlagCounter(establishment=establishment, user=user)
+                    flag_count.save()
+
+            return JsonResponse({"success": "success"})
+        else:
+            return JsonResponse({"error": "You are not logged in you silly goose!"})
+    else:
+        return redirect('/')
 
 
-# def index(request):
-#     return HttpResponse("Hello establishments")
-#
-#
-# def create_establishment(request):
-#     # need to get views completed to show this.
-#     # need to determine post vs get
-#     return HttpResponse("Establishments")
+def search(request):
+    payload = {'data': []}
+    data = json.loads(request.body)
+    establishments = Establishment.objects.filter(name__contains=data['search']);
+    for establishment in establishments:
+        payload['data'].append(establishment.to_json())
+
+    return JsonResponse(payload)

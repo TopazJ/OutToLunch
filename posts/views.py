@@ -1,84 +1,121 @@
 import uuid
-
+from datetime import datetime
+from establishments.models import *
+from comments.views import get_comment_count
 from django.forms import model_to_dict
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 import json
 import requests
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 # Create your views here.
-from posts.validation import validate_create_save, validate_update_save, validate_delete_save
+from event.PynamoDBModels import Event, Post
+from posts.validation import *
 
 
-def index(request):
+def index(request, page):
     # retrieves posts based on page #
-    url = 'https://c8u8796f4d.execute-api.us-west-2.amazonaws.com/alpha/posts'
-    payload = {'page': request.GET['page']}
+    url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/posts'
+    payload = {"page": page.__int__()}
     r = requests.get(url, params=payload)
-
-    #return r
-    return redirect('/')
+    return JsonResponse(compile_data(r.json()))
 
 
-def create_post(request):
-    # Needs to be changed to make sure
-    """    {
-        "type": "PostCreatedEvent",
-        "eventId": "MYUNIQUEID",
-        "data": {
-            "user_id": "nana",
-            "post_content": "<blah blah blah>",
-            "post_photo_location": null,
-            "establishment_id": "someid"
-        },
-        "timestamp": "<datehere>"
-    }"""
-    url = 'https://c8u8796f4d.execute-api.us-west-2.amazonaws.com/alpha/posts'
-    type = "PostCreatedEvent"
-    eventId = uuid.uuid4()
-    user_id = uuid.uuid4()
-    post_content = "controller test post content"
-    photo = None
-    establishment = uuid.uuid4()
-    data = {
-        "user_id": str(user_id),
-        "post_content": post_content,
-        "post_photo_location": photo,
-        "establishment_id": str(establishment),
-        "post_rating": 1,
-        "post_subject": 'controller test'
-    }
-    date = 0
-    payload = {'type': str(type), 'eventId': str(eventId), 'data': data, 'timestamp': str(date)}
-    """
-    payload = "\"{\"commentID\":\"" + str(comment_id) + "\", \"postID\":\"" + str(post_id) + "\", \"userID\":\"" + str(
-        user_id) + "\", \"parentID\":\"" + str(parent_id) + "\", \"content\":\"" + str(
-        content) + "\", \"dateMS\":" + str(date) + '}\"'
-    """
-    print(payload)
-    r = requests.post(url, json=payload)
-    print(r.text)
-
-    return redirect('/')
+def establishment_posts(request, establishment_id, page):
+    url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/posts/establishment'
+    payload = {"page": page.__int__(), "establishment_id": establishment_id}
+    r = requests.get(url, params=payload)
+    return JsonResponse(compile_data(r.json()))
 
 
-def update_post(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        return validate_update_save(post_id=data['post_id'],
-                                    user_id=data['user_id'],
-                                    post_content=data['post_content'],
-                                    post_photo_location=data['post_photo_location']
-                                    )
+def post_details(request, post_id):
+    pass
+
+
+def compile_data(post_data_list):
+    to_return = {'data': []}
+    for post_data in post_data_list:
+        post_data['count'] = get_comment_count(post_data['post_id'])['count']
+        user = SiteUser.objects.get(id=post_data['user_id'])
+        post_data['username'] = user.username
+        post_data['user_image'] = user.image
+        post_data['establishment_name'] = Establishment.objects.get(establishment_id=post_data['establishment_id']).name
+        to_return['data'].append(post_data)
+    return to_return
+
+
+def create(request):
+    # pynamo db - tested
+    # TODO: picture boi
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            data = json.loads(request.body)
+            comment = Event(event_id=uuid.uuid4().__str__(),
+                            type='PostCreatedEvent',
+                            timestamp=datetime.now(),
+                            data=Post(post_id=uuid.uuid4().__str__(),
+                                      user_id=data['user_id'],
+                                      post_rating=data['rating'],
+                                      post_subject=data['post_subject'],
+                                      establishment_id=data['establishment_id'],
+                                      post_content=data['post_content'],
+                                      post_photo_location='null'
+                                      )
+                            )
+            comment.save()
+            establishment = Establishment.objects.get(establishment_id=data['establishment_id'])
+            establishment.rating_count += 1
+            establishment.rating = ((establishment.rating * (establishment.rating_count - 1)) + data['rating'])/ establishment.rating_count
+            return JsonResponse({'success': 'success'})
+        else:
+            return JsonResponse({'error': 'You have to login first in order to post!'})
     else:
         return redirect('/')
 
 
-def delete_post(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        return validate_delete_save(post_id=data['post_id'],
-                                    user_id=data['user_id'],
-                                    )
+def update(request):
+    # pynamo db - tested
+    # TODO: validation
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            data = json.loads(request.body)
+            if validate_post(data["post_id"], request.user.id):
+                instance = Post(post_id= data["post_id"])
+                for attr, value in data["data"].items():
+                        setattr(instance, attr, value)
+                comment = Event(event_id=uuid.uuid4().__str__(),
+                                type='PostUpdatedEvent',
+                                timestamp=datetime.now(),
+                                data=instance
+                                )
+                comment.save()
+                return JsonResponse({'success': 'success'})
+            else:
+                return JsonResponse({'error': "You don't have permissions to modify this post!"})
+        else:
+            return JsonResponse({'error': 'You have to login first in order to modify this post!'})
+    else:
+        return redirect('/')
+
+
+def delete(request):
+    # pynamo db - tested
+    #TODO: validation
+
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            data = json.loads(request.body)
+            if validate_post(data["post_id"], request.user.id):
+                comment = Event(event_id=uuid.uuid4().__str__(),
+                                type='PostDeletedEvent',
+                                timestamp=datetime.now(),
+                                data=Post(post_id=data["post_id"])
+                                )
+                comment.save()
+                return JsonResponse({'success': 'success'})
+            else:
+                return JsonResponse({'error': "You don't have permissions to delete this post!"})
+        else:
+            return JsonResponse({'error': 'You have to login first in order to delete this post!'})
     else:
         return redirect('/')

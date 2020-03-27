@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'establishments',
     'view',
     'users',
+    'images',
 ]
 
 MIDDLEWARE = [
