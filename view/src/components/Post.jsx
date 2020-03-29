@@ -16,7 +16,6 @@ class Post extends Component {
 
   constructor(props){
     super(props);
-    console.log(this.props);
     if (this.props.post){
         this.state.post = this.props.post;
     }
@@ -74,8 +73,8 @@ class Post extends Component {
   };
 
 
-  retrieveComments = (parentId) => {
-    fetch(this.props.request+'/comments/'+parentId+'/'+this.state.page+'/', {
+  retrieveComments = () => {
+    fetch(this.props.request+'/comments/'+this.state.post.postId+'/'+this.state.page+'/', {
             method: 'GET',
             signal: this.abortController.signal,
         }).then(res => res.json())
@@ -94,8 +93,7 @@ class Post extends Component {
                                 userImage: x.userImage,
                                 date: x.commentDate,
                                 content: x.content,
-                                numChildren: x.numChildren,
-                                children:[]
+                                numChildren: x.numChildren
                             }
                         ]
                     }));
@@ -126,9 +124,9 @@ class Post extends Component {
       }
   }
 
-  render() {
-    return (
-      <div className="background container border post">
+  renderPostOnLoad(){
+      if (Object.keys(this.state.post).length > 1){
+         return (
         <div style={{ background: "aliceblue" }}>
           <div
             style={{
@@ -176,7 +174,21 @@ class Post extends Component {
             <p>{this.state.post.content}</p>
             <br />
           </div>
-        </div>
+        </div>);
+      }
+      return (
+          <Loader
+             type="Oval"
+             color="#17a2b8"
+             height={100}
+             width={100}
+          />);
+  }
+
+  render() {
+    return (
+        <div className="background container border post">
+            {this.renderPostOnLoad()}
         <div style={{ background: "#fff7f0" }}>
           <h2 style={{ paddingLeft: "10px" }}>Comments:</h2>
           {this.state.comments.map((comment, index) => (
@@ -184,14 +196,14 @@ class Post extends Component {
               <br />
               <Comment key={index}
                        userId={comment.userId}
-                       commentId={comment.commentID}
-                       parentId={comment.parentID}
+                       commentId={comment.commentId}
+                       parentId={comment.parentId}
                        username={comment.username}
                        userImage={comment.userImage}
-                       date={comment.commentDate}
+                       date={comment.date}
                        content={comment.content}
                        numChildren={comment.numChildren}
-                       children={comment.children}
+                       request={this.props.request}
               />
               <br />
             </div>

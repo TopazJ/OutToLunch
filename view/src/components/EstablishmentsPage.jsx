@@ -105,7 +105,7 @@ class EstablishmentsPage extends Component {
                   <EstablishmentsList request = {this.props.request}
                             url={this.props.location.pathname.replace('establishments/','')}
                             loggedIn={this.props.loggedIn}
-                            header={'Reviews For This Establishment'}
+                            header={'Reviews For '}
                   />
               </Route>
                <Route path="/establishments/">
