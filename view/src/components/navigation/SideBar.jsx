@@ -5,7 +5,7 @@ class SideBar extends Component {
       showTheAccountSettingsIfLoggedIn() {
     if (this.props.loggedIn === true) {
       return (
-        <a href="#">Account Settings</a>
+         <Link to ={"/account-settings"}>Account Settings</Link>
       );
     }
   }
