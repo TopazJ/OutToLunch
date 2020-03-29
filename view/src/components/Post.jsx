@@ -4,25 +4,15 @@ import Comment from "./Comment.jsx";
 import { Link } from "react-router-dom";
 import Loader from 'react-loader-spinner'
 
-/*
-some placeholder stuff
-        ,
-      { id: 3, userId: 0 },
-      { id: 4, userId: 2 },
-      { id: 5, userId: 0 },
-      { id: 6, userId: 2 },
-      { id: 7, userId: 0 },
-      { id: 8, userId: 2 }
-
-*/
 class Post extends Component {
   state = {
     loading: true,
     moreData: true,
     page: 0,
     post: {},
-    comments: [] //[{ id: 1, userId: 0 }]
+    comments: []
   };
+  abortController = new window.AbortController();
 
   constructor(props){
     super(props);
@@ -34,7 +24,7 @@ class Post extends Component {
         this.state.post.postId = this.props.id;
         this.retrievePost();
     }
-    this.retrieveComments();
+    this.retrieveComments(this.state.post.postId);
   }
 
   componentDidMount() {
@@ -43,6 +33,7 @@ class Post extends Component {
 
   componentWillUnmount() {
       window.removeEventListener('scroll', this.handleScroll);
+      this.abortController.abort();
   }
 
   handleScroll = () => {
@@ -83,9 +74,10 @@ class Post extends Component {
   };
 
 
-  retrieveComments = () => {
-    fetch(this.props.request+'/comments/'+this.state.post.postId+'/'+this.state.page+'/', {
+  retrieveComments = (parentId) => {
+    fetch(this.props.request+'/comments/'+parentId+'/'+this.state.page+'/', {
             method: 'GET',
+            signal: this.abortController.signal,
         }).then(res => res.json())
         .then(data => {
             this.setState({loading:false});
@@ -102,7 +94,8 @@ class Post extends Component {
                                 userImage: x.userImage,
                                 date: x.commentDate,
                                 content: x.content,
-                                children: x.numChildren
+                                numChildren: x.numChildren,
+                                children:[]
                             }
                         ]
                     }));
@@ -113,7 +106,9 @@ class Post extends Component {
             else {
                 this.setState({moreData: false});
             }
-        }).catch(err => console.error("Error:", err));
+        }).catch(err => {
+            if (err.name === 'AbortError') return;
+            console.error("Error:", err)});
   };
 
   spinnerWhenLoading() {
@@ -195,6 +190,7 @@ class Post extends Component {
                        userImage={comment.userImage}
                        date={comment.commentDate}
                        content={comment.content}
+                       numChildren={comment.numChildren}
                        children={comment.children}
               />
               <br />

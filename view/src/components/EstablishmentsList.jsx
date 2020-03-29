@@ -12,6 +12,7 @@ class EstablishmentsList extends Component {
       page: 0,
       posts: []
   };
+  abortController = new window.AbortController();
 
   constructor(props){
       super(props);
@@ -25,6 +26,7 @@ class EstablishmentsList extends Component {
 
   componentWillUnmount() {
       window.removeEventListener('scroll', this.handleScroll);
+      this.abortController.abort();
   }
 
   handleScroll = () => {
@@ -52,6 +54,7 @@ class EstablishmentsList extends Component {
   retrievePosts = () => {
       fetch(this.props.request+'/posts'+this.props.url+this.state.page+'/', {
             method: 'GET',
+            signal: this.abortController.signal,
         }).then(res => res.json())
         .then(data => {
             this.setState({loading:false});
@@ -84,7 +87,9 @@ class EstablishmentsList extends Component {
             else {
                 this.setState({moreData: false});
             }
-        }).catch(err => console.error("Error:", err));
+        }).catch(err => {
+            if (err.name === 'AbortError') return;
+            console.error("Error:", err)});
   };
 
 

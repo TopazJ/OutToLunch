@@ -26,7 +26,7 @@ def create(request):
             data = json.loads(request.body)
             if request.user.elo >= 1000:
                 establishment = Establishment(name=data['name'],
-                                              location= data['location'],
+                                              location=data['location'],
                                               description=data['description'],
                                               rating=0,
                                               owner=request.user,

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import StarRatingComponent from "react-star-rating-component";
 
 class CreateEstablishment extends Component {
   state = {};
