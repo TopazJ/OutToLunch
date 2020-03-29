@@ -7,7 +7,7 @@ class Comment extends Component {
     // TODO Shamez -> Figure out how to do inner comment lazy loading. Show replies does not currently work.
 
     showRepliesButtonIfChildren() {
-        if (this.props.children > 0){
+        if (this.props.numChildren > 0){
             return (<a href='#'>{"See replies (" + this.props.children + ")"}</a>);
         }
     }
@@ -26,7 +26,9 @@ class Comment extends Component {
                 style={{ width: "100px", height: "100px" }}
                 src={this.props.userImage}
               />
-              <p>{this.props.username}</p>
+             <Link to={'/user/'+this.props.userId+'/'}>
+                    <p>{this.props.username}</p>
+             </Link>
             </div>
             <div
               style={{

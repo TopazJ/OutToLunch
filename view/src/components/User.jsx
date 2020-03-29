@@ -5,10 +5,11 @@ import "./styles.css";
 import { Link, Switch, Route, withRouter } from "react-router-dom";
 import Loader from 'react-loader-spinner'
 
-class Homepage extends Component {
+class User extends Component {
   state = {
       loading: true,
       moreData: true,
+      username: '',
       page: 0,
       posts: []
   };
@@ -58,6 +59,7 @@ class Homepage extends Component {
         }).then(res => res.json())
         .then(data => {
             this.setState({loading:false});
+            this.setState({username: data.username});
             if (data.data.length > 0) {
                 data.data.map(x => {
                     this.setState(state => ({
@@ -119,7 +121,7 @@ class Homepage extends Component {
           }}/>
           <Route>
               <div className="background">
-                <b style={{ paddingLeft: "350px" }}>{this.props.header}</b>
+                <b style={{ paddingLeft: "350px" }}>{this.props.header + this.state.username}</b>
                 {this.showThePostReviewButtonIfLoggedIn()}
                 <br />
                 {this.state.posts.map((post, index) => (
@@ -148,4 +150,4 @@ class Homepage extends Component {
   }
 }
 
-export default withRouter(Homepage);
+export default withRouter(User);

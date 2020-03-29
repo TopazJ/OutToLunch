@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import StarRatingComponent from "react-star-rating-component";
-import {Link, useParams} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 class HomepagePost extends Component {
 
@@ -33,7 +33,9 @@ class HomepagePost extends Component {
                   style={{ width: "100px", height: "100px" }}
                   src={this.props.userImage}
                 />
-                <p>{this.props.username}</p>
+                <Link to={'/user/'+this.props.userId+'/'}>
+                    <p>{this.props.username}</p>
+                </Link>
                 <div
                   className="btn-group"
                   role="group"

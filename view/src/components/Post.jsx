@@ -1,37 +1,30 @@
 import React, { Component } from "react";
 import StarRatingComponent from "react-star-rating-component";
 import Comment from "./Comment.jsx";
+import { Link } from "react-router-dom";
 import Loader from 'react-loader-spinner'
 
-/*
-some placeholder stuff
-        ,
-      { id: 3, userId: 0 },
-      { id: 4, userId: 2 },
-      { id: 5, userId: 0 },
-      { id: 6, userId: 2 },
-      { id: 7, userId: 0 },
-      { id: 8, userId: 2 }
-
-*/
 class Post extends Component {
   state = {
     loading: true,
     moreData: true,
     page: 0,
     post: {},
-    comments: [] //[{ id: 1, userId: 0 }]
+    comments: []
   };
+  abortController = new window.AbortController();
 
   constructor(props){
     super(props);
+    console.log(this.props);
     if (this.props.post){
         this.state.post = this.props.post;
     }
     else{
         this.state.post.postId = this.props.id;
+        this.retrievePost();
     }
-    this.retrieveComments();
+    this.retrieveComments(this.state.post.postId);
   }
 
   componentDidMount() {
@@ -40,6 +33,7 @@ class Post extends Component {
 
   componentWillUnmount() {
       window.removeEventListener('scroll', this.handleScroll);
+      this.abortController.abort();
   }
 
   handleScroll = () => {
@@ -49,10 +43,41 @@ class Post extends Component {
     }
   };
 
-
-  retrieveComments = () => {
-    fetch(this.props.request+'/comments/'+this.state.post.postId+'/'+this.state.page+'/', {
+  retrievePost = () => {
+      fetch(this.props.request+'/posts/'+this.state.post.postId + '/', {
             method: 'GET',
+        }).then(res => res.json())
+        .then(data => {
+            if (data.data.length > 0) {
+                data.data.map(x => {
+                    this.setState({
+                        post:
+                            {
+                                postId: x.post_id,
+                                userId: x.user_id,
+                                username: x.username,
+                                userImage: x.user_image,
+                                establishmentName: x.establishment_name,
+                                date: x.post_date,
+                                content: x.post_content,
+                                photo: x.post_photo_location,
+                                rating: x.post_rating,
+                                subject: x.post_subject,
+                                upvotes: x.upvote,
+                                downvotes: x.downvote
+                            }
+                    });
+                });
+
+            }
+        }).catch(err => console.error("Error:", err));
+  };
+
+
+  retrieveComments = (parentId) => {
+    fetch(this.props.request+'/comments/'+parentId+'/'+this.state.page+'/', {
+            method: 'GET',
+            signal: this.abortController.signal,
         }).then(res => res.json())
         .then(data => {
             this.setState({loading:false});
@@ -69,7 +94,8 @@ class Post extends Component {
                                 userImage: x.userImage,
                                 date: x.commentDate,
                                 content: x.content,
-                                children: x.numChildren
+                                numChildren: x.numChildren,
+                                children:[]
                             }
                         ]
                     }));
@@ -80,7 +106,9 @@ class Post extends Component {
             else {
                 this.setState({moreData: false});
             }
-        }).catch(err => console.error("Error:", err));
+        }).catch(err => {
+            if (err.name === 'AbortError') return;
+            console.error("Error:", err)});
   };
 
   spinnerWhenLoading() {
@@ -114,7 +142,9 @@ class Post extends Component {
               src={this.state.post.userImage}
             />
 
-            <p>{this.state.post.username}</p>
+            <Link to={'/user/'+this.state.post.userId+'/'}>
+                <p>{this.state.post.username}</p>
+            </Link>
             <div className="btn-group" role="group" aria-label="Basic example">
               <button style={{ width: "50px" }}>🍽{this.state.post.upvotes}</button>
 
@@ -160,6 +190,7 @@ class Post extends Component {
                        userImage={comment.userImage}
                        date={comment.commentDate}
                        content={comment.content}
+                       numChildren={comment.numChildren}
                        children={comment.children}
               />
               <br />

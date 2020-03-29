@@ -5,7 +5,7 @@ import "./styles.css";
 import { Link, Switch, Route, withRouter } from "react-router-dom";
 import Loader from 'react-loader-spinner'
 
-class Homepage extends Component {
+class EstablishmentsList extends Component {
   state = {
       loading: true,
       moreData: true,
@@ -148,4 +148,4 @@ class Homepage extends Component {
   }
 }
 
-export default withRouter(Homepage);
+export default withRouter(EstablishmentsList);
