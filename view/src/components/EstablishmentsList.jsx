@@ -9,6 +9,7 @@ class EstablishmentsList extends Component {
   state = {
       loading: true,
       moreData: true,
+      name: '',
       page: 0,
       posts: []
   };
@@ -58,6 +59,7 @@ class EstablishmentsList extends Component {
         }).then(res => res.json())
         .then(data => {
             this.setState({loading:false});
+            this.setState({name: data.name});
             if (data.data.length > 0) {
                 data.data.map(x => {
                     this.setState(state => ({
@@ -119,7 +121,7 @@ class EstablishmentsList extends Component {
           }}/>
           <Route>
               <div className="background">
-                <b style={{ paddingLeft: "350px" }}>{this.props.header}</b>
+                <b style={{ paddingLeft: "350px" }}>{this.props.header + this.state.name}</b>
                 {this.showThePostReviewButtonIfLoggedIn()}
                 <br />
                 {this.state.posts.map((post, index) => (

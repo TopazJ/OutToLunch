@@ -1,12 +1,10 @@
-import uuid
 from datetime import datetime
 from establishments.models import *
 from comments.views import get_comment_count
-from django.forms import model_to_dict
 from django.shortcuts import redirect
 import json
 import requests
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 
 # Create your views here.
 from event.PynamoDBModels import Event, Post
@@ -25,14 +23,14 @@ def establishment_posts(request, establishment_id, page):
     url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/posts/establishment'
     payload = {"page": page.__int__(), "establishment_id": establishment_id}
     r = requests.get(url, params=payload)
-    return JsonResponse(compile_data(r.json()))
+    return JsonResponse(compile_data(r.json(), establishment_id=establishment_id))
 
 
 def user_posts(request, user_id, page):
     url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/posts/user'
     payload = {"page": page.__int__(), "post_user": user_id}
     r = requests.get(url, params=payload)
-    return JsonResponse(compile_data(r.json(), user_id))
+    return JsonResponse(compile_data(r.json(), user_id=user_id))
 
 
 def post_details(request, post_id):
@@ -41,18 +39,23 @@ def post_details(request, post_id):
     return JsonResponse(compile_data(r.json()))
 
 
-def compile_data(post_data_list, user_id=0):
+def compile_data(post_data_list, user_id=0, establishment_id=0):
     to_return = {'data': []}
     if user_id != 0:
         user = SiteUser.objects.get(id=user_id)
         to_return['username'] = user.username
+    if establishment_id != 0:
+        establishment = Establishment.objects.get(establishment_id=establishment_id)
+        to_return['name'] = establishment.name
     for post_data in post_data_list:
         post_data['count'] = get_comment_count(post_data['post_id'])['count']
         if user_id == 0:
             user = SiteUser.objects.get(id=post_data['user_id'])
+        if establishment_id == 0:
+            establishment = Establishment.objects.get(establishment_id=post_data['establishment_id'])
         post_data['username'] = user.username
         post_data['user_image'] = user.image
-        post_data['establishment_name'] = Establishment.objects.get(establishment_id=post_data['establishment_id']).name
+        post_data['establishment_name'] = establishment.name
         to_return['data'].append(post_data)
     return to_return
 
