@@ -35,7 +35,7 @@ class LoginForm extends React.Component {
       .then(res => res.json())
       .then(data => {
         if (data.status === "success") {
-          this.props.props.login();
+          this.props.props.login(data.user);
         } else {
           alert(data.status);
         }

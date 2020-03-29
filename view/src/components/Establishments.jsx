@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link, useParams } from "react-router-dom";
+import StarRatingComponent from "react-star-rating-component";
 
 class Establishments extends Component {
   render() {
@@ -17,6 +18,12 @@ class Establishments extends Component {
             <div className="col-sm">
               <div>
                 <h1>{this.props.name}</h1>
+                  <StarRatingComponent
+                  name="rate1"
+                  editing={false}
+                  starCount={10}
+                  value={this.props.rating}
+                  />
                 <div style={{ paddingBottom: "20px" }}>
                     <Link to={'/establishments/'+this.props.id+'/'}>
                   <button

@@ -2,10 +2,9 @@ import React, { Component } from "react";
 import "./styles.css";
 import Establishments from "./Establishments.jsx";
 import {Route, Switch, withRouter} from "react-router";
-import Homepage from "./Homepage.jsx"
 import {Link} from "react-router-dom";
 import Loader from 'react-loader-spinner'
-
+import EstablishmentsList from "./EstablishmentsList.jsx";
 
 class EstablishmentsPage extends Component {
   state = {
@@ -14,6 +13,7 @@ class EstablishmentsPage extends Component {
       page: 0,
       establishments: []
   };
+  abortController = new window.AbortController();
 
   constructor(props){
       super(props);
@@ -26,6 +26,7 @@ class EstablishmentsPage extends Component {
 
   componentWillUnmount() {
       window.removeEventListener('scroll', this.handleScroll);
+      this.abortController.abort();
   }
 
   handleScroll = () => {
@@ -52,6 +53,7 @@ class EstablishmentsPage extends Component {
   retrieveEstablishments = () => {
     fetch(this.props.request+'/establishments/'+this.state.page+'/', {
             method: 'GET',
+            signal: this.abortController.signal,
         }).then(res => res.json())
         .then(data => {
             this.setState({loading:false});
@@ -63,6 +65,7 @@ class EstablishmentsPage extends Component {
                             {
                                 id: x.id,
                                 name: x.name,
+                                rating: x.rating
                             }
                         ]
                     }));
@@ -74,13 +77,15 @@ class EstablishmentsPage extends Component {
                 this.setState({moreData: false});
             }
         })
-        .catch(err => console.error("Error:", err));
+        .catch(err => {
+            if (err.name === 'AbortError') return;
+            console.error("Error:", err)});
   };
 
   showTheCreateEstablishmentButtonIfLoggedIn() {
     if (this.props.userElo >= 1000) {
       return (
-        <Link to="/create-establishment">
+        <Link to="/create-establishment/">
           <button
             className="btn btn-secondary"
             style={{ position: "absolute", right: "10px" }}
@@ -97,17 +102,20 @@ class EstablishmentsPage extends Component {
       return (
           <Switch>
               <Route path="/establishments/:id/">
-                  <Homepage request = {this.props.request}
-                             url={this.props.location.pathname.replace('establishments/','')}
-                             loggedIn={this.props.loggedIn}/>
+                  <EstablishmentsList request = {this.props.request}
+                            url={this.props.location.pathname.replace('establishments/','')}
+                            loggedIn={this.props.loggedIn}
+                            header={'Reviews For This Establishment'}
+                  />
               </Route>
                <Route path="/establishments/">
                    <div className="background">
+                       <b style={{ paddingLeft: "350px" }}>Establishments By Rating</b>
                        {this.showTheCreateEstablishmentButtonIfLoggedIn()}
                        {this.state.establishments.map((establishment, index) => (
                             <div key={index}>
                                 <br />
-                                <Establishments id={establishment.id} name={establishment.name} />
+                                <Establishments id={establishment.id} name={establishment.name} rating={establishment.rating}/>
                                 <br />
                             </div>
                        ))}
