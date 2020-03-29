@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 
 class AccountSettings extends Component {
-  state = { username: "nich", elo: 100 };
-  render() {
+
+    render() {
     return (
       <div className="background">
         <div className="container border post">
@@ -16,15 +16,15 @@ class AccountSettings extends Component {
                 }}
               >
                 <h2>Account Settings</h2>
-                  <h2>{this.state.username}</h2>
+                  <h2>{this.props.user.username}</h2>
                 <img
                   style={{ width: "100px", height: "100px" }}
-                  src={this.state.userImage}
+                  src={this.props.user.image}
                 />
                 <h3>Change profile picture:</h3>
                 <input type="file" name="fileToUpload" id="fileToUpload" />
                 <br />
-                 <h2> 🍽 {this.state.elo}</h2>
+                 <h2> 🍽 {this.props.user.userElo}</h2>
               </div>
             </div>
           </div>

@@ -33,8 +33,7 @@ class App extends Component {
         ],
         location:this.props.location.pathname,
         loggedIn:true, //You can make this true by default for testing everything with the user as logged in.
-        userId:0,
-        userElo:0
+        user:{}
     };
 
     initButtons() {
@@ -44,7 +43,7 @@ class App extends Component {
         }).then(res => res.json())
             .then(data => {
                 if (data.status==='user'){
-                    this.login(data.elo, data.userid);
+                    this.login(data.user);
                 }
                 else{
                     this.setLogout();
@@ -53,11 +52,10 @@ class App extends Component {
             .catch(err => console.error("Error:", err));
     };
 
-    login(elo, userid) {
+    login(user) {
         this.setState({
             navLinks: [{id: "logout", text: "Logout", component: Logout, props: {logout: this.logout, url:this.state.url}}],
-            userElo: elo,
-            userId: userid,
+            user:{userId: user.id, userElo: user.elo, image: user.image, username: user.username},
             loggedIn:true
         });
     }
@@ -86,11 +84,11 @@ class App extends Component {
     }
 
     createRouteForCreateEstablishment() {
-        if (this.state.userElo>=1000) {
+        if (this.state.user.userElo>=1000) {
             return (
                 <Route path="/create-establishment/">
                     <div className="homepage">
-                        <CreateEstablishment userId={this.state.userId}/>
+                        <CreateEstablishment userId={this.state.user.userId}/>
                     </div>
                 </Route>);
         }
@@ -101,10 +99,23 @@ class App extends Component {
             return (
                  <Route path="/create-post/">
                         <div className="homepage">
-                            <CreatePost userId={this.state.userId}/>
+                            <CreatePost userId={this.state.user.userId}/>
                         </div>
-                 </Route>);
+                 </Route>
+            );
         }
+    }
+
+    createRouteForAccountSettings() {
+         if (this.state.loggedIn) {
+             return (
+                 <Route path="/account-settings/">
+                     <div className="homepage">
+                         <AccountSettings user={this.state.user}/>
+                     </div>
+                 </Route>
+             );
+         }
     }
 
     render() {
@@ -130,24 +141,15 @@ class App extends Component {
                                 )}
                             />
                         ))}
-                        {this.createRouteForCreatePost()}
-                        <Route path="/account-settings">
-                            <div className="homepage">
-                                <AccountSettings userId={this.state.userId}/>
-                            </div>
-                        </Route>
-                        <Route path="/create-post">
-                            <div className="homepage">
-                                <CreatePost userId={this.state.userId}/>
-                            </div>
-                        </Route>
                         {this.createRouteForCreateEstablishment()}
+                        {this.createRouteForCreatePost()}
+                        {this.createRouteForAccountSettings()}
                         <Route path="/establishments/">
                             <div className="homepage">
                                 <EstablishmentsPage
                                     request = {this.state.url}
                                     loggedIn={this.state.loggedIn}
-                                    userElo={this.state.userElo}
+                                    userElo={this.state.user.userElo}
                                 />
                             </div>
                         </Route>

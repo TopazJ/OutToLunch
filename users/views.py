@@ -12,7 +12,11 @@ from django.contrib.auth import authenticate, login, logout
 
 def status(request):
     if request.user.is_authenticated:
-        return JsonResponse({'status': 'user', 'elo': request.user.elo, 'userid': request.user.id})
+        return JsonResponse({'status': 'user',
+                             'user': {'elo': request.user.elo,
+                                      'id': request.user.id,
+                                      'image': request.user.image,
+                                      'username': request.user.username}})
     else:
         return JsonResponse({'status': 'anon'})
 
@@ -40,7 +44,11 @@ def login_user(request):
         data = json.loads(request.body)
         user = authenticate(username=data['username'], password=data['password'])
         if user is not None:
-            response_data = {'status': 'success'}
+            response_data = {'status': 'success',
+                             'user': {'elo': user.elo,
+                                      'id': user.id,
+                                      'image': user.image,
+                                      'username': user.username}}
             if user.is_active:
                 login(request, user)
         else:
