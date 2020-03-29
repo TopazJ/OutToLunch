@@ -28,15 +28,28 @@ def establishment_posts(request, establishment_id, page):
     return JsonResponse(compile_data(r.json()))
 
 
+def user_posts(request, user_id, page):
+    url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/posts/user'
+    payload = {"page": page.__int__(), "post_user": user_id}
+    r = requests.get(url, params=payload)
+    return JsonResponse(compile_data(r.json(), user_id))
+
+
 def post_details(request, post_id):
-    pass
+    url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/posts/'
+    r = requests.get(url+str(post_id))
+    return JsonResponse(compile_data(r.json()))
 
 
-def compile_data(post_data_list):
+def compile_data(post_data_list, user_id=0):
     to_return = {'data': []}
+    if user_id != 0:
+        user = SiteUser.objects.get(id=user_id)
+        to_return['username'] = user.username
     for post_data in post_data_list:
         post_data['count'] = get_comment_count(post_data['post_id'])['count']
-        user = SiteUser.objects.get(id=post_data['user_id'])
+        if user_id == 0:
+            user = SiteUser.objects.get(id=post_data['user_id'])
         post_data['username'] = user.username
         post_data['user_image'] = user.image
         post_data['establishment_name'] = Establishment.objects.get(establishment_id=post_data['establishment_id']).name

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import StarRatingComponent from "react-star-rating-component";
 import Comment from "./Comment.jsx";
+import { Link } from "react-router-dom";
 import Loader from 'react-loader-spinner'
 
 /*
@@ -25,11 +26,13 @@ class Post extends Component {
 
   constructor(props){
     super(props);
+    console.log(this.props);
     if (this.props.post){
         this.state.post = this.props.post;
     }
     else{
         this.state.post.postId = this.props.id;
+        this.retrievePost();
     }
     this.retrieveComments();
   }
@@ -47,6 +50,36 @@ class Post extends Component {
          this.setState({loading: true});
          this.retrieveComments();
     }
+  };
+
+  retrievePost = () => {
+      fetch(this.props.request+'/posts/'+this.state.post.postId + '/', {
+            method: 'GET',
+        }).then(res => res.json())
+        .then(data => {
+            if (data.data.length > 0) {
+                data.data.map(x => {
+                    this.setState({
+                        post:
+                            {
+                                postId: x.post_id,
+                                userId: x.user_id,
+                                username: x.username,
+                                userImage: x.user_image,
+                                establishmentName: x.establishment_name,
+                                date: x.post_date,
+                                content: x.post_content,
+                                photo: x.post_photo_location,
+                                rating: x.post_rating,
+                                subject: x.post_subject,
+                                upvotes: x.upvote,
+                                downvotes: x.downvote
+                            }
+                    });
+                });
+
+            }
+        }).catch(err => console.error("Error:", err));
   };
 
 
@@ -114,7 +147,9 @@ class Post extends Component {
               src={this.state.post.userImage}
             />
 
-            <p>{this.state.post.username}</p>
+            <Link to={'/user/'+this.state.post.userId+'/'}>
+                <p>{this.state.post.username}</p>
+            </Link>
             <div className="btn-group" role="group" aria-label="Basic example">
               <button style={{ width: "50px" }}>🍽{this.state.post.upvotes}</button>
 

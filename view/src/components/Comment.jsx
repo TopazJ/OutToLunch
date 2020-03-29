@@ -26,7 +26,9 @@ class Comment extends Component {
                 style={{ width: "100px", height: "100px" }}
                 src={this.props.userImage}
               />
-              <p>{this.props.username}</p>
+             <Link to={'/user/'+this.props.userId+'/'}>
+                    <p>{this.props.username}</p>
+             </Link>
             </div>
             <div
               style={{

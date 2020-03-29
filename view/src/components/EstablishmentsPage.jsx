@@ -2,10 +2,9 @@ import React, { Component } from "react";
 import "./styles.css";
 import Establishments from "./Establishments.jsx";
 import {Route, Switch, withRouter} from "react-router";
-import Homepage from "./Homepage.jsx"
 import {Link} from "react-router-dom";
 import Loader from 'react-loader-spinner'
-
+import EstablishmentsList from "./EstablishmentsList.jsx";
 
 class EstablishmentsPage extends Component {
   state = {
@@ -63,6 +62,7 @@ class EstablishmentsPage extends Component {
                             {
                                 id: x.id,
                                 name: x.name,
+                                rating: x.rating
                             }
                         ]
                     }));
@@ -97,17 +97,20 @@ class EstablishmentsPage extends Component {
       return (
           <Switch>
               <Route path="/establishments/:id/">
-                  <Homepage request = {this.props.request}
-                             url={this.props.location.pathname.replace('establishments/','')}
-                             loggedIn={this.props.loggedIn}/>
+                  <EstablishmentsList request = {this.props.request}
+                            url={this.props.location.pathname.replace('establishments/','')}
+                            loggedIn={this.props.loggedIn}
+                            header={'Reviews For This Establishment'}
+                  />
               </Route>
                <Route path="/establishments/">
                    <div className="background">
+                       <b style={{ paddingLeft: "350px" }}>Establishments By Rating</b>
                        {this.showTheCreateEstablishmentButtonIfLoggedIn()}
                        {this.state.establishments.map((establishment, index) => (
                             <div key={index}>
                                 <br />
-                                <Establishments id={establishment.id} name={establishment.name} />
+                                <Establishments id={establishment.id} name={establishment.name} rating={establishment.rating}/>
                                 <br />
                             </div>
                        ))}

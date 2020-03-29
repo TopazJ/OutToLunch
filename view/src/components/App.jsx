@@ -8,6 +8,7 @@ import NavBar from "./navigation/NavBar.jsx";
 import CreateAccount from "./CreateAccount.jsx";
 import Logout from "./Logout.jsx"
 import Homepage from "./Homepage.jsx";
+import User from "./User.jsx"
 import CreatePost from "./createPost.jsx";
 import SideBar from "./navigation/SideBar.jsx";
 import EstablishmentsPage from "./EstablishmentsPage.jsx";
@@ -25,8 +26,8 @@ class App extends Component {
     state = {
         url:this.props.url,
         navLinks:[
-            {id:'login', text:'Login', component:LoginForm, props:{login:this.login, url:this.props.url}},
-            {id:'create-account', text:'Create Account', component:CreateAccount, props:{url:this.props.url}},
+            {id:'login/', text:'Login', component:LoginForm, props:{login:this.login, url:this.props.url}},
+            {id:'create-account/', text:'Create Account', component:CreateAccount, props:{url:this.props.url}},
         ],
         location:this.props.location.pathname,
         loggedIn:false, //You can make this true by default for testing everything with the user as logged in.
@@ -75,8 +76,8 @@ class App extends Component {
     setLogout(){
         this.setState({
             navLinks:[
-                {id:'login', text:'Login', component:LoginForm, props:{login:this.login, url:this.props.url}},
-                {id:'create-account', text:'Create Account', component:CreateAccount, props:{url:this.props.url}}
+                {id:'login/', text:'Login', component:LoginForm, props:{login:this.login, url:this.props.url}},
+                {id:'create-account/', text:'Create Account', component:CreateAccount, props:{url:this.props.url}}
                 ],
             loggedIn:false
         });
@@ -85,11 +86,22 @@ class App extends Component {
     createRouteForCreateEstablishment() {
         if (this.state.userElo>=1000) {
             return (
-                <Route path="/create-establishment">
+                <Route path="/create-establishment/">
                     <div className="homepage">
                         <CreatePost userId={this.state.userId}/>
                     </div>
                 </Route>);
+        }
+    }
+
+    createRouteForCreatePost() {
+        if (this.state.loggedIn) {
+            return (
+                 <Route path="/create-post/">
+                        <div className="homepage">
+                            <CreatePost userId={this.state.userId}/>
+                        </div>
+                 </Route>);
         }
     }
 
@@ -116,13 +128,9 @@ class App extends Component {
                                 )}
                             />
                         ))}
-                        <Route path="/create-post">
-                            <div className="homepage">
-                                <CreatePost userId={this.state.userId}/>
-                            </div>
-                        </Route>
+                        {this.createRouteForCreatePost()}
                         {this.createRouteForCreateEstablishment()}
-                        <Route path="/establishments">
+                        <Route path="/establishments/">
                             <div className="homepage">
                                 <EstablishmentsPage
                                     request = {this.state.url}
@@ -131,12 +139,22 @@ class App extends Component {
                                 />
                             </div>
                         </Route>
+                        <Route path="/user/:id/">
+                            <div className="homepage">
+                                <User request = {this.state.url}
+                                          url={this.props.location.pathname}
+                                          loggedIn={this.state.loggedIn}
+                                          header={'Posts By '}
+                                />
+                            </div>
+                        </Route>
                         <Route path="/">
                             <div className="homepage">
-                            <Homepage request = {this.state.url}
-                                      url={'/'}
-                                      loggedIn={this.state.loggedIn}
-                            />
+                                <Homepage request = {this.state.url}
+                                          url={'/'}
+                                          loggedIn={this.state.loggedIn}
+                                          header = {'Most Recent Reviews'}
+                                />
                             </div>
                         </Route>
                         <Route>
