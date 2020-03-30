@@ -4,10 +4,6 @@ import { Link } from "react-router-dom";
 
 class HomepagePost extends Component {
 
-  renderHeaders=()=>{
-        console.log(this.props);
-  };
-
   postContentLength(){
      if (this.props.content.length>50){
          return this.props.content.substring(0,50) + "...";

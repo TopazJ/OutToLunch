@@ -65,7 +65,9 @@ class EstablishmentsPage extends Component {
                             {
                                 id: x.id,
                                 name: x.name,
-                                rating: x.rating
+                                rating: x.rating,
+                                location: x.location,
+                                description: x.description,
                             }
                         ]
                     }));
@@ -115,7 +117,12 @@ class EstablishmentsPage extends Component {
                        {this.state.establishments.map((establishment, index) => (
                             <div key={index}>
                                 <br />
-                                <Establishments id={establishment.id} name={establishment.name} rating={establishment.rating}/>
+                                <Establishments id={establishment.id}
+                                                name={establishment.name}
+                                                rating={establishment.rating}
+                                                location={establishment.location}
+                                                description={establishment.description}
+                                />
                                 <br />
                             </div>
                        ))}

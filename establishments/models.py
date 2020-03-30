@@ -22,7 +22,7 @@ class Establishment(models.Model):
     owner = models.ForeignKey(SiteUser, on_delete=models.DO_NOTHING, null=True)
     image = models.CharField(max_length=2048, null=True)
 
-    def to_json(self, can_edit):
+    def to_json(self, can_edit=False):
         json_data = {
             'id': self.establishment_id,
             'name': self.name,

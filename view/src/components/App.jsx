@@ -123,9 +123,11 @@ class App extends Component {
             <React.Fragment>
                     <NavBar
                         initButtons={this.initButtons}
-                        buttonLinks={this.state.navLinks}/>
+                        buttonLinks={this.state.navLinks}
+                        request={this.state.url}
+                    />
                     <div className='homepage'>
-                        <SideBar loggedIn={this.state.loggedIn}/> {/*TODO Sidebar needs to receive the options it lists as props as these will change with the user's status.*/}
+                        <SideBar loggedIn={this.state.loggedIn}/>
                     </div>
                     <Switch>
                         {this.state.navLinks.map(link => (

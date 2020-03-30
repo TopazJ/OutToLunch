@@ -1,10 +1,16 @@
 import React from "react";
 import CSRFToken from "./CSRFToken.jsx";
+import Loader from 'react-loader-spinner'
+import { Redirect } from "react-router-dom";
 
 class LoginForm extends React.Component {
+  state = {
+    loading: false
+  };
+
   constructor(props) {
     super(props);
-    this.state = { form: { username: "", password: "" } };
+    this.state = { form: { username: "", password: "" }};
   }
 
   handleInputChange = event => {
@@ -22,6 +28,7 @@ class LoginForm extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
+    this.setState({loading: true});
     const values = this.state.form;
     let url = this.props.props.url + '/auth/login/';
     fetch(url, {
@@ -35,6 +42,7 @@ class LoginForm extends React.Component {
       .then(res => res.json())
       .then(data => {
         if (data.status === "success") {
+          this.setState({loading: false});
           this.props.props.login(data.user);
         } else {
           alert(data.status);
@@ -42,6 +50,21 @@ class LoginForm extends React.Component {
       })
       .catch(err => console.error("Error:", err));
   };
+
+  spinnerWhenLoading() {
+      if (this.state.loading){
+          return (
+                <div style={{ paddingLeft: "350px" }}>
+                    <Loader
+                     type="Oval"
+                     color="#17a2b8"
+                     height={100}
+                     width={100}
+	                />
+                </div>
+              );
+      }
+  }
 
   render() {
     return (
@@ -77,6 +100,7 @@ class LoginForm extends React.Component {
             Sign in
           </button>
         </form>
+              {this.spinnerWhenLoading()}
         </div>
             </div>
           </div>

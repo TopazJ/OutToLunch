@@ -6,12 +6,13 @@ import { Link, Switch, Route, withRouter } from "react-router-dom";
 import Loader from 'react-loader-spinner'
 
 class EstablishmentsList extends Component {
+  page = 0;
+  moreData = true;
   state = {
-      loading: true,
-      moreData: true,
       name: '',
-      page: 0,
-      posts: []
+      posts: [],
+      loading: true,
+      count: 0
   };
   abortController = new window.AbortController();
 
@@ -30,8 +31,17 @@ class EstablishmentsList extends Component {
       this.abortController.abort();
   }
 
-  handleScroll = () => {
-     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight-5 && !this.state.loading && this.state.moreData) {
+  componentDidUpdate(prevProps, prevState, snapshot) {
+      if (this.props.url !== prevProps.url) {
+          this.page = 0;
+          this.moreData = true;
+          this.setState({posts: [], loading:true, name:''});
+          this.retrievePosts();
+      }
+  }
+
+    handleScroll = () => {
+     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight-5 && !this.state.loading && this.moreData) {
          this.setState({loading: true});
          this.retrievePosts();
     }
@@ -53,13 +63,14 @@ class EstablishmentsList extends Component {
   }
 
   retrievePosts = () => {
-      fetch(this.props.request+'/posts'+this.props.url+this.state.page+'/', {
+      fetch(this.props.request+'/posts'+this.props.url+this.page+'/', {
             method: 'GET',
             signal: this.abortController.signal,
         }).then(res => res.json())
         .then(data => {
             this.setState({loading:false});
             this.setState({name: data.name});
+            this.setState({count: data.rating_count});
             if (data.data.length > 0) {
                 data.data.map(x => {
                     this.setState(state => ({
@@ -83,11 +94,10 @@ class EstablishmentsList extends Component {
                         ]
                     }));
                 });
-                let increment = this.state.page + 1;
-                this.setState({page: increment});
+                this.page += 1;
             }
             else {
-                this.setState({moreData: false});
+                this.moreData = false;
             }
         }).catch(err => {
             if (err.name === 'AbortError') return;
@@ -110,6 +120,16 @@ class EstablishmentsList extends Component {
     }
   }
 
+  showRatingsCount(){
+      if (this.state.count === 0){
+          return (<b style={{ paddingLeft: "350px" }}>{"No Ratings"}</b>);
+      }
+      else if (this.state.count === 1){
+          return (<b style={{ paddingLeft: "350px" }}>{this.state.count + " Rating"}</b>);
+      }
+      return (<b style={{ paddingLeft: "350px" }}>{this.state.count + " Ratings"}</b>);
+  }
+
   render() {
     return (
         <Switch>
@@ -122,6 +142,7 @@ class EstablishmentsList extends Component {
           <Route>
               <div className="background">
                 <b style={{ paddingLeft: "350px" }}>{this.props.header + this.state.name}</b>
+                {this.showRatingsCount()}
                 {this.showThePostReviewButtonIfLoggedIn()}
                 <br />
                 {this.state.posts.map((post, index) => (
