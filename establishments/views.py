@@ -67,10 +67,10 @@ def flag(request):
             data = json.loads(request.body)
             user = SiteUser.objects.get(id=request.user.id)
             establishment = Establishment.objects.get(establishment_id=data["establishment_id"])
-            if FlagCounter.objects.get(establishment = establishment, user=user).exists():
+            if FlagCounter.objects.get(establishment=establishment, user=user).exists():
                 return JsonResponse({"error": "You've already flagged this establishment!"})
             else:
-                if FlagCounter.objects.filter(establishment = establishment).count() is 9:
+                if FlagCounter.objects.filter(establishment=establishment).count() == 9:
                     establishment.delete()
                 else:
                     flag_count = FlagCounter(establishment=establishment, user=user)
@@ -83,10 +83,26 @@ def flag(request):
         return redirect('/')
 
 
-def search(request):
+def delete(request):
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            data = json.loads(request.body)
+            instance = Establishment.objects.get(establishment_id=data["establishment_id"], owner=request.user)
+            if instance is not None:
+                instance.delete()
+                return JsonResponse({"success": "success"})
+            else:
+                return JsonResponse({"error": "You do not have deletion right for this establishment!"})
+        else:
+            return JsonResponse({"error": "You are not logged in you silly goose!"})
+    else:
+        return redirect('/')
+
+
+def search(request, search_params):
     payload = {'data': []}
-    data = json.loads(request.body)
-    establishments = Establishment.objects.filter(name__contains=data['search']);
+    search_params = search_params.replace('-', ' ')
+    establishments = Establishment.objects.filter(name__icontains=search_params)
     for establishment in establishments:
         payload['data'].append(establishment.to_json())
 

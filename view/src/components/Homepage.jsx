@@ -6,10 +6,10 @@ import { Link, Switch, Route, withRouter } from "react-router-dom";
 import Loader from 'react-loader-spinner'
 
 class Homepage extends Component {
+  moreData = true;
+  page = 0;
   state = {
       loading: true,
-      moreData: true,
-      page: 0,
       posts: []
   };
   abortController = new window.AbortController();
@@ -19,6 +19,14 @@ class Homepage extends Component {
       this.retrievePosts();
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+      if (this.props.url !== prevProps.url) {
+          this.page = 0;
+          this.moreData = true;
+          this.setState({posts: [], loading:true});
+          this.retrievePosts();
+      }
+  }
 
   componentDidMount() {
        window.addEventListener('scroll', this.handleScroll);
@@ -30,7 +38,7 @@ class Homepage extends Component {
   }
 
   handleScroll = () => {
-     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight-5 && !this.state.loading && this.state.moreData) {
+     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight-5 && !this.state.loading && this.moreData) {
          this.setState({loading: true});
          this.retrievePosts();
     }
@@ -52,7 +60,7 @@ class Homepage extends Component {
   }
 
   retrievePosts = () => {
-      fetch(this.props.request+'/posts'+this.props.url+this.state.page+'/', {
+      fetch(this.props.request+'/posts'+this.props.url+this.page+'/', {
             method: 'GET',
             signal: this.abortController.signal,
         }).then(res => res.json())
@@ -81,11 +89,10 @@ class Homepage extends Component {
                         ]
                     }));
                 });
-                let increment = this.state.page + 1;
-                this.setState({page: increment});
+                this.page += 1;
             }
             else {
-                this.setState({moreData: false});
+                this.moreData = false;
             }
         }).catch(err => {
             if (err.name === 'AbortError') return;

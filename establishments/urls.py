@@ -9,6 +9,7 @@ urlpatterns = [
     path('<int:page>/', views.index, name='most_recent'),
     path('create/', views.create, name='create'),
     path('update/', views.update, name='update'),
-    path('search/', views.search, name='search'),
+    path('delete/', views.delete, name='delete'),
+    path('search/<slug:search_params>/', views.search, name='search'),
     path('flag/', views.flag, name='search')
 ]

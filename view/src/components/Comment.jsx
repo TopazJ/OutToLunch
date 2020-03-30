@@ -4,7 +4,6 @@ import Loader from "react-loader-spinner";
 
 class Comment extends Component {
 
-    // TODO Shamez -> Figure out how to do inner comment lazy loading. Show replies does not currently work.
     state = {
         childrenInfo:{
             loadedChildren: 0,
