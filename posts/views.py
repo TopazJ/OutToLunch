@@ -39,6 +39,14 @@ def post_details(request, post_id):
     return JsonResponse(compile_data(r.json()))
 
 
+def search(request, search_params, page):
+    url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/posts/search'
+    search_params = search_params.replace('-', ' ')
+    payload = {"page": page.__int__(), "search_criteria": search_params}
+    r = requests.get(url, params=payload)
+    return JsonResponse({"data": r.json()})
+
+
 def compile_data(post_data_list, user_id=0, establishment_id=0):
     to_return = {'data': []}
     if user_id != 0:
@@ -47,6 +55,7 @@ def compile_data(post_data_list, user_id=0, establishment_id=0):
     if establishment_id != 0:
         establishment = Establishment.objects.get(establishment_id=establishment_id)
         to_return['name'] = establishment.name
+        to_return['rating_count'] = establishment.rating_count
     for post_data in post_data_list:
         post_data['count'] = get_comment_count(post_data['post_id'])['count']
         if user_id == 0:

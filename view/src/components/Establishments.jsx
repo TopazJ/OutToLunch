@@ -24,6 +24,10 @@ class Establishments extends Component {
                   starCount={10}
                   value={this.props.rating}
                   />
+                  <h5>Location:</h5>
+                  <p>{this.props.location}</p>
+                  <h5>Description:</h5>
+                  <p>{this.props.description}</p>
                 <div style={{ paddingBottom: "20px" }}>
                     <Link to={'/establishments/'+this.props.id+'/'}>
                   <button

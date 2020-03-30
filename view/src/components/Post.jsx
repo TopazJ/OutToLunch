@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 import Loader from 'react-loader-spinner'
 
 class Post extends Component {
+  page = 0;
+  moreData = true;
   state = {
     loading: true,
-    moreData: true,
-    page: 0,
     post: {},
     comments: []
   };
@@ -35,15 +35,25 @@ class Post extends Component {
       this.abortController.abort();
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+      if (this.props.id!== prevProps.id) {
+          this.page = 0;
+          this.moreData = true;
+          this.setState({post: {postId: this.props.id}, comments:[], loading:true});
+          this.retrievePost();
+          this.retrieveComments(this.state.post.postId);
+      }
+  }
+
   handleScroll = () => {
-     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight-5 && !this.state.loading && this.state.moreData) {
+     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight-5 && !this.state.loading && this.moreData) {
          this.setState({loading: true});
          this.retrieveComments();
     }
   };
 
   retrievePost = () => {
-      fetch(this.props.request+'/posts/'+this.state.post.postId + '/', {
+      fetch(this.props.request+'/posts/'+this.props.id + '/', {
             method: 'GET',
         }).then(res => res.json())
         .then(data => {
@@ -74,7 +84,7 @@ class Post extends Component {
 
 
   retrieveComments = () => {
-    fetch(this.props.request+'/comments/'+this.state.post.postId+'/'+this.state.page+'/', {
+    fetch(this.props.request+'/comments/'+this.props.id+'/'+this.page+'/', {
             method: 'GET',
             signal: this.abortController.signal,
         }).then(res => res.json())
@@ -98,11 +108,10 @@ class Post extends Component {
                         ]
                     }));
                 });
-                let increment = this.state.page + 1;
-                this.setState({page: increment});
+                this.page += 1;
             }
             else {
-                this.setState({moreData: false});
+                this.moreData=false;
             }
         }).catch(err => {
             if (err.name === 'AbortError') return;

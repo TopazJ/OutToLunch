@@ -8,18 +8,35 @@
 
 .navbarsearch {
   position: relative;
-  width: 640px;
+  width: 585px;
 }
 .navbarsearch input {
   border: none;
   background-color: #fff;
-  width: 400px;
+  width: 500px;
 }
 .navbarsearch img {
   position: absolute;
   top: 7px;
   left: 5px;
 }
+
+.navbarsearch button {
+  position: absolute;
+  top: 1px;
+  right: 5px;
+}
+
+.navbarsearchloading {
+  position: absolute;
+  top: 7px;
+  left: 5px;
+}
+
+.navbarsearchitem {
+  width: 500px;
+}
+
 .padding {
   padding-left: 30px;
 }

@@ -30,7 +30,7 @@ class CreateAccount extends Component{
         })
         .catch(err => {
             alert("Error communicating with server.");
-            console.log(err);
+            console.error(err);
         });
     };
 
