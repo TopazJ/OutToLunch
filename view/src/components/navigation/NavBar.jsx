@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Link, NavLink, withRouter } from "react-router-dom";
 import Autosuggest from 'react-autosuggest';
 import { debounce } from 'throttle-debounce';
-import slugify from 'react-slugify';
 import Loader from 'react-loader-spinner'
 
 class NavBar extends Component {
@@ -47,9 +46,8 @@ class NavBar extends Component {
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
     if (inputLength > 0) {
-        const searchParams = slugify(inputValue);
         this.setState({loading:true});
-        fetch(this.props.request + '/establishments/search/' + searchParams + '/', {
+        fetch(this.props.request + '/establishments/search/' + inputValue + '/', {
             method: 'GET',
             signal: this.abortController.signal,
         }).then(res => res.json())
@@ -68,7 +66,7 @@ class NavBar extends Component {
                         ]
                     });
                 }
-                fetch(this.props.request + '/posts/search/' + searchParams + '/0/', {
+                fetch(this.props.request + '/posts/search/' + inputValue + '/0/', {
                     method: 'GET',
                     signal: this.abortController.signal,
                 }).then(res => res.json())

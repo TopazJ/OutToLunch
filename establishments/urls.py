@@ -10,6 +10,6 @@ urlpatterns = [
     path('create/', views.create, name='create'),
     path('update/', views.update, name='update'),
     path('delete/', views.delete, name='delete'),
-    path('search/<slug:search_params>/', views.search, name='search'),
+    path('search/<str:search_params>/', views.search, name='search'),
     path('flag/', views.flag, name='search')
 ]

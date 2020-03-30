@@ -41,7 +41,6 @@ def post_details(request, post_id):
 
 def search(request, search_params, page):
     url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/posts/search'
-    search_params = search_params.replace('-', ' ')
     payload = {"page": page.__int__(), "search_criteria": search_params}
     r = requests.get(url, params=payload)
     return JsonResponse({"data": r.json()})

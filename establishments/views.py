@@ -101,7 +101,6 @@ def delete(request):
 
 def search(request, search_params):
     payload = {'data': []}
-    search_params = search_params.replace('-', ' ')
     establishments = Establishment.objects.filter(name__icontains=search_params)
     for establishment in establishments:
         payload['data'].append(establishment.to_json())
