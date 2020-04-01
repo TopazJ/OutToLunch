@@ -64,6 +64,9 @@ public class CommentLambda implements RequestHandler<Comment, String>
 	 * Read all comments made by a user:
 	 *  request{ userID: <userID>, all else: "null"}
 	 *  
+	 * Read 1 comment by commentID
+	 *  request{ commentID: <commentID>, all else: "null" } 
+	 *  
 	 * @param request Comment with parameters for query
 	 * @param context AWS Lambda context
 	 * @return JSON list of read comments.
@@ -80,6 +83,8 @@ public class CommentLambda implements RequestHandler<Comment, String>
 		char mode = 's';
 		if(request.getParentID().equals("null"))
 			return "Error: invalid parameters.";
+		if(!request.getCommentID().equals("null") && !request.getCommentID().equals("Missing userID") && !request.getCommentID().equals(""))
+			mode='i';
 		if(!request.getContent().equals("null"))
 		{
 			//check for 'a'
@@ -117,6 +122,9 @@ public class CommentLambda implements RequestHandler<Comment, String>
 				break;
 			case 'u':
 				jsonResponse = dbManager.queryCommentsByColumnID("userID", request.getUserID());
+				break;
+			case 'i':
+				jsonResponse = dbManager.queryCommentsByColumnID("commentID", request.getCommentID());
 				break;
 			default:
 				jsonResponse = "Error: No comments read.";

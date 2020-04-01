@@ -275,7 +275,7 @@ public class CommentDBManager
 		if(mode=='s')
 			return commentListJSON;
 		if(mode=='c')
-			return "{ count: " + Integer.toString(commentList.size()) + "; }";
+			return "{ \"count\": " + Integer.toString(commentList.size()) + " }";
 		return "Error: incorrect mode.";
 	}	
 	
