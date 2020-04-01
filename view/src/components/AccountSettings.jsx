@@ -1,6 +1,9 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 class AccountSettings extends Component {
+
+    //TODO Users can update their profile images.
 
     render() {
     return (
@@ -16,7 +19,9 @@ class AccountSettings extends Component {
                 }}
               >
                 <h2>Account Settings</h2>
-                  <h2>{this.props.user.username}</h2>
+                  <Link to={'/user/'+this.props.user.userId+'/'}>
+                    <h2>{this.props.user.username}</h2>
+                  </Link>
                 <img
                   style={{ width: "100px", height: "100px" }}
                   src={this.props.user.image}

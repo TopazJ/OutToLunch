@@ -3,6 +3,7 @@ import StarRatingComponent from "react-star-rating-component";
 import Autosuggest from "react-autosuggest";
 import {debounce} from "throttle-debounce";
 import Loader from "react-loader-spinner";
+import CSRFToken from "./CSRFToken.jsx";
 
 class CreatePost extends Component {
   state = {
@@ -11,16 +12,16 @@ class CreatePost extends Component {
       content: '',
       rating: 0,
       imageFile: null,
-      selected:{}
+      selected:{},
     },
     suggestions:[],
     value:'',
     oldValue:'',
     loading: false,
-    imageUrl: ''
   };
   abortController = new window.AbortController();
   suggestions = [];
+
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -69,8 +70,7 @@ class CreatePost extends Component {
                 form:{
                     ...state.form,
                     imageFile: file
-                },
-                imageUrl: reader.result
+                }
             }));
         };
         reader.readAsDataURL(file)
@@ -183,7 +183,54 @@ class CreatePost extends Component {
 
   handleSubmit(e) {
        e.preventDefault();
-       console.log(this.state.form);
+       if (!this.state.form.selected || Object.keys(this.state.form.selected).length === 0){
+            alert("Please provide a valid establishment!");
+            return;
+       }
+       if (this.state.form.rating < 1 || this.state.form.rating > 10){
+           alert("Please provide a rating!");
+           return;
+       }
+       let data = new FormData();
+       let createForm = document.forms.createPost;
+       data.append('image', this.state.form.imageFile);
+       const content = {
+         userId: this.props.userId,
+         rating: this.state.form.rating,
+         subject: this.state.form.subject,
+         content: this.state.form.content,
+         establishmentId: this.state.form.selected.id
+       };
+       data.append('content', JSON.stringify(content));
+       fetch(this.props.request + '/posts/create/', {
+            method: 'POST',
+            body: data,
+            headers: {
+                'X-CSRFToken':e.target.csrfmiddlewaretoken.value
+            }
+        }).then(res => res.json())
+        .then(data => {
+            if (data.success === "success"){
+                alert("Successfully posted review!");
+                this.setState({
+                    form:{
+                      subject:'',
+                      content: '',
+                      rating: 0,
+                      imageFile: null,
+                      selected:{},
+                    },
+                    suggestions:[],
+                    value:'',
+                    oldValue:'',
+                    loading: false
+                });
+                createForm.fileToUpload.value = '';
+            }
+        })
+        .catch(err => {
+            console.error("Error:", err)
+        });
   };
 
   render() {
@@ -215,7 +262,8 @@ class CreatePost extends Component {
                 }}
               >
                 <h2>Create New Review</h2>
-                <form onSubmit={this.handleSubmit}>
+                <form name="createPost" onSubmit={this.handleSubmit}>
+                  <CSRFToken/>
                   <input
                     className="form-control"
                     type="text"
@@ -224,15 +272,9 @@ class CreatePost extends Component {
                     placeholder="Title"
                     name="subject"
                     onChange={this.handleInputChange}
+                    value={this.state.form.subject}
                   />
                   <br/>
-                  {/*<input*/}
-                  {/*  className="form-control"*/}
-                  {/*  type="text"*/}
-                  {/*  required*/}
-                  {/*  style={{ width: "300px" }}*/}
-                  {/*  placeholder="Establishment"*/}
-                  {/*/>*/}
                   <div style={{position: "relative", width: "540px" }}>
                       <Autosuggest
                         suggestions={suggestions}
@@ -259,6 +301,7 @@ class CreatePost extends Component {
                     style={{ width: "700px", height: "200px", resize:"none"}}
                     placeholder="Write your review..."
                     onChange={this.handleInputChange}
+                    value={this.state.form.content}
                   />
                   <br/>
                   <input

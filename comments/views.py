@@ -40,21 +40,20 @@ def comment_count(request, post_id):
 
 
 def create(request):
-    # pynamo db - tested
-    # TODO: make it take in the POST information
     if request.method == "POST":
         if request.user.is_authenticated:
             data = json.loads(request.body)
+            comment_id = uuid.uuid4().__str__()
             comment = Event(event_id=uuid.uuid4().__str__(),
                             type='CommentCreatedEvent',
                             timestamp=datetime.now(),
-                            data=CreateComment(commentID=uuid.uuid4().__str__(),
+                            data=CreateComment(commentID=comment_id,
                                                userID=data["userID"],
                                                parentID=data['parentID'],
                                                content=data['content'],
                                                dateMs=int(time.time() * 1000)))
             comment.save()
-            return JsonResponse({'success': 'success'})
+            return JsonResponse({'success': 'success', 'commentId': comment_id})
         else:
             return JsonResponse({'error': 'You have to login first in order to post!'})
     else:
@@ -71,7 +70,7 @@ def update(request):
             comment = Event(event_id=uuid.uuid4().__str__(),
                             type='CommentUpdatedEvent',
                             timestamp=datetime.now(),
-                            data=UpdateComment(commentID=data['comentID'],
+                            data=UpdateComment(commentID=data['commentID'],
                                                userID=data['userID'],
                                                parentID=data['parentID'],
                                                content=data['content'],

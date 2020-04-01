@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 import json
 from establishments.models import *
 from establishments.logic import *
+from images.models import Image
 from users.models import SiteUser
 from django.views.decorators.csrf import csrf_exempt
 
@@ -23,14 +24,23 @@ def index(request, page):
 def create(request):
     if request.method == "POST":
         if request.user.is_authenticated:
-            data = json.loads(request.body)
+            content = json.loads(request.POST['content'])
+            establishment_uuid = uuid.uuid4()
+            image_url = 'https://outtolunchstatic.s3.amazonaws.com/media/images/download.png'
+            if 'image' in request.FILES:
+                request.FILES['image'].name = uuid.uuid4().__str__()
+                image = Image(file=request.FILES['image'], type='E', uuid=establishment_uuid)
+                image.save()
+                image_url = image.file.url
             if request.user.elo >= 1000:
-                establishment = Establishment(name=data['name'],
-                                              location=data['location'],
-                                              description=data['description'],
+                establishment = Establishment(establishment_id=establishment_uuid,
+                                              name=content['name'],
+                                              location=content['location'],
+                                              description=content['description'],
                                               rating=0,
                                               owner=request.user,
-                                              rating_count=0)
+                                              rating_count=0,
+                                              image=image_url)
                 establishment.save()
                 return JsonResponse({"success": "success"})
             else:

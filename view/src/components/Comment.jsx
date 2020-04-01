@@ -1,18 +1,28 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Loader from "react-loader-spinner";
+import CSRFToken from "./CSRFToken.jsx";
 
 class Comment extends Component {
 
     state = {
         childrenInfo:{
+            numChildren:0,
             loadedChildren: 0,
             children:[],
         },
         page:0,
-        loading:false
+        loading:false,
+        commentForm:{
+            content:''
+        }
     };
     abortController = new window.AbortController();
+
+    constructor(props){
+        super(props);
+        this.state.childrenInfo.numChildren = this.props.numChildren;
+    }
 
     componentWillUnmount() {
       this.abortController.abort();
@@ -54,13 +64,13 @@ class Comment extends Component {
     };
 
     showRepliesButtonIfChildren() {
-        if (this.props.numChildren > 0 && this.props.numChildren > this.state.childrenInfo.loadedChildren){
+        if (this.state.childrenInfo.numChildren > 0 && this.state.childrenInfo.numChildren > this.state.childrenInfo.loadedChildren){
             if (this.state.childrenInfo.loadedChildren===0){
                 return (<a href="#0" onClick={this.retrieveChildren}>{"See replies (" +
-                (this.props.numChildren - this.state.childrenInfo.loadedChildren) + ")"}</a>);
+                (this.state.childrenInfo.numChildren - this.state.childrenInfo.loadedChildren) + ")"}</a>);
             }
             return (<a href="#0" onClick={this.retrieveChildren}>{"More replies (" +
-                (this.props.numChildren - this.state.childrenInfo.loadedChildren) + ")"}</a>);
+                (this.state.childrenInfo.numChildren - this.state.childrenInfo.loadedChildren) + ")"}</a>);
         }
     }
 
@@ -94,12 +104,77 @@ class Comment extends Component {
                              content={comment.content}
                              numChildren={comment.numChildren}
                              request={this.props.request}
+                             currentUser={this.props.currentUser}
                     />
                     <br/>
                 </div>
             )));
         }
     }
+
+    handleCommentInputChange = (event) => {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+
+        this.setState(state => ({
+            commentForm: {
+                ...state.commentForm,
+                [name]: value
+            }
+        }));
+    };
+
+    createComment = (event) => {
+      event.preventDefault();
+      const values = {
+         userID: this.props.currentUser.userId,
+         parentID: this.props.commentId,
+         content: this.state.commentForm.content
+      };
+      fetch(this.props.request + '/comments/create/', {
+            method: 'POST',
+            body: JSON.stringify(values),
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken':event.target.csrfmiddlewaretoken.value
+            }
+        }).then(res => res.json())
+        .then(data => {
+            if (data.success!=='success'){
+                alert(data.error);
+            }
+            else{
+                let loaded = this.state.childrenInfo.loadedChildren;
+                let numChildren = this.state.childrenInfo.numChildren;
+                this.setState(state => ({
+                    childrenInfo:{
+                        loadedChildren: loaded+1,
+                        numChildren: numChildren+1,
+                        children:[
+                            {
+                                commentId: data.commentId,
+                                userId: this.props.currentUser.userId,
+                                parentId: this.props.commentId,
+                                username: this.props.currentUser.username,
+                                userImage: this.props.currentUser.image,
+                                date: 0,
+                                content: this.state.commentForm.content,
+                                numChildren: 0
+                            },
+                            ...state.childrenInfo.children
+                        ]
+                    },
+                }));
+                this.setState({commentForm: {content:''}});
+            }
+        })
+        .catch(err => {
+            alert("Error communicating with server.");
+            console.error(err);
+        });
+
+    };
 
     render() {
         return (
@@ -128,16 +203,21 @@ class Comment extends Component {
                 <br/>
 
               </p>
-
-              <textarea
-                required
-                style={{ width: "450px", height: "50px" }}
-                placeholder="Respond to this comment"
-                className="form-control"
-              />
-              <div style={{ paddingBottom: "10px" }}>
-                <button className="btn btn-secondary"> Post Comment </button>
-              </div>
+              <form onSubmit={this.createComment}>
+                  <CSRFToken/>
+                  <textarea
+                    name="content"
+                    required
+                    style={{ width: "450px", height: "50px" }}
+                    placeholder="Respond to this comment"
+                    className="form-control"
+                    value={this.state.commentForm.content}
+                    onChange={this.handleCommentInputChange}
+                  />
+                  <div style={{ paddingBottom: "10px" }}>
+                    <button type="submit" className="btn btn-secondary"> Post Comment </button>
+                  </div>
+              </form>
 
             </div>
                {this.renderNestedChildren()}

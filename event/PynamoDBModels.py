@@ -16,19 +16,19 @@ CommentDeletesEvent = 'CommentDeleteEvent'
 
 class Post(MapAttribute):
     post_id = UnicodeAttribute(null=False)
-    user_id = UnicodeAttribute(null=True)
+    user_id = UnicodeAttribute(null=False)
+    establishment_id = UnicodeAttribute(null=False)
     post_rating = NumberAttribute(null=True)
     post_subject = UnicodeAttribute(null=True)
-    establishment_id = UnicodeAttribute(null=True)
     post_content = UnicodeAttribute(null=True)
     post_photo_location = UnicodeAttribute(null=True)
     post_date = UnicodeAttribute(null=True)
 
 
-class PostUpdate(MapAttribute):
-    user_id = UnicodeAttribute(null=False)
+class PostVote(MapAttribute):
     post_id = UnicodeAttribute(null=False)
-    vote = NumberAttribute(null=False)
+    user_id = UnicodeAttribute(null=False)
+    vote = UnicodeAttribute(null=False)
 
 
 class CreateComment(MapAttribute):

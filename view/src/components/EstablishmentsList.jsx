@@ -137,7 +137,9 @@ class EstablishmentsList extends Component {
               const post = this.state.posts.find(post => post.postId === props.match.params.id);
               return (<Post post={post}
                             id={props.match.params.id}
-                            request={this.props.request}/>);
+                            request={this.props.request}
+                            currentUser={this.props.user}
+              />);
           }}/>
           <Route>
               <div className="background">
@@ -147,6 +149,7 @@ class EstablishmentsList extends Component {
                 <br />
                 {this.state.posts.map((post, index) => (
                   <HomepagePost
+                    currentUser={this.props.user}
                     key={index}
                     postId={post.postId}
                     userId = {post.userId}
@@ -161,6 +164,7 @@ class EstablishmentsList extends Component {
                     upvotes = {post.upvotes}
                     downvotes = {post.downvotes}
                     comments = {post.comments}
+                    request = {this.props.request}
                   />
                 ))}
                 {this.spinnerWhenLoading()}

@@ -55,7 +55,7 @@ class App extends Component {
     login(user) {
         this.setState({
             navLinks: [{id: "logout", text: "Logout", component: Logout, props: {logout: this.logout, url:this.state.url}}],
-            user:{userId: user.id, userElo: user.elo, image: user.image, username: user.username},
+            user:{userId: user.id.replace(/-/g,""), userElo: user.elo, image: user.image, username: user.username},
             loggedIn:true
         });
     }
@@ -88,7 +88,9 @@ class App extends Component {
             return (
                 <Route path="/create-establishment/">
                     <div className="homepage">
-                        <CreateEstablishment userId={this.state.user.userId}/>
+                        <CreateEstablishment userId={this.state.user.userId}
+                                             request={this.state.url}
+                        />
                     </div>
                 </Route>);
         }
@@ -153,7 +155,7 @@ class App extends Component {
                                 <EstablishmentsPage
                                     request = {this.state.url}
                                     loggedIn={this.state.loggedIn}
-                                    userElo={this.state.user.userElo}
+                                    user={this.state.user}
                                 />
                             </div>
                         </Route>
@@ -163,6 +165,7 @@ class App extends Component {
                                           url={this.props.location.pathname}
                                           loggedIn={this.state.loggedIn}
                                           header={'Posts By '}
+                                          user={this.state.user}
                                 />
                             </div>
                         </Route>
@@ -172,6 +175,7 @@ class App extends Component {
                                           url={'/'}
                                           loggedIn={this.state.loggedIn}
                                           header = {'Most Recent Reviews'}
+                                          user={this.state.user}
                                 />
                             </div>
                         </Route>

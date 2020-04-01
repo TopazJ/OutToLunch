@@ -78,7 +78,7 @@ class Homepage extends Component {
                                 userImage: x.user_image,
                                 date: x.post_date,
                                 content: x.post_content,
-                                photoURL: x.post_photo_location,
+                                photo: x.post_photo_location,
                                 establishmentName: x.establishment_name,
                                 rating: x.post_rating,
                                 subject: x.post_subject,
@@ -122,7 +122,9 @@ class Homepage extends Component {
               const post = this.state.posts.find(post => post.postId === props.match.params.id);
               return (<Post post={post}
                             id={props.match.params.id}
-                            request={this.props.request}/>);
+                            request={this.props.request}
+                            currentUser={this.props.user}
+                        />);
           }}/>
           <Route>
               <div className="background">
@@ -131,6 +133,7 @@ class Homepage extends Component {
                 <br />
                 {this.state.posts.map((post, index) => (
                   <HomepagePost
+                    currentUser={this.props.user}
                     key={index}
                     postId={post.postId}
                     userId = {post.userId}
@@ -139,12 +142,13 @@ class Homepage extends Component {
                     establishmentName = {post.establishmentName}
                     date = {post.date}
                     content = {post.content}
-                    photo = {post.photoURL}
+                    photo = {post.photo}
                     rating = {post.rating}
                     subject = {post.subject}
                     upvotes = {post.upvotes}
                     downvotes = {post.downvotes}
                     comments = {post.comments}
+                    request = {this.props.request}
                   />
                 ))}
                 {this.spinnerWhenLoading()}

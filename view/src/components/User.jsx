@@ -124,7 +124,9 @@ class User extends Component {
               const post = this.state.posts.find(post => post.postId === props.match.params.id);
               return (<Post post={post}
                             id={props.match.params.id}
-                            request={this.props.request}/>);
+                            request={this.props.request}
+                            currentUser={this.props.user}
+                    />);
           }}/>
           <Route>
               <div className="background">
@@ -134,6 +136,7 @@ class User extends Component {
                 {this.state.posts.map((post, index) => (
                   <HomepagePost
                     key={index}
+                    currentUser={this.props.user}
                     postId={post.postId}
                     userId = {post.userId}
                     username={post.username}
@@ -147,6 +150,7 @@ class User extends Component {
                     upvotes = {post.upvotes}
                     downvotes = {post.downvotes}
                     comments = {post.comments}
+                    request = {this.props.request}
                   />
                 ))}
                 {this.spinnerWhenLoading()}

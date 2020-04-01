@@ -1,5 +1,7 @@
 from datetime import datetime
 from establishments.models import *
+from users.models import *
+from images.models import Image
 from comments.views import get_comment_count
 from django.shortcuts import redirect
 import json
@@ -7,7 +9,7 @@ import requests
 from django.http import JsonResponse
 
 # Create your views here.
-from event.PynamoDBModels import Event, Post
+from event.PynamoDBModels import *
 from posts.validation import *
 
 
@@ -69,27 +71,33 @@ def compile_data(post_data_list, user_id=0, establishment_id=0):
 
 
 def create(request):
-    # pynamo db - tested
-    # TODO: picture boi
     if request.method == "POST":
         if request.user.is_authenticated:
-            data = json.loads(request.body)
-            comment = Event(event_id=uuid.uuid4().__str__(),
-                            type='PostCreatedEvent',
-                            timestamp=datetime.now(),
-                            data=Post(post_id=uuid.uuid4().__str__(),
-                                      user_id=data['user_id'],
-                                      post_rating=data['rating'],
-                                      post_subject=data['post_subject'],
-                                      establishment_id=data['establishment_id'],
-                                      post_content=data['post_content'],
-                                      post_photo_location='null'
-                                      )
-                            )
-            comment.save()
-            establishment = Establishment.objects.get(establishment_id=data['establishment_id'])
+            content = json.loads(request.POST['content'])
+            post_id = uuid.uuid4().__str__()
+            image_url = 'https://outtolunchstatic.s3.amazonaws.com/media/images/download.png'
+            if 'image' in request.FILES:
+                request.FILES['image'].name = uuid.uuid4().__str__()
+                image = Image(file=request.FILES['image'], type='P', uuid=post_id)
+                image.save()
+                image_url = image.file.url
+            post_event = Event(event_id=uuid.uuid4().__str__(),
+                               type='PostCreatedEvent',
+                               timestamp=datetime.now(),
+                               data=Post(post_id=post_id,
+                                         user_id=content['userId'],
+                                         post_rating=content['rating'],
+                                         post_subject=content['subject'],
+                                         establishment_id=content['establishmentId'],
+                                         post_content=content['content'],
+                                         post_photo_location=image_url
+                                         )
+                               )
+            post_event.save()
+            establishment = Establishment.objects.get(establishment_id=content['establishmentId'])
             establishment.rating_count += 1
-            establishment.rating = ((establishment.rating * (establishment.rating_count - 1)) + data['rating'])/ establishment.rating_count
+            establishment.rating = ((establishment.rating * (establishment.rating_count - 1)) + content['rating']) / establishment.rating_count
+            establishment.save()
             return JsonResponse({'success': 'success'})
         else:
             return JsonResponse({'error': 'You have to login first in order to post!'})
@@ -104,7 +112,7 @@ def update(request):
         if request.user.is_authenticated:
             data = json.loads(request.body)
             if validate_post(data["post_id"], request.user.id):
-                instance = Post(post_id= data["post_id"])
+                instance = Post(post_id=data["post_id"])
                 for attr, value in data["data"].items():
                         setattr(instance, attr, value)
                 comment = Event(event_id=uuid.uuid4().__str__(),
@@ -122,10 +130,49 @@ def update(request):
         return redirect('/')
 
 
+def vote(request):
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            data = json.loads(request.body)
+            url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/posts/validate/'
+            r = requests.get(url + str(data['postId']))
+            user = SiteUser.objects.get(id=r.json()['user_id'])
+            try:
+                elo = EloTracker.objects.get(voter=data['userId'], votee=r.json()['user_id'], post=data['postId'])
+                if elo.vote != data['vote']:
+                    user.elo += data['vote']
+                    user.save()
+                    elo.vote = data['vote']
+                    elo.save()
+                    create_post_vote(data['postId'], data['userId'], data['vote'])
+                else:
+                    return JsonResponse({'error': 'You already voted for this post!'})
+            except EloTracker.DoesNotExist:
+                elo = EloTracker(voter=data['userId'], votee=r.json()['user_id'], post=data['postId'], vote=data['vote'])
+                elo.save()
+                user.elo += data['vote']
+                user.save()
+                create_post_vote(data['postId'], data['userId'], data['vote'])
+            return JsonResponse({'success': 'success'})
+        else:
+            return JsonResponse({'error': 'You have to login first in order to modify this post!'})
+    else:
+        return redirect('/')
+
+
+def create_post_vote(post_id, user_id, vote_result):
+    instance = PostVote(post_id=post_id, user_id=user_id, vote=vote_result)
+    vote_event = Event(event_id=uuid.uuid4().__str__(),
+                       type=PostVoteEvent,
+                       timestamp=datetime.now(),
+                       data=instance
+                       )
+    vote_event.save()
+
+
 def delete(request):
     # pynamo db - tested
-    #TODO: validation
-
+    # TODO: validation
     if request.method == "POST":
         if request.user.is_authenticated:
             data = json.loads(request.body)

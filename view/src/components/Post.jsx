@@ -3,14 +3,26 @@ import StarRatingComponent from "react-star-rating-component";
 import Comment from "./Comment.jsx";
 import { Link } from "react-router-dom";
 import Loader from 'react-loader-spinner'
+import CSRFToken from "./CSRFToken.jsx";
 
 class Post extends Component {
   page = 0;
   moreData = true;
   state = {
+    upVote:0,
+    downVote:0,
     loading: true,
-    post: {},
-    comments: []
+    post: {comments:0},
+    comments: [],
+    canEdit: false,
+    edit: false,
+    commentForm:{
+        content: '',
+    },
+    postEditForm: {
+
+    }
+
   };
   abortController = new window.AbortController();
 
@@ -59,6 +71,7 @@ class Post extends Component {
         .then(data => {
             if (data.data.length > 0) {
                 data.data.map(x => {
+                    console.log(data.data);
                     this.setState({
                         post:
                             {
@@ -73,7 +86,8 @@ class Post extends Component {
                                 rating: x.post_rating,
                                 subject: x.post_subject,
                                 upvotes: x.upvote,
-                                downvotes: x.downvote
+                                downvotes: x.downvote,
+                                comments: x.count,
                             }
                     });
                 });
@@ -152,9 +166,14 @@ class Post extends Component {
                 <p>{this.state.post.username}</p>
             </Link>
             <div className="btn-group" role="group" aria-label="Basic example">
-              <button style={{ width: "50px" }}>🍽{this.state.post.upvotes}</button>
-
-              <button style={{ width: "50px" }}>🤮{this.state.post.downvotes}</button>
+                <form onSubmit={this.postUpvote}>
+                        <CSRFToken/>
+                        <button type="submit" style={{ width: "50px" }} disabled={this.state.upVote === 1}>🍽{this.state.post.upvotes + this.state.upVote}</button>
+                </form>
+                <form onSubmit={this.postDownvote}>
+                        <CSRFToken/>
+                        <button type="submit" style={{ width: "50px" }} disabled={this.state.downVote === 1}>🤮{this.state.post.downvotes + this.state.downVote}</button>
+                </form>
             </div>
           </div>
 
@@ -192,12 +211,128 @@ class Post extends Component {
           />);
   }
 
+   postUpvote = (event) =>
+  {
+      event.preventDefault();
+      const values = {
+          postId: this.state.post.postId,
+          userId: this.props.currentUser.userId,
+          vote: 1
+      };
+      fetch(this.props.request + '/posts/vote/', {
+            method: 'POST',
+            body: JSON.stringify(values),
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken':event.target.csrfmiddlewaretoken.value
+            }
+        }).then(res => res.json())
+        .then(data => {
+            if (data.success!=='success'){
+                alert(data.error);
+            }
+            else{
+                this.setState({upVote:1, downVote:0});
+            }
+        })
+        .catch(err => {
+            console.error(err);
+        });
+  };
+
+  postDownvote = (event) =>
+  {
+      event.preventDefault();
+      const values = {
+          postId: this.state.post.postId,
+          userId: this.props.currentUser.userId,
+          vote: -1
+      };
+      fetch(this.props.request + '/posts/vote/', {
+            method: 'POST',
+            body: JSON.stringify(values),
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken':event.target.csrfmiddlewaretoken.value
+            }
+        }).then(res => res.json())
+        .then(data => {
+            if (data.success!=='success'){
+                alert(data.error);
+            }
+            else{
+                this.setState({downVote:1, upVote:0});
+            }
+        })
+        .catch(err => {
+            console.error(err);
+        });
+  };
+
+  handleCommentInputChange = (event) => {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+
+        this.setState(state => ({
+            commentForm: {
+                ...state.commentForm,
+                [name]: value
+            }
+        }));
+  };
+
+  createComment = (event) => {
+      event.preventDefault();
+      const values = {
+         userID: this.props.currentUser.userId,
+         parentID: this.state.post.postId,
+         content: this.state.commentForm.content
+      };
+      fetch(this.props.request + '/comments/create/', {
+            method: 'POST',
+            body: JSON.stringify(values),
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken':event.target.csrfmiddlewaretoken.value
+            }
+        }).then(res => res.json())
+        .then(data => {
+            if (data.success!=='success'){
+                alert(data.error);
+            }
+            else{
+                this.setState(state => ({
+                        comments: [
+                            ...state.comments,
+                            {
+                                commentId: data.commentId,
+                                userId: this.props.currentUser.userId,
+                                parentId: this.state.post.postId,
+                                username: this.props.currentUser.username,
+                                userImage: this.props.currentUser.image,
+                                date: 0,
+                                content: this.state.commentForm.content,
+                                numChildren: 0
+                            }
+                        ]
+                }));
+                this.setState({commentForm: {content:''}});
+            }
+        })
+        .catch(err => {
+            alert("Error communicating with server.");
+            console.error(err);
+        });
+
+  };
+
   render() {
     return (
         <div className="background container border post">
             {this.renderPostOnLoad()}
         <div style={{ background: "#fff7f0" }}>
-          <h2 style={{ paddingLeft: "10px" }}>Comments:</h2>
+          <h2 style={{ paddingLeft: "10px" }}>{this.state.post.comments+" Comments:"}</h2>
           {this.state.comments.map((comment, index) => (
             <div key={index}>
               <br />
@@ -211,21 +346,28 @@ class Post extends Component {
                        content={comment.content}
                        numChildren={comment.numChildren}
                        request={this.props.request}
+                       currentUser={this.props.currentUser}
               />
               <br />
             </div>
           ))}
           {this.spinnerWhenLoading()}
           <div style={{ paddingLeft: "25px" }}>
-            <textarea
-              required
-              style={{ width: "700px", height: "100px" }}
-              placeholder="Write a comment..."
-              className="form-control"
-            />
-            <div style={{ paddingBottom: "10px" }}>
-              <button className="btn btn-primary"> Post Comment </button>
-            </div>
+            <form onSubmit={this.createComment}>
+                <CSRFToken/>
+                <textarea
+                      name="content"
+                      required
+                      style={{ width: "700px", height: "100px" }}
+                      placeholder="Write a comment..."
+                      className="form-control"
+                      value={this.state.commentForm.content}
+                      onChange={this.handleCommentInputChange}
+                />
+                <div style={{ paddingBottom: "10px" }}>
+                  <button type="submit" className="btn btn-primary"> Post Comment </button>
+                </div>
+            </form>
           </div>
         </div>
       </div>

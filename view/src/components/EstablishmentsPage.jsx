@@ -85,7 +85,7 @@ class EstablishmentsPage extends Component {
   };
 
   showTheCreateEstablishmentButtonIfLoggedIn() {
-    if (this.props.userElo >= 1000) {
+    if (this.props.user.userElo >= 1000) {
       return (
         <Link to="/create-establishment/">
           <button
@@ -108,6 +108,7 @@ class EstablishmentsPage extends Component {
                             url={this.props.location.pathname.replace('establishments/','')}
                             loggedIn={this.props.loggedIn}
                             header={'Reviews For '}
+                            user={this.props.user}
                   />
               </Route>
                <Route path="/establishments/">

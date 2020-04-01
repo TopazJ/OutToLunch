@@ -1,8 +1,14 @@
 import React, { Component } from "react";
 import StarRatingComponent from "react-star-rating-component";
 import { Link } from "react-router-dom";
+import CSRFToken from "./CSRFToken.jsx";
 
 class HomepagePost extends Component {
+
+  state = {
+     upVote: 0,
+     downVote: 0,
+  };
 
   postContentLength(){
      if (this.props.content.length>50){
@@ -10,6 +16,64 @@ class HomepagePost extends Component {
      }
      return this.props.content;
   }
+
+  postUpvote = (event) =>
+  {
+      event.preventDefault();
+      const values = {
+          postId: this.props.postId,
+          userId: this.props.currentUser.userId,
+          vote: 1
+      };
+      fetch(this.props.request + '/posts/vote/', {
+            method: 'POST',
+            body: JSON.stringify(values),
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken':event.target.csrfmiddlewaretoken.value
+            }
+        }).then(res => res.json())
+        .then(data => {
+            if (data.success!=='success'){
+                alert(data.error);
+            }
+            else{
+                this.setState({upVote:1, downVote:0});
+            }
+        })
+        .catch(err => {
+            console.error(err);
+        });
+  };
+
+  postDownvote = (event) =>
+  {
+      event.preventDefault();
+      const values = {
+          postId: this.props.postId,
+          userId: this.props.currentUser.userId,
+          vote: -1
+      };
+      fetch(this.props.request + '/posts/vote/', {
+            method: 'POST',
+            body: JSON.stringify(values),
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken':event.target.csrfmiddlewaretoken.value
+            }
+        }).then(res => res.json())
+        .then(data => {
+            if (data.success!=='success'){
+                alert(data.error);
+            }
+            else{
+                this.setState({downVote:1, upVote:0});
+            }
+        })
+        .catch(err => {
+            console.error(err);
+        });
+  };
 
   render() {
     const { postId } = this.props;
@@ -37,9 +101,15 @@ class HomepagePost extends Component {
                   role="group"
                   aria-label="Basic example"
                 >
-                  <button style={{ width: "50px" }}>🍽{this.props.upvotes}</button>
+                    <form onSubmit={this.postUpvote}>
+                        <CSRFToken/>
+                        <button type="submit" style={{ width: "50px" }} disabled={this.state.upVote === 1}>🍽{this.props.upvotes + this.state.upVote}</button>
+                    </form>
 
-                  <button style={{ width: "50px" }}>🤮{this.props.downvotes}</button>
+                    <form onSubmit={this.postDownvote}>
+                        <CSRFToken/>
+                        <button type="submit" style={{ width: "50px" }} disabled={this.state.downVote === 1}>🤮{this.props.downvotes + this.state.downVote}</button>
+                    </form>
                 </div>
               </div>
               <div
