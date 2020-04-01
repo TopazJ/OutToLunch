@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5225a379-3f6c-47e4-ae19-2441f0df3cfe" name="Default Changelist" comment="Url is now dynamic for API calls to the backend.">
+    <list default="true" id="5225a379-3f6c-47e4-ae19-2441f0df3cfe" name="Default Changelist" comment="Search feature should now work correctly.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/event/PynamoDBModels.py" beforeDir="false" afterPath="$PROJECT_DIR$/event/PynamoDBModels.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/images/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/images/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/src/components/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/view/src/components/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/src/components/HomepagePost.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/view/src/components/HomepagePost.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/src/components/Post.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/view/src/components/Post.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/src/components/createPost.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/view/src/components/CreatePost.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/src/components/navigation/NavBar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/view/src/components/navigation/NavBar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/static/frontend/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/view/static/frontend/main.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,43 +24,19 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/event/PynamoDBModels.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="64" lean-forward="true" selection-start-line="2" selection-start-column="64" selection-end-line="2" selection-end-column="64" />
-              <folding>
-                <element signature="e#0#33#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/view/src/components/Comment.jsx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="35" column="32" selection-start-line="35" selection-start-column="32" selection-end-line="35" selection-end-column="32" />
-              <folding>
-                <element signature="e#0#41#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/OutToLunch/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="23" column="25" lean-forward="true" selection-start-line="23" selection-start-column="25" selection-end-line="23" selection-end-column="25" />
+            <state relative-caret-position="222">
+              <caret line="171" column="53" lean-forward="true" selection-start-line="171" selection-start-column="53" selection-end-line="171" selection-end-column="53" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/view/src/components/App.jsx">
+        <entry file="file://$PROJECT_DIR$/view/src/components/CreatePost.jsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="33" column="17" selection-start-line="33" selection-start-column="17" selection-end-line="33" selection-end-column="17" />
+            <state relative-caret-position="1701">
+              <caret line="269" column="20" selection-start-line="269" selection-start-column="20" selection-end-line="269" selection-end-column="20" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -62,10 +45,19 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/view/src/components/Post.jsx">
+        <entry file="file://$PROJECT_DIR$/images/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="31" column="47" selection-start-line="31" selection-start-column="47" selection-end-line="31" selection-end-column="47" />
+            <state relative-caret-position="204">
+              <caret line="12" column="75" selection-start-line="12" selection-start-column="75" selection-end-line="12" selection-end-column="75" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/view/src/components/HomepagePost.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="884">
+              <caret line="52" column="61" selection-start-line="52" selection-start-column="61" selection-end-line="52" selection-end-column="61" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -76,8 +68,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/view/src/components/Homepage.jsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1887">
-              <caret line="116" column="60" selection-start-line="116" selection-start-column="60" selection-end-line="116" selection-end-column="60" />
+            <state relative-caret-position="-815">
+              <caret line="25" column="51" selection-start-line="25" selection-start-column="51" selection-end-line="25" selection-end-column="51" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -86,33 +78,60 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/view/src/components/Establishments.jsx">
+        <entry file="file://$PROJECT_DIR$/images/admin.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="22" column="44" selection-start-line="22" selection-start-column="44" selection-end-line="22" selection-end-column="44" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/view/src/components/EstablishmentsPage.jsx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1190">
-              <caret line="76" column="29" selection-start-line="76" selection-start-column="22" selection-end-line="76" selection-end-column="29" />
+            <state relative-caret-position="68">
+              <caret line="4" column="26" selection-start-line="4" selection-start-column="26" selection-end-line="4" selection-end-column="26" />
               <folding>
-                <element signature="e#0#41#0" expanded="true" />
+                <element signature="e#0#32#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/comments/views.py">
+        <entry file="file://$PROJECT_DIR$/establishments/admin.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="85">
-              <caret line="16" column="90" selection-start-line="16" selection-start-column="90" selection-end-line="16" selection-end-column="90" />
+              <caret line="5" selection-start-line="5" selection-end-line="5" />
               <folding>
-                <element signature="e#0#11#0" expanded="true" />
+                <element signature="e#0#32#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/view/src/components/App.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="102" column="64" selection-start-line="102" selection-start-column="64" selection-end-line="102" selection-end-column="64" />
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/view/src/components/navigation/NavBar.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="162">
+              <caret line="111" column="32" selection-start-line="111" selection-start-column="32" selection-end-line="111" selection-end-column="32" />
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/view/src/components/Post.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="125">
+              <caret line="170" column="41" selection-start-line="170" selection-start-column="41" selection-end-line="170" selection-end-column="41" />
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -130,12 +149,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>errorMessage</find>
-      <find>allowed</find>
-      <find>fetch</find>
-      <find>created</find>
-      <find>canLoad</find>
+      <find>userid</find>
+      <find>elo</find>
+      <find>login(</find>
+      <find>childre</find>
+      <find>retreive</find>
+      <find>console.</find>
+      <find>border</find>
+      <find>navba</find>
+      <find>getSugg</find>
+      <find>this.get</find>
+      <find>getsection</find>
+      <find>getSuggestions</find>
+      <find>getsu</find>
+      <find>trim</find>
       <find>console</find>
+      <find>onsuggest</find>
+      <find>type a</find>
+      <find>count</find>
+      <find>moredata</find>
+      <find>this.state.page</find>
+      <find>moreData</find>
+      <find>page</find>
+      <find>onchange</find>
+      <find>renderHeader</find>
+      <find>searchParams</find>
+      <find>selected</find>
+      <find>console.lo</find>
+      <find>console.log</find>
+      <find>image</find>
+      <find>img</find>
     </findStrings>
     <replaceStrings>
       <replace>successful_message</replace>
@@ -159,42 +202,54 @@
         <option value="$PROJECT_DIR$/OutToLunch/urls.py" />
         <option value="$PROJECT_DIR$/view/src/components/Home.jsx" />
         <option value="$PROJECT_DIR$/OutToLunch/config.py" />
-        <option value="$PROJECT_DIR$/establishments/models.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/users/urls.py" />
         <option value="$PROJECT_DIR$/view/templates/view/index.html" />
         <option value="$PROJECT_DIR$/view/templates/view/forNich.html" />
         <option value="$PROJECT_DIR$/view/static/frontend/forNich.html" />
         <option value="$PROJECT_DIR$/view/src/index.js" />
-        <option value="$PROJECT_DIR$/view/src/components/LoginForm.jsx" />
-        <option value="$PROJECT_DIR$/view/src/components/CreateAccount.jsx" />
         <option value="$PROJECT_DIR$/view/src/components/createPost.jsx" />
         <option value="$PROJECT_DIR$/comments/urls.py" />
-        <option value="$PROJECT_DIR$/users/views.py" />
         <option value="$PROJECT_DIR$/establishments/admin.py" />
         <option value="$PROJECT_DIR$/users/admin.py" />
         <option value="$PROJECT_DIR$/users/models.py" />
+        <option value="$PROJECT_DIR$/event/PynamoDBModels.py" />
+        <option value="$PROJECT_DIR$/view/src/components/App.css" />
         <option value="$PROJECT_DIR$/view/src/components/navigation/SideBar.jsx" />
-        <option value="$PROJECT_DIR$/view/src/components/navigation/NavBar.jsx" />
+        <option value="$PROJECT_DIR$/view/src/components/AccountSettings.jsx" />
+        <option value="$PROJECT_DIR$/users/views.py" />
+        <option value="$PROJECT_DIR$/view/src/components/CreateEstablishment.jsx" />
+        <option value="$PROJECT_DIR$/comments/views.py" />
+        <option value="$PROJECT_DIR$/view/src/components/Comment.jsx" />
+        <option value="$PROJECT_DIR$/view/src/components/LoginForm.jsx" />
         <option value="$PROJECT_DIR$/view/src/components/EstablishmentsPage.jsx" />
+        <option value="$PROJECT_DIR$/establishments/models.py" />
+        <option value="$PROJECT_DIR$/view/src/components/Establishments.jsx" />
+        <option value="$PROJECT_DIR$/view/src/components/styles.css" />
+        <option value="$PROJECT_DIR$/view/src/components/Homepage.jsx" />
+        <option value="$PROJECT_DIR$/view/src/components/User.jsx" />
+        <option value="$PROJECT_DIR$/view/src/components/EstablishmentsList.jsx" />
+        <option value="$PROJECT_DIR$/establishments/urls.py" />
         <option value="$PROJECT_DIR$/posts/urls.py" />
         <option value="$PROJECT_DIR$/posts/views.py" />
-        <option value="$PROJECT_DIR$/view/src/components/HomepagePost.jsx" />
-        <option value="$PROJECT_DIR$/view/src/components/Comment.jsx" />
-        <option value="$PROJECT_DIR$/comments/views.py" />
+        <option value="$PROJECT_DIR$/establishments/views.py" />
+        <option value="$PROJECT_DIR$/view/src/components/CreateAccount.jsx" />
         <option value="$PROJECT_DIR$/view/src/components/App.jsx" />
+        <option value="$PROJECT_DIR$/view/src/components/navigation/NavBar.jsx" />
+        <option value="$PROJECT_DIR$/view/src/components/CreatePost.jsx" />
+        <option value="$PROJECT_DIR$/images/models.py" />
+        <option value="$PROJECT_DIR$/images/admin.py" />
         <option value="$PROJECT_DIR$/view/src/components/Post.jsx" />
+        <option value="$PROJECT_DIR$/view/src/components/HomepagePost.jsx" />
         <option value="$PROJECT_DIR$/OutToLunch/settings.py" />
-        <option value="$PROJECT_DIR$/view/src/components/Homepage.jsx" />
-        <option value="$PROJECT_DIR$/event/PynamoDBModels.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-10" />
     <option name="y" value="-10" />
-    <option name="width" value="1939" />
-    <option name="height" value="1049" />
+    <option name="width" value="1940" />
+    <option name="height" value="1050" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -202,6 +257,86 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="OutToLunch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="OutToLunch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
+              <item name="comments" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="OutToLunch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
+              <item name="establishments" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="OutToLunch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
+              <item name="images" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="OutToLunch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
+              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="OutToLunch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
+              <item name="posts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="OutToLunch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
+              <item name="users" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="OutToLunch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
+              <item name="view" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="OutToLunch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
+              <item name="view" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="OutToLunch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
+              <item name="view" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="OutToLunch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
+              <item name="view" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="navigation" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="OutToLunch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
+              <item name="view" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="OutToLunch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
+              <item name="view" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="frontend" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="Scope">
         <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
           <expand>
@@ -284,50 +419,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="OutToLunch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OutToLunch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
-              <item name="comments" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OutToLunch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
-              <item name="event" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OutToLunch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
-              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OutToLunch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
-              <item name="view" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OutToLunch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
-              <item name="view" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OutToLunch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
-              <item name="view" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -335,20 +426,21 @@
     <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/.ebextensions" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/view/src/components" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\mesta\Documents\GitHub\OutToLunch\.ebextensions" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\mesta\Documents\GitHub\OutToLunch\view\static\frontend" />
       <recent name="C:\Users\mesta\Documents\GitHub\OutToLunch\view\templates\view" />
       <recent name="C:\Users\mesta\Documents\GitHub\OutToLunch\templates" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\mesta\Documents\GitHub\OutToLunch\view\src\components" />
+      <recent name="C:\Users\mesta\Documents\GitHub\OutToLunch\.ebextensions" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -407,6 +499,11 @@
       <workItem from="1583946249719" duration="9457000" />
       <workItem from="1584057745106" duration="600000" />
       <workItem from="1585201066947" duration="944000" />
+      <workItem from="1585311165866" duration="700000" />
+      <workItem from="1585339586172" duration="9405000" />
+      <workItem from="1585475333133" duration="2259000" />
+      <workItem from="1585505699616" duration="35622000" />
+      <workItem from="1585673673385" duration="9230000" />
     </task>
     <task id="LOCAL-00001" summary="Added starting layer of the view. User logins work for the most part, have to add better error messages to the user.">
       <created>1582364877304</created>
@@ -485,11 +582,60 @@
       <option name="project" value="LOCAL" />
       <updated>1585310485979</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Fixed the wrong imported variables from settings.">
+      <created>1585311574121</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1585311574121</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Account Settings are now accessible.">
+      <created>1585451780877</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1585451780879</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Canceled fetches loading data when leaving that page.">
+      <created>1585453847710</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1585453847710</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Nested comments now work correctly.">
+      <created>1585476452341</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1585476452341</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Re-enabled static hosting on S3.">
+      <created>1585476541576</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1585476541576</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Search feature should now work correctly.">
+      <created>1585580820118</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1585580820118</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Changed the slugification for search to regular strings with the %20 etc. ugliness. Search works better now though.">
+      <created>1585582845297</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1585582845297</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="55867000" />
+    <option name="totallyTimeSpent" value="126432000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -504,22 +650,23 @@
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.13069706" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13739946" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49798927" weight="0.32956153" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49731904" weight="0.32956153" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.32956153" />
-      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Docker" order="6" show_stripe_button="false" />
+      <window_info anchor="bottom" id="TODO" order="7" weight="0.32956153" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32956153" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5013405" side_tool="true" weight="0.32956153" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.32956153" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50268096" side_tool="true" weight="0.32956153" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" sideWeight="0.49798927" visible="true" weight="0.32956153" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.32956153" />
+      <window_info anchor="bottom" id="Messages" order="13" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -561,22 +708,16 @@
     <MESSAGE value="Url is now dynamic for API calls to the backend." />
     <MESSAGE value="Added a large amount of changes to now successfully display establishments, posts, and comments that exist in the database." />
     <MESSAGE value="Fixed the show comment replies button to now show up. Is not functional yet." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed the show comment replies button to now show up. Is not functional yet." />
+    <MESSAGE value="Fixed the wrong imported variables from settings." />
+    <MESSAGE value="Account Settings are now accessible." />
+    <MESSAGE value="Canceled fetches loading data when leaving that page." />
+    <MESSAGE value="Nested comments now work correctly." />
+    <MESSAGE value="Re-enabled static hosting on S3." />
+    <MESSAGE value="Search feature should now work correctly." />
+    <MESSAGE value="Changed the slugification for search to regular strings with the %20 etc. ugliness. Search works better now though." />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed the slugification for search to regular strings with the %20 etc. ugliness. Search works better now though." />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/OutToLunch/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/OutToLunch/asgi.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/comments/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/establishments/migrations/0005_auto_20200312_1808.py" />
-    <entry file="file://$PROJECT_DIR$/establishments/migrations/0004_auto_20200311_1358.py" />
-    <entry file="file://$PROJECT_DIR$/establishments/migrations/0003_auto_20200311_1355.py" />
-    <entry file="file://$PROJECT_DIR$/establishments/migrations/0002_auto_20200311_1354.py" />
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -589,16 +730,6 @@
           <caret line="9" column="4" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/establishments/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="8" column="57" selection-start-line="8" selection-start-column="57" selection-end-line="8" selection-end-column="57" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -644,113 +775,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/establishments/admin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="5" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/users/admin.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="4" column="29" selection-start-line="4" selection-start-column="29" selection-end-line="4" selection-end-column="29" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/view/src/components/Home.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="38" selection-start-line="12" selection-start-column="38" selection-end-line="12" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/posts/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="65" selection-start-line="7" selection-start-column="65" selection-end-line="7" selection-end-column="65" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/posts/validation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="6" selection-start-line="18" selection-start-column="6" selection-end-line="18" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/view/src/components/createPost.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="884">
-          <caret line="53" column="23" selection-start-line="53" selection-start-column="23" selection-end-line="53" selection-end-column="23" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/view/src/components/LoginForm.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="833">
-          <caret line="50" column="36" selection-start-line="50" selection-start-column="36" selection-end-line="50" selection-end-column="36" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/view/src/components/CreateAccount.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="19" column="43" selection-start-line="19" selection-start-column="43" selection-end-line="19" selection-end-column="43" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/view/src/components/styles.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="29" column="16" selection-start-line="29" selection-start-column="16" selection-end-line="29" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/view/src/components/navigation/SideBar.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="15" column="31" selection-start-line="15" selection-start-column="31" selection-end-line="15" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/event/views.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/posts/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1105">
-          <caret line="77" column="22" selection-start-line="77" selection-start-column="22" selection-end-line="77" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/view/src/components/HomepagePost.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="20" column="11" selection-start-line="20" selection-start-column="11" selection-end-line="20" selection-end-column="11" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -765,18 +795,90 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/users/views.py">
+    <entry file="file://$PROJECT_DIR$/OutToLunch/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="13" selection-start-line="13" selection-end-line="13" />
+        <state relative-caret-position="323">
+          <caret line="20" column="41" selection-start-line="20" selection-start-column="41" selection-end-line="20" selection-end-column="41" />
           <folding>
-            <element signature="e#0#45#0" expanded="true" />
+            <element signature="e#634#666#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/establishments/views.py">
+    <entry file="file://$PROJECT_DIR$/view/src/components/navigation/SideBar.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="14" column="31" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/event/views.py">
       <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/view/src/components/AccountSettings.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/view/src/components/App.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="63">
+          <caret line="5" column="17" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/view/src/components/LoginForm.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-765">
+          <caret line="45" column="44" selection-start-line="45" selection-start-column="44" selection-end-line="45" selection-end-column="44" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/view/src/components/Home.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="38" selection-start-line="12" selection-start-column="38" selection-end-line="12" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/view/src/components/Establishments.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="25" column="20" selection-start-line="25" selection-start-column="20" selection-end-line="25" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/view/src/components/User.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2193">
+          <caret line="134" column="27" selection-start-line="134" selection-start-column="23" selection-end-line="134" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/view/src/components/EstablishmentsList.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="37" column="60" selection-start-line="37" selection-start-column="60" selection-end-line="37" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/view/src/components/EstablishmentsPage.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="392">
+          <caret line="105" column="42" selection-start-line="105" selection-start-column="42" selection-end-line="105" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/users/urls.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -788,12 +890,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/OutToLunch/urls.py">
+    <entry file="file://$PROJECT_DIR$/users/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="20" column="41" selection-start-line="20" selection-start-column="41" selection-end-line="20" selection-end-column="41" />
+        <state relative-caret-position="119">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
           <folding>
-            <element signature="e#634#666#0" expanded="true" />
+            <element signature="e#0#45#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -808,20 +910,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/OutToLunch/config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="68" selection-start-line="8" selection-start-column="68" selection-end-line="8" selection-end-column="68" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
           <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/establishments/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="5" selection-start-line="5" selection-end-line="5" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -838,37 +937,168 @@
     <entry file="file://$PROJECT_DIR$/event/tests.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/view/src/components/navigation/NavBar.jsx">
+    <entry file="file://$PROJECT_DIR$/event/PynamoDBModels.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1258">
-          <caret line="75" selection-start-line="75" selection-end-line="75" />
+        <state relative-caret-position="1054">
+          <caret line="64" column="49" selection-start-line="64" selection-start-column="49" selection-end-line="64" selection-end-column="49" />
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/posts/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="22" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/establishments/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="11" column="49" selection-start-line="11" selection-start-column="49" selection-end-line="11" selection-end-column="49" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/establishments/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1479">
+          <caret line="94" column="71" selection-start-line="94" selection-start-column="71" selection-end-line="94" selection-end-column="71" />
+          <folding>
+            <element signature="e#0#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/establishments/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="24" column="37" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/posts/validation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="6" selection-start-line="18" selection-start-column="6" selection-end-line="18" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/comments/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="935">
+          <caret line="66" column="6" selection-start-line="66" selection-start-column="6" selection-end-line="66" selection-end-column="6" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/posts/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1972">
+          <caret line="126" column="5" selection-start-line="126" selection-start-column="5" selection-end-line="126" selection-end-column="5" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/view/src/components/Comment.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="6" column="4" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="4" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/OutToLunch/config.py">
+    <entry file="file://$PROJECT_DIR$/view/src/components/CreateEstablishment.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="68" selection-start-line="8" selection-start-column="68" selection-end-line="8" selection-end-column="68" />
+        <state relative-caret-position="17">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/view/src/components/Comment.jsx">
+    <entry file="file://$PROJECT_DIR$/view/src/components/CreateAccount.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="35" column="32" selection-start-line="35" selection-start-column="32" selection-end-line="35" selection-end-column="32" />
+        <state>
+          <caret line="48" column="6" selection-start-line="48" selection-start-column="6" selection-end-line="48" selection-end-column="6" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/view/src/components/styles.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="24" column="21" selection-start-line="24" selection-start-column="21" selection-end-line="24" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/view/src/components/CreatePost.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1701">
+          <caret line="269" column="20" selection-start-line="269" selection-start-column="20" selection-end-line="269" selection-end-column="20" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/establishments/admin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/images/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="75" selection-start-line="12" selection-start-column="75" selection-end-line="12" selection-end-column="75" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/images/admin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="26" selection-start-line="4" selection-start-column="26" selection-end-line="4" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/view/src/components/App.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="33" column="17" selection-start-line="33" selection-start-column="17" selection-end-line="33" selection-end-column="17" />
+        <state relative-caret-position="170">
+          <caret line="102" column="64" selection-start-line="102" selection-start-column="64" selection-end-line="102" selection-end-column="64" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/view/src/components/navigation/NavBar.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="111" column="32" selection-start-line="111" selection-start-column="32" selection-end-line="111" selection-end-column="32" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
@@ -877,8 +1107,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/view/src/components/Post.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="31" column="47" selection-start-line="31" selection-start-column="47" selection-end-line="31" selection-end-column="47" />
+        <state relative-caret-position="125">
+          <caret line="170" column="41" selection-start-line="170" selection-start-column="41" selection-end-line="170" selection-end-column="41" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
@@ -887,55 +1117,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/view/src/components/Homepage.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1887">
-          <caret line="116" column="60" selection-start-line="116" selection-start-column="60" selection-end-line="116" selection-end-column="60" />
+        <state relative-caret-position="-815">
+          <caret line="25" column="51" selection-start-line="25" selection-start-column="51" selection-end-line="25" selection-end-column="51" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/view/src/components/Establishments.jsx">
+    <entry file="file://$PROJECT_DIR$/view/src/components/HomepagePost.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="22" column="44" selection-start-line="22" selection-start-column="44" selection-end-line="22" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/view/src/components/EstablishmentsPage.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1190">
-          <caret line="76" column="29" selection-start-line="76" selection-start-column="22" selection-end-line="76" selection-end-column="29" />
+        <state relative-caret-position="884">
+          <caret line="52" column="61" selection-start-line="52" selection-start-column="61" selection-end-line="52" selection-end-column="61" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/comments/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="16" column="90" selection-start-line="16" selection-start-column="90" selection-end-line="16" selection-end-column="90" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/OutToLunch/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="25" lean-forward="true" selection-start-line="23" selection-start-column="25" selection-end-line="23" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/event/PynamoDBModels.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="64" lean-forward="true" selection-start-line="2" selection-start-column="64" selection-end-line="2" selection-end-column="64" />
-          <folding>
-            <element signature="e#0#33#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="222">
+          <caret line="171" column="53" lean-forward="true" selection-start-line="171" selection-start-column="53" selection-end-line="171" selection-end-column="53" />
         </state>
       </provider>
     </entry>

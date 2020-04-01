@@ -9,7 +9,7 @@ import CreateAccount from "./CreateAccount.jsx";
 import Logout from "./Logout.jsx"
 import Homepage from "./Homepage.jsx";
 import User from "./User.jsx"
-import CreatePost from "./createPost.jsx";
+import CreatePost from "./CreatePost.jsx";
 import SideBar from "./navigation/SideBar.jsx";
 import EstablishmentsPage from "./EstablishmentsPage.jsx";
 import CreateEstablishment from "./CreateEstablishment.jsx";
@@ -99,7 +99,9 @@ class App extends Component {
             return (
                  <Route path="/create-post/">
                         <div className="homepage">
-                            <CreatePost userId={this.state.user.userId}/>
+                            <CreatePost userId={this.state.user.userId}
+                                        request={this.state.url}
+                            />
                         </div>
                  </Route>
             );

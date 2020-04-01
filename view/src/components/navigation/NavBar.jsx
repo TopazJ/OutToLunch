@@ -34,7 +34,6 @@ class NavBar extends Component {
 
   getSuggestions = value => {
     if (this.state.selected && Object.keys(this.state.selected).length > 0) {
-        console.log(value);
         if (!(value === this.state.selected.title)) {
             this.setState({selected: {}});
         }
@@ -193,7 +192,7 @@ class NavBar extends Component {
       return (
           <img
             src="https://webstockreview.net/images/computer-clipart-magnifying-glass-13.png"
-            style={{ height: "20px" }}
+            style={{ height: "20px"}}
           />
       );
   }

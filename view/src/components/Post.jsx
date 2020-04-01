@@ -77,7 +77,6 @@ class Post extends Component {
                             }
                     });
                 });
-
             }
         }).catch(err => console.error("Error:", err));
   };
@@ -169,9 +168,8 @@ class Post extends Component {
             {this.state.post.establishmentName}
             <br/>
             <img
-              src="https://www.ucalgary.ca/news/sites/default/files/styles/ucws_news_hero_image_desktop/public/2019-06/bookstore_011a0796_f.jpg?itok=aE9ylKnp"
-              //TODO the image url stuff goes here when I figure that out.
-              style={{ width: "500px", height: "200px" }}
+              src={this.state.post.photo}
+              style={{height: "200px" }}
             />
             <br />
             <StarRatingComponent

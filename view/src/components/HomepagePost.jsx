@@ -50,11 +50,12 @@ class HomepagePost extends Component {
                 <h1>{this.props.subject}</h1>
                 {this.props.establishmentName}
                 <br/>
+                <div style={{ height: "200px", width: '500px'}}>
                 <img
-                  src="https://www.ucalgary.ca/news/sites/default/files/styles/ucws_news_hero_image_desktop/public/2019-06/bookstore_011a0796_f.jpg?itok=aE9ylKnp"
-                  //TODO the image url stuff goes here when I figure that out.
-                  style={{ width: "500px", height: "200px" }}
+                  src={this.props.photo}
+                  style={{ height: "200px" }}
                 />
+                </div>
                 <StarRatingComponent
                   name="rate1"
                   editing={false}
