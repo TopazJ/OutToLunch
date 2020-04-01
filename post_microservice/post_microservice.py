@@ -1,16 +1,19 @@
-import sys
-import logging
-import rds_config
-import pymysql
 import json
+import logging
+import pymysql
+import rds_config
 import re
-from query_generation import *
-from boto3.dynamodb.types import TypeDeserializer
+import sys
 import uuid
+from boto3.dynamodb.types import TypeDeserializer
 from datetime import datetime
+from query_generation import *
 
 # variables
+
+#words that will not be searched for if present in a search criteria
 commonWords = ['the', 'of', 'and', 'a', 'to', 'in', 'is', 'you', 'that', 'it', 'was', 'for']
+#fields that a user cannot update when updating a post
 unableToUpdate = ['post_id', 'post_user', 'establishment_id', 'upvote', 'downvote', 'date']
 
 # rds settings
@@ -31,14 +34,6 @@ except pymysql.MySQLError as e:
     logger.error(e)
     sys.exit()
 
-# only need to create table
-'''
-with conn.cursor() as cur:
-    cur.execute("CREATE TABLE post ( post_id  varchar(36) NOT NULL, post_user varchar(36) NOT NULL, post_date "
-                "TIMESTAMP, post_content varchar(5000) NOT NULL, post_photo_location varchar(500),"
-                " establishment_id varchar(36) NOT NULL, post_rating INT, post_subject varchar(500),"
-                " PRIMARY KEY (post_id))")
-'''
 logger.info("SUCCESS: Connection to RDS MySQL instance succeeded")
 
 
@@ -52,9 +47,7 @@ def respond(err, res=None):
         },
     }
 
-
 logger.setLevel(logging.WARNING)
-
 
 def handler(event, context):
     """the lambda_handler, catches GET requests or dynamodb stream and returns a response"""
@@ -91,6 +84,7 @@ def handler(event, context):
 def testSerializer(data):
     """formats dynamodb stream into python dict, taken from stack overflow
 
+        Taken directly from stack overflow post
         https://stackoverflow.com/questions/41746735/aws-dynamodb-stream-python-convert-native-format?fbclid=IwAR3hz2KaLDTrVJUvvU8MaLL80iVh0omKkpXkIL6IlesBE1sjNk-6MJtyG_4
     """
     deserializer = TypeDeserializer()
@@ -106,7 +100,7 @@ def testSerializer(data):
 
 
 def getPost(getRequestEvent):
-    """retrieves posts based on most recent, establishment or user"""
+    """retrieves posts based on most recent, establishment, user, search criteria or post_id, returns post user id for validation"""
     path = getRequestEvent['path']
     try:
         pageNumber = int(getRequestEvent['queryStringParameters']['page'])
@@ -131,7 +125,7 @@ def getPost(getRequestEvent):
 
 
 def addPost(postCreatedEvent):
-    """adds a new post to the database after receiving a PostCreatedEvent from dynamodb"""
+    """adds a new post to the post table after receiving a PostCreatedEvent from dynamodb"""
     query = generatePostSQLQuery(postCreatedEvent)
     with conn.cursor() as cur:
         cur.execute(query)
@@ -158,6 +152,12 @@ def updatePost(updatePostEvent):
 
 
 def votePost(votePostEvent):
+    """updates the post upvote and downvote in the post table and ensures user can only have one vote per post
+
+    to ensure 1 vote/post -> if a user has not voted they will be added to a vote table and their vote recorded, if a
+    user has already voted if their vote has changed it will adjust in the vote table. vote(-1 = downvote, +1 = upvote)
+     Post upvotes and downvotes updated as needed
+    """
     userID = votePostEvent["data"]["user_id"]
     postID = votePostEvent["data"]["post_id"]
     vote = int(votePostEvent["data"]["vote"])
@@ -211,8 +211,12 @@ def convertResults(row):
     return post
 
 
-# https://www.geeksforgeeks.org/python-removing-duplicate-dicts-in-list/
 def searchPosts(searchCriteria, pageNumber):
+    """retrieves posts which contain words from the search criteria in the post content or subject
+
+    used code from geeks for geeks to remove duplicate search entries
+    https://www.geeksforgeeks.org/python-removing-duplicate-dicts-in-list/
+    """
     searchWords = re.findall(r'\w+', searchCriteria)
     duplicateResults = []
     for word in searchWords:
@@ -232,6 +236,7 @@ def searchPosts(searchCriteria, pageNumber):
 
 
 def validateUser(postId):
+    """retrieves userId for a particular postId, to be used in front end validation"""
     query = ('SELECT post_user FROM post WHERE post_id =\"{}\"'.format(postId))
     with conn.cursor() as cur:
         cur.execute(query)

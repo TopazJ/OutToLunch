@@ -1,3 +1,4 @@
+#variables
 sizeOfPage = 10
 
 #Assumption that initial post will have zero upvotes and zero downvotes so no need to insert into table
@@ -8,8 +9,8 @@ def generatePostSQLQuery(newRecord):
                  " establishment_id) values(\"{}\", \"{}\", \"{}\", {}, \"{}\", \"{}\",\"{}\")"
                  .format(newRecord["data"]["post_id"], newRecord["data"]["user_id"], newRecord["timestamp"], newRecord["data"]["post_rating"], newRecord["data"]["post_subject"], newRecord["data"]["post_content"], newRecord["data"]["establishment_id"]))
     else:
-         query = ("INSERT INTO post (post_id, post_user, post_date, post_rating, post_subject, post_content, post_photo_location"
-                 " establishment_id) values(\"{}\", \"{}\", \"{}\", {}, \"{}\", \"{}\",\"{}\")"
+         query = ("INSERT INTO post (post_id, post_user, post_date, post_rating, post_subject, post_content, post_photo_location,"
+                 " establishment_id) values(\"{}\", \"{}\", \"{}\", {}, \"{}\", \"{}\",\"{}\", \"{}\")"
                  .format(newRecord["data"]["post_id"], newRecord["data"]["user_id"], newRecord["timestamp"], newRecord["data"]["post_rating"], newRecord["data"]["post_subject"], newRecord["data"]["post_content"], newRecord["data"]["post_photo_location"], newRecord["data"]["establishment_id"]))
 
     return query
