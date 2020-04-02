@@ -108,7 +108,8 @@ def delete(request):
     if request.method == "POST":
         if request.user.is_authenticated:
             data = json.loads(request.body)
-            if validate_comment(data['commentID'], request.user.id):
+            validation = validate_comment(data['commentID'], request.user.id)
+            if validation == 'V':
                 comment = Event(event_id=uuid.uuid4().__str__(),
                                 type='CommentWipedEvent',
                                 timestamp=datetime.now(),
