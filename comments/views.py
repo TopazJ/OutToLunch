@@ -17,9 +17,10 @@ def index(request, post_id, page):
     payload = {'parentID': post_id, 'content': '[n:20,offset:' + str(page.__int__() * 20) + ']'}
     r = requests.get(url, params=payload)
     to_return = {'data': []}
-    if r.json() == {'message': 'Internal server error'}:
-        return JsonResponse(to_return)
     try:
+        if r.json() == {'message': 'Internal server error'}:
+            to_return['message'] = 'error'
+            return JsonResponse(to_return)
         for commentData in json.loads(r.json()):
             user = SiteUser.objects.get(id=commentData['userID'])
             commentData['username'] = user.username
@@ -104,22 +105,19 @@ def update(request):
 
 
 def delete(request):
-    # TODO Need to modify micro-service to have deleted comments become owned by the deleted user.
     if request.method == "POST":
         if request.user.is_authenticated:
             data = json.loads(request.body)
-            validation = validate_comment(data['commentID'], request.user.id)
-            if validation == 'V':
-                print(data)
-                # comment = Event(event_id=uuid.uuid4().__str__(),
-                #                 type='CommentUpdatedEvent',
-                #                 timestamp=datetime.now(),
-                #                 data=WipeComment(commentID=data['commentID'],
-                #                                  userID=00000000000000000000000000000000,
-                #                                  content='[deleted]'/'wipe',
-                #                                  )
-                #                 )
-                # comment.save()
+            if validate_comment(data['commentID'], request.user.id):
+                comment = Event(event_id=uuid.uuid4().__str__(),
+                                type='CommentWipedEvent',
+                                timestamp=datetime.now(),
+                                data=WipeComment(commentID=data['commentID'],
+                                                 userID=00000000000000000000000000000000,
+                                                 content='wipe',
+                                                 )
+                                )
+                comment.save()
                 return JsonResponse({'success': 'success'})
             elif validation == 'I':
                 return JsonResponse({'error': "You don't have permission to modify this comment!"})

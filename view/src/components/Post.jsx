@@ -27,7 +27,8 @@ class Post extends Component {
         imageFile: null,
         imageUrl: ''
     },
-    submitted: false
+    submitted: false,
+    error: false
   };
   abortController = new window.AbortController();
 
@@ -147,6 +148,9 @@ class Post extends Component {
             }
             else {
                 this.moreData=false;
+                if (data.message==="error"){
+                   this.setState({error: true});
+                }
             }
         }).catch(err => {
             if (err.name === 'AbortError') return;
@@ -225,6 +229,12 @@ class Post extends Component {
                   </form>
               </div>
           );
+      }
+  }
+
+  showError(){
+      if (this.state.error){
+          return (<h4>We had a problem getting the comments for this post :/.</h4>);
       }
   }
 
@@ -630,6 +640,7 @@ class Post extends Component {
             {this.renderPostOnLoad()}
         <div style={{ background: "#fff7f0" }}>
           <h2 style={{ paddingLeft: "10px" }}>{this.state.post.comments+" Comments:"}</h2>
+          {this.showError()}
           {this.state.comments.map((comment, index) => (
             <div key={index}>
               <br />
