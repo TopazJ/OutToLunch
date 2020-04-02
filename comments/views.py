@@ -69,19 +69,20 @@ def validate_comment(comment_id, user_id):
     payload = {'commentID': comment_id}
     r = requests.get(url, params=payload)
     if r.json() == {'message': 'Internal server error'}:
-        return "ERROR"
+        return 'E'  # error
     valid_user_id = json.loads(r.json())[0]['userID'].__str__().replace('-', '')
     sent_user_id = user_id.__str__().replace('-', '')
     if valid_user_id == sent_user_id:
-        return True
-    return False
+        return 'V'  # valid
+    return 'I'  # invalid
 
 
 def update(request):
     if request.method == "POST":
         if request.user.is_authenticated:
             data = json.loads(request.body)
-            if validate_comment(data['commentID'], request.user.id):
+            validation = validate_comment(data['commentID'], request.user.id)
+            if validation == 'V':
                 comment = Event(event_id=uuid.uuid4().__str__(),
                                 type='CommentUpdatedEvent',
                                 timestamp=datetime.now(),
@@ -92,8 +93,10 @@ def update(request):
                                                    ))
                 comment.save()
                 return JsonResponse({'success': 'success'})
-            else:
+            elif validation == 'I':
                 return JsonResponse({'error': "You don't have permission to modify this comment!"})
+            else:
+                return JsonResponse({'error': "Please try again later!"})
         else:
             return JsonResponse({'error': 'You have to login first in order to edit a comment!'})
     else:
@@ -105,7 +108,8 @@ def delete(request):
     if request.method == "POST":
         if request.user.is_authenticated:
             data = json.loads(request.body)
-            if validate_comment(data['commentID'], request.user.id):
+            validation = validate_comment(data['commentID'], request.user.id)
+            if validation == 'V':
                 print(data)
                 # comment = Event(event_id=uuid.uuid4().__str__(),
                 #                 type='CommentUpdatedEvent',
@@ -117,8 +121,10 @@ def delete(request):
                 #                 )
                 # comment.save()
                 return JsonResponse({'success': 'success'})
+            elif validation == 'I':
+                return JsonResponse({'error': "You don't have permission to modify this comment!"})
             else:
-                return JsonResponse({'error': "You don't have permission to delete this comment!"})
+                return JsonResponse({'error': "Please try again later!"})
         else:
             return JsonResponse({'error': 'You have to login first in order to post!'})
     else:
