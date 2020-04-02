@@ -188,7 +188,6 @@ def create_post_vote(post_id, user_id, vote_result):
 
 
 def delete(request):
-    # TODO Need to modify micro-service so that deleted posts become owned by the deleted user and ratings become 0.
     if request.method == "POST":
         if request.user.is_authenticated:
             data = json.loads(request.body)
