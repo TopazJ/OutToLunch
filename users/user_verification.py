@@ -11,7 +11,7 @@ def send_email(code, email):
     send_mail(
         'Out To Lunch Verification Code',
         "Your verification code is " + str(code) + "." +
-        "\nCopy and paste this code into the confirmation box here: http://127.0.0.1:8000/confirm/" +
+        "\nCopy and paste this code into the confirmation box here: http://outtolunch.us-west-2.elasticbeanstalk.com/confirm/" +
         "\nThis is a no-reply address, please don't reply to this email.",
         'youraccesscodeishere@gmail.com',
         [email]
