@@ -1,36 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5225a379-3f6c-47e4-ae19-2441f0df3cfe" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="5225a379-3f6c-47e4-ae19-2441f0df3cfe" name="Default Changelist" comment="initial models for pynamoDB with comments">
+      <change afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/comments/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/comments/views.py" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/OutToLunch/settings.py">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/OutToLunch/urls.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="view-devel" />
+      </map>
+    </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-10" />
@@ -39,48 +37,27 @@
     <option name="height" value="1050" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="OutToLunch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OutToLunch" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
-              <item name="OutToLunch" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-    </panes>
-  </component>
   <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/view/src/components" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\mesta\Documents\GitHub\OutToLunch\view\static\frontend" />
+      <recent name="C:\Users\mesta\Documents\GitHub\OutToLunch\view\templates\view" />
+      <recent name="C:\Users\mesta\Documents\GitHub\OutToLunch\templates" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\mesta\Documents\GitHub\OutToLunch\view\src\components" />
+      <recent name="C:\Users\mesta\Documents\GitHub\OutToLunch\.ebextensions" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="OutToLunch" type="Python.DjangoServer" factoryName="Django server">
@@ -89,6 +66,7 @@
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="OutToLunch.settings" />
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="" />
@@ -117,56 +95,277 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1581621010775</updated>
-      <workItem from="1581621012240" duration="1276000" />
+      <workItem from="1581621012240" duration="1874000" />
+      <workItem from="1582356544958" duration="2894000" />
+      <workItem from="1582360263176" duration="4645000" />
+      <workItem from="1582365172077" duration="251000" />
+      <workItem from="1583876413608" duration="2540000" />
+      <workItem from="1583946249719" duration="9457000" />
+      <workItem from="1584057745106" duration="600000" />
+      <workItem from="1585201066947" duration="944000" />
+      <workItem from="1585311165866" duration="700000" />
+      <workItem from="1585339586172" duration="9405000" />
+      <workItem from="1585475333133" duration="2259000" />
+      <workItem from="1585505699616" duration="35622000" />
+      <workItem from="1585673673385" duration="9230000" />
     </task>
+    <task id="LOCAL-00001" summary="Added starting layer of the view. User logins work for the most part, have to add better error messages to the user.">
+      <created>1582364877304</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1582364877305</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Fixed the website title and made an html file for Nich.">
+      <created>1582365405782</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1582365405782</updated>
+    </task>
+    <task id="LOCAL-00003" summary="IDK new migration.">
+      <created>1583875438914</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1583875438914</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Added new Events Model for using DynamoDB.">
+      <created>1583955160382</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1583955160382</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Updated the PynamoDB to use MapAttribute for storing data in the events database.">
+      <created>1584038993587</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1584038993587</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Modified what is actually a Post from being named Establishment.">
+      <created>1584040832698</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1584040832698</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Adding a new field to the user for keeping track of upvotes and downvotes (karma).">
+      <created>1584057924420</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1584057924420</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Added all pip libraries.">
+      <created>1584058579388</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1584058579388</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Url is now dynamic for API calls to the backend.">
+      <created>1584950280480</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1584950280481</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Added a large amount of changes to now successfully display establishments, posts, and comments that exist in the database.">
+      <created>1585307902936</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1585307902936</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Fixed the show comment replies button to now show up. Is not functional yet.">
+      <created>1585310485979</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1585310485979</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Fixed the wrong imported variables from settings.">
+      <created>1585311574121</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1585311574121</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Account Settings are now accessible.">
+      <created>1585451780877</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1585451780879</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Canceled fetches loading data when leaving that page.">
+      <created>1585453847710</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1585453847710</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Nested comments now work correctly.">
+      <created>1585476452341</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1585476452341</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Re-enabled static hosting on S3.">
+      <created>1585476541576</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1585476541576</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Search feature should now work correctly.">
+      <created>1585580820118</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1585580820118</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Changed the slugification for search to regular strings with the %20 etc. ugliness. Search works better now though.">
+      <created>1585582845297</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1585582845297</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Post, Establishment, and Comment creates now work. Post upvotes and downvotes now also work.">
+      <created>1585739931897</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1585739931897</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Users can now upload a profile picture and change their profile picture.">
+      <created>1585792844270</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1585792844270</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Post, establishment, and comment updates now work. Establishments flag and deletes also work. Users can update their profile image.">
+      <created>1585832842270</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1585832842270</updated>
+    </task>
+    <task id="LOCAL-00022" summary="getting comment count now sends ERROR if server ERROR">
+      <created>1585857057846</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1585857057846</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
-  <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1276000" />
-  </component>
-  <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
-    <layout>
-      <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Database Changes" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Python Console" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="SciView" />
-      <window_info anchor="right" id="Database" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-    </layout>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
-  <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/OutToLunch/settings.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Database.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/OutToLunch/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
-        </state>
-      </provider>
-    </entry>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="requirements.txt" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list />
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added starting layer of the view. User logins work for the most part, have to add better error messages to the user." />
+    <MESSAGE value="Fixed the website title and made an html file for Nich." />
+    <MESSAGE value="IDK new migration." />
+    <MESSAGE value="Added new Events Model for using DynamoDB." />
+    <MESSAGE value="Updated the PynamoDB to use MapAttribute for storing data in the events database." />
+    <MESSAGE value="Modified what is actually a Post from being named Establishment." />
+    <MESSAGE value="Adding a new field to the user for keeping track of upvotes and downvotes (karma)." />
+    <MESSAGE value="Added all pip libraries." />
+    <MESSAGE value="Url is now dynamic for API calls to the backend." />
+    <MESSAGE value="Added a large amount of changes to now successfully display establishments, posts, and comments that exist in the database." />
+    <MESSAGE value="Fixed the show comment replies button to now show up. Is not functional yet." />
+    <MESSAGE value="Fixed the wrong imported variables from settings." />
+    <MESSAGE value="Account Settings are now accessible." />
+    <MESSAGE value="Canceled fetches loading data when leaving that page." />
+    <MESSAGE value="Nested comments now work correctly." />
+    <MESSAGE value="Re-enabled static hosting on S3." />
+    <MESSAGE value="Search feature should now work correctly." />
+    <MESSAGE value="Changed the slugification for search to regular strings with the %20 etc. ugliness. Search works better now though." />
+    <MESSAGE value="Post, Establishment, and Comment creates now work. Post upvotes and downvotes now also work." />
+    <MESSAGE value="Users can now upload a profile picture and change their profile picture." />
+    <MESSAGE value="Post, establishment, and comment updates now work. Establishments flag and deletes also work. Users can update their profile image." />
+    <MESSAGE value="getting comment count now sends ERROR if server ERROR" />
+    <option name="LAST_COMMIT_MESSAGE" value="getting comment count now sends ERROR if server ERROR" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="358" y="65" key="CommitChangelistDialog2" timestamp="1585858346769">
+      <screen x="0" y="0" width="1368" height="872" />
+    </state>
+    <state x="358" y="65" key="CommitChangelistDialog2/0.0.1368.872@0.0.1368.872" timestamp="1585858346769" />
+    <state width="1326" height="280" key="GridCell.Tab.0.bottom" timestamp="1585854136335">
+      <screen x="0" y="0" width="1368" height="872" />
+    </state>
+    <state width="1326" height="280" key="GridCell.Tab.0.bottom/0.0.1368.872@0.0.1368.872" timestamp="1585854136335" />
+    <state width="1326" height="280" key="GridCell.Tab.0.center" timestamp="1585854136335">
+      <screen x="0" y="0" width="1368" height="872" />
+    </state>
+    <state width="1326" height="280" key="GridCell.Tab.0.center/0.0.1368.872@0.0.1368.872" timestamp="1585854136335" />
+    <state width="1326" height="280" key="GridCell.Tab.0.left" timestamp="1585854136335">
+      <screen x="0" y="0" width="1368" height="872" />
+    </state>
+    <state width="1326" height="280" key="GridCell.Tab.0.left/0.0.1368.872@0.0.1368.872" timestamp="1585854136335" />
+    <state width="1326" height="280" key="GridCell.Tab.0.right" timestamp="1585854136335">
+      <screen x="0" y="0" width="1368" height="872" />
+    </state>
+    <state width="1326" height="280" key="GridCell.Tab.0.right/0.0.1368.872@0.0.1368.872" timestamp="1585854136335" />
+    <state width="1326" height="280" key="GridCell.Tab.1.bottom" timestamp="1585854136335">
+      <screen x="0" y="0" width="1368" height="872" />
+    </state>
+    <state width="1326" height="280" key="GridCell.Tab.1.bottom/0.0.1368.872@0.0.1368.872" timestamp="1585854136335" />
+    <state width="1326" height="280" key="GridCell.Tab.1.center" timestamp="1585854136335">
+      <screen x="0" y="0" width="1368" height="872" />
+    </state>
+    <state width="1326" height="280" key="GridCell.Tab.1.center/0.0.1368.872@0.0.1368.872" timestamp="1585854136335" />
+    <state width="1326" height="280" key="GridCell.Tab.1.left" timestamp="1585854136335">
+      <screen x="0" y="0" width="1368" height="872" />
+    </state>
+    <state width="1326" height="280" key="GridCell.Tab.1.left/0.0.1368.872@0.0.1368.872" timestamp="1585854136335" />
+    <state width="1326" height="280" key="GridCell.Tab.1.right" timestamp="1585854136335">
+      <screen x="0" y="0" width="1368" height="872" />
+    </state>
+    <state width="1326" height="280" key="GridCell.Tab.1.right/0.0.1368.872@0.0.1368.872" timestamp="1585854136335" />
+    <state x="277" y="159" key="Vcs.Push.Dialog.v2" timestamp="1585857069629">
+      <screen x="0" y="0" width="1368" height="872" />
+    </state>
+    <state x="277" y="159" key="Vcs.Push.Dialog.v2/0.0.1368.872@0.0.1368.872" timestamp="1585857069629" />
+    <state x="471" y="150" key="git4idea.branch.GitSmartOperationDialog" timestamp="1585850847958">
+      <screen x="0" y="0" width="1368" height="872" />
+    </state>
+    <state x="471" y="150" key="git4idea.branch.GitSmartOperationDialog/0.0.1368.872@0.0.1368.872" timestamp="1585850847958" />
   </component>
 </project>

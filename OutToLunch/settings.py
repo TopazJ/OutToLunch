@@ -12,9 +12,31 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+if 'UsingEB' in os.environ:
+    DbUser = os.environ['DatabaseUser']
+    DbPass = os.environ['DatabasePassword']
+    DynamoKeyID = os.environ['DynamoDBKeyID']
+    DynamoAccess = os.environ['DynamoDBAccessKey']
+    StaticBucketName = os.environ['StaticBucketAWSName']
+    StaticBucketKey = os.environ['StaticBucketAWSKeyID']
+    StaticBucketAccess = os.environ['StaticBucketAWSAccessID']
+    EmailUser = os.environ['EmailAccess']
+    EmailPass = os.environ['EmailSecret']
+else:
+    from .config import *
+    DbUser = DatabaseUser
+    DbPass = DatabasePassword
+    DynamoKeyID = DynamoDBKeyID
+    DynamoAccess = DynamoDBAccessKey
+    StaticBucketName = StaticBucketAWSName
+    StaticBucketKey = StaticBucketAWSKeyID
+    StaticBucketAccess = StaticBucketAWSAccessID
+    EmailUser = EmailAccess
+    EmailPass = EmailSecret
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -25,8 +47,7 @@ SECRET_KEY = 'vdp+p^d)v=3wn2!sgg017w%#+ck*j80=8^0%dz%di93v0vwus='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'outtolunch.us-west-2.elasticbeanstalk.com']
 
 # Application definition
 
@@ -37,6 +58,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
+    'comments',
+    'posts',
+    'event',
+    'establishments',
+    'view',
+    'users',
+    'images',
 ]
 
 MIDDLEWARE = [
@@ -70,17 +99,25 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'OutToLunch.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
+
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': 'users',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': DbUser,
+        'PASSWORD': DbPass,
+        'HOST': 'outtolunch.cotysnks4blq.us-west-2.rds.amazonaws.com',
+        'PORT': '3306',
+        'OPTIONS': {'init_command': "SET sql_mode='STRICT_TRANS_TABLES'", },
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -100,6 +137,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'users.SiteUser'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -114,8 +152,39 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880
+
 STATIC_URL = '/static/'
+
+AWS_S3_OBJECT_PARAMETERS = {
+    'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
+    'CacheControl': 'max-age=94608000',
+}
+
+AWS_STORAGE_BUCKET_NAME = StaticBucketName
+AWS_S3_REGION_NAME = 'us-west-2'  # e.g. us-east-2
+AWS_ACCESS_KEY_ID = StaticBucketKey
+AWS_SECRET_ACCESS_KEY = StaticBucketAccess
+
+# Tell django-storages the domain to use to refer to static files.
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+# Tell the staticfiles app to use S3Boto3 storage when writing the collected static files (when
+# you run `collectstatic`).
+STATICFILES_LOCATION = 'static'
+STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+
+MEDIAFILES_LOCATION = 'media'
+DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+
+AWS_DEFAULT_ACL = None
+
+EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+EMAIL_HOST = 'email-smtp.us-west-2.amazonaws.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = EmailUser
+EMAIL_HOST_PASSWORD = EmailPass
+EMAIL_USE_TLS = True

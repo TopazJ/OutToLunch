@@ -1,4 +1,5 @@
 OutToLunch/config.py
+temp_file.txt
 ### Django ###
 *.log
 *.pot
@@ -222,3 +223,4 @@ sketch
 
 # End of https://www.gitignore.io/api/react,django,intellij
 .idea/workspace.xml
+/.idea/
