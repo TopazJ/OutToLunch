@@ -12,7 +12,7 @@ from query_generation import *
 # variables
 
 #words that will not be searched for if present in a search criteria
-commonWords = ['the', 'of', 'and', 'a', 'to', 'in', 'is', 'you', 'that', 'it', 'was', 'for']
+commonWords = ['the', 'of', 'and', 'a', 'to', 'in', 'is', 'you', 'that', 'it', 'was', 'for', 'this']
 #fields that a user cannot update when updating a post
 unableToUpdate = ['post_id', 'post_user', 'establishment_id', 'upvote', 'downvote', 'date']
 
