@@ -234,7 +234,7 @@ class Post extends Component {
 
   showError(){
       if (this.state.error){
-          return (<h4>We had a problem getting the comments for this post :/.</h4>);
+          return (<h4>We had a problem getting the comments for this post ☹</h4>);
       }
   }
 
