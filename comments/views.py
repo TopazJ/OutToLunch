@@ -17,6 +17,8 @@ def index(request, post_id, page):
     payload = {'parentID': post_id, 'content': '[n:20,offset:' + str(page.__int__() * 20) + ']'}
     r = requests.get(url, params=payload)
     to_return = {'data': []}
+    if r.json() == {'message': 'Internal server error'}:
+        return JsonResponse(to_return)
     try:
         for commentData in json.loads(r.json()):
             user = SiteUser.objects.get(id=commentData['userID'])
@@ -32,7 +34,6 @@ def get_comment_count(post_id):
     url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/readCommentLambda'
     payload = {'parentID': post_id, 'content': '[count]'}
     r = requests.get(url, params=payload)
-    # TODO: Shamez this sends {'message': 'Internal server error'}
     if r.json() == {'message': 'Internal server error'}:
         return json.loads('{"count": "ERROR"}')
     return json.loads(r.json())
@@ -67,6 +68,8 @@ def validate_comment(comment_id, user_id):
     url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/readCommentLambda'
     payload = {'commentID': comment_id}
     r = requests.get(url, params=payload)
+    if r.json() == {'message': 'Internal server error'}:
+        return "ERROR"
     valid_user_id = json.loads(r.json())[0]['userID'].__str__().replace('-', '')
     sent_user_id = user_id.__str__().replace('-', '')
     if valid_user_id == sent_user_id:
