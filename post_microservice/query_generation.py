@@ -7,11 +7,11 @@ def generatePostSQLQuery(newRecord):
     if newRecord['data']['post_photo_location'] is None:
          query = ("INSERT INTO post (post_id, post_user, post_date, post_rating, post_subject, post_content,"
                  " establishment_id) values(\"{}\", \"{}\", \"{}\", {}, \"{}\", \"{}\",\"{}\")"
-                 .format(newRecord["data"]["post_id"], newRecord["data"]["user_id"], newRecord["timestamp"], newRecord["data"]["post_rating"], newRecord["data"]["post_subject"], newRecord["data"]["post_content"], newRecord["data"]["establishment_id"]))
+                 .format(newRecord["data"]["post_id"], newRecord["data"]["post_user"], newRecord["timestamp"], newRecord["data"]["post_rating"], newRecord["data"]["post_subject"], newRecord["data"]["post_content"], newRecord["data"]["establishment_id"]))
     else:
          query = ("INSERT INTO post (post_id, post_user, post_date, post_rating, post_subject, post_content, post_photo_location,"
                  " establishment_id) values(\"{}\", \"{}\", \"{}\", {}, \"{}\", \"{}\",\"{}\", \"{}\")"
-                 .format(newRecord["data"]["post_id"], newRecord["data"]["user_id"], newRecord["timestamp"], newRecord["data"]["post_rating"], newRecord["data"]["post_subject"], newRecord["data"]["post_content"], newRecord["data"]["post_photo_location"], newRecord["data"]["establishment_id"]))
+                 .format(newRecord["data"]["post_id"], newRecord["data"]["post_user"], newRecord["timestamp"], newRecord["data"]["post_rating"], newRecord["data"]["post_subject"], newRecord["data"]["post_content"], newRecord["data"]["post_photo_location"], newRecord["data"]["establishment_id"]))
 
     return query
 
