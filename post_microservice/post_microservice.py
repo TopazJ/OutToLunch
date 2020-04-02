@@ -16,6 +16,9 @@ commonWords = ['the', 'of', 'and', 'a', 'to', 'in', 'is', 'you', 'that', 'it', '
 #fields that a user cannot update when updating a post
 unableToUpdate = ['post_id', 'post_user', 'establishment_id', 'upvote', 'downvote', 'date']
 
+# database connection code snippet taken from
+# https://docs.aws.amazon.com/lambda/latest/dg/services-rds-tutorial.html
+
 # rds settings
 
 rds_host = rds_config.db_host
@@ -38,7 +41,7 @@ logger.info("SUCCESS: Connection to RDS MySQL instance succeeded")
 
 
 def respond(err, res=None):
-    """A response for the HTTP GET request"""
+    """A response for the HTTP GET request, function taken from dynamodb-microservice lambda template"""
     return {
         'statusCode': '400' if err else '200',
         'body': err.message if err else json.dumps(res),
