@@ -17,7 +17,7 @@ def generatePostSQLQuery(newRecord):
 
 def generateDeletePostSQLQuery(newRecord):
     """generates a delete query that sets values to [deleted], zero or null but leaves subject untouched"""
-    query = ('UPDATE post SET post_content = "[deleted]", post_photo_location = NULL, upvote = 0, downvote = 0 WHERE post_id = \"{}\"'
+    query = ('UPDATE post SET post_content = "[deleted]", post_user = "00000000000000000000000000000000", post_photo_location = NULL, post_rating = 0, upvote = 0, downvote = 0 WHERE post_id = \"{}\"'
              .format(newRecord['data']['post_id']))
     return query
 
