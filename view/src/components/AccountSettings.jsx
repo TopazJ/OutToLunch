@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import CSRFToken from "./CSRFToken.jsx";
 
 class AccountSettings extends Component {
-
-    //TODO Users can update their profile images.
     state = {
       imageUrl:'',
       imageFile: null,

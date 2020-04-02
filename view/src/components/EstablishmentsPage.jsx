@@ -68,6 +68,7 @@ class EstablishmentsPage extends Component {
                                 rating: x.rating,
                                 location: x.location,
                                 description: x.description,
+                                canEdit: x.edit
                             }
                         ]
                     }));
@@ -123,6 +124,9 @@ class EstablishmentsPage extends Component {
                                                 rating={establishment.rating}
                                                 location={establishment.location}
                                                 description={establishment.description}
+                                                edit={establishment.canEdit}
+                                                currentUser={this.props.user}
+                                                request={this.props.request}
                                 />
                                 <br />
                             </div>

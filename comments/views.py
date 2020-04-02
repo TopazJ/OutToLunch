@@ -60,51 +60,59 @@ def create(request):
         return redirect('/')
 
 
+def validate_comment(comment_id, user_id):
+    url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/readCommentLambda'
+    payload = {'commentID': comment_id}
+    r = requests.get(url, params=payload)
+    valid_user_id = json.loads(r.json())[0]['userID'].__str__().replace('-', '')
+    sent_user_id = user_id.__str__().replace('-', '')
+    if valid_user_id == sent_user_id:
+        return True
+    return False
+
+
 def update(request):
-    # pynamo db - untested
-    # TODO: make it take in the POST information
-    # TODO: validate same user
     if request.method == "POST":
         if request.user.is_authenticated:
             data = json.loads(request.body)
-            comment = Event(event_id=uuid.uuid4().__str__(),
-                            type='CommentUpdatedEvent',
-                            timestamp=datetime.now(),
-                            data=UpdateComment(commentID=data['commentID'],
-                                               userID=data['userID'],
-                                               parentID=data['parentID'],
-                                               content=data['content'],
-                                               dateMs=data['dateMS'],
-                                               numChildren=0
-                                               ))
-            comment.save()
-            return JsonResponse({'success': 'success'})
+            if validate_comment(data['commentID'], request.user.id):
+                comment = Event(event_id=uuid.uuid4().__str__(),
+                                type='CommentUpdatedEvent',
+                                timestamp=datetime.now(),
+                                data=UpdateComment(commentID=data['commentID'],
+                                                   userID=data['userID'],
+                                                   content=data['content'],
+                                                   numChildren=data['numChildren']
+                                                   ))
+                comment.save()
+                return JsonResponse({'success': 'success'})
+            else:
+                return JsonResponse({'error': "You don't have permission to modify this comment!"})
         else:
-            return JsonResponse({'error': 'You have to login first in order to post!'})
+            return JsonResponse({'error': 'You have to login first in order to edit a comment!'})
     else:
         return redirect('/')
 
 
 def delete(request):
-    # pynamo db - tested
-    # TODO: make it take in the POST information,
-    # TODO: validate same user
-    # usage
+    # TODO Need to modify micro-service to have deleted comments become owned by the deleted user.
     if request.method == "POST":
         if request.user.is_authenticated:
             data = json.loads(request.body)
-            comment = Event(event_id=uuid.uuid4().__str__(),
-                            type='CommentWipedEvent',
-                            timestamp=datetime.now(),
-                            data=WipeComment(commentID=data['commentID'],
-                                             userID=data['userID'],
-                                             parentID=data['parentID'],
-                                             content=data['content'],
-                                             dateMs=data['dateMS'],
-                                             numChildren=0
-                                             ))
-            comment.save()
-            return JsonResponse({'success': 'success'})
+            if validate_comment(data['commentID'], request.user.id):
+                print(data)
+                # comment = Event(event_id=uuid.uuid4().__str__(),
+                #                 type='CommentUpdatedEvent',
+                #                 timestamp=datetime.now(),
+                #                 data=WipeComment(commentID=data['commentID'],
+                #                                  userID=00000000000000000000000000000000,
+                #                                  content='[deleted]'/'wipe',
+                #                                  )
+                #                 )
+                # comment.save()
+                return JsonResponse({'success': 'success'})
+            else:
+                return JsonResponse({'error': "You don't have permission to delete this comment!"})
         else:
             return JsonResponse({'error': 'You have to login first in order to post!'})
     else:

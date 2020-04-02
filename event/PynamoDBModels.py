@@ -16,7 +16,7 @@ CommentDeletesEvent = 'CommentDeleteEvent'
 
 class Post(MapAttribute):
     post_id = UnicodeAttribute(null=False)
-    user_id = UnicodeAttribute(null=False)
+    post_user = UnicodeAttribute(null=False)
     establishment_id = UnicodeAttribute(null=False)
     post_rating = NumberAttribute(null=True)
     post_subject = UnicodeAttribute(null=True)
@@ -26,8 +26,8 @@ class Post(MapAttribute):
 
 
 class PostVote(MapAttribute):
-    post_id = UnicodeAttribute(null=False)
     user_id = UnicodeAttribute(null=False)
+    post_user = UnicodeAttribute(null=False)
     vote = UnicodeAttribute(null=False)
 
 
@@ -42,19 +42,14 @@ class CreateComment(MapAttribute):
 class UpdateComment(MapAttribute):
     commentID = UnicodeAttribute()
     userID = UnicodeAttribute()
-    parentID = UnicodeAttribute()
     content = UnicodeAttribute()
-    dateMs = NumberAttribute()
     numChildren = NumberAttribute()
 
 
 class WipeComment(MapAttribute):
     commentID = UnicodeAttribute()
     userID = UnicodeAttribute()
-    parentID = UnicodeAttribute()
     content = UnicodeAttribute()
-    dateMs = NumberAttribute()
-    numChildren = NumberAttribute()
 
 
 class Event(Model):

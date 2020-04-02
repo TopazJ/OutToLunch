@@ -18,6 +18,7 @@ class CreatePost extends Component {
     value:'',
     oldValue:'',
     loading: false,
+    submitted:false,
   };
   abortController = new window.AbortController();
   suggestions = [];
@@ -74,7 +75,7 @@ class CreatePost extends Component {
             }));
         };
         reader.readAsDataURL(file)
-    }
+  }
 
   onChange = (event, { newValue }) => {
     this.setState({
@@ -181,6 +182,37 @@ class CreatePost extends Component {
       );
   }
 
+  showLoadingOnSubmit(){
+      if (this.state.submitted){
+          return(
+               <div style={{
+                  position: "absolute",
+                  right: "10px"
+                }}
+               >
+                  <Loader
+                     type="Oval"
+                     color="#17a2b8"
+                     height={30}
+                     width={30}
+	                />
+              </div>
+          );
+      }
+      return(
+          <button
+            type="submit"
+            style={{
+              position: "absolute",
+              right: "10px"
+            }}
+            className="btn btn-primary"
+          >
+            Post
+          </button>
+      );
+  }
+
   handleSubmit(e) {
        e.preventDefault();
        if (!this.state.form.selected || Object.keys(this.state.form.selected).length === 0){
@@ -202,6 +234,7 @@ class CreatePost extends Component {
          establishmentId: this.state.form.selected.id
        };
        data.append('content', JSON.stringify(content));
+       this.setState({submitted: true});
        fetch(this.props.request + '/posts/create/', {
             method: 'POST',
             body: data,
@@ -223,7 +256,8 @@ class CreatePost extends Component {
                     suggestions:[],
                     value:'',
                     oldValue:'',
-                    loading: false
+                    loading: false,
+                    submitted: false
                 });
                 createForm.fileToUpload.value = '';
             }
@@ -304,6 +338,7 @@ class CreatePost extends Component {
                     value={this.state.form.content}
                   />
                   <br/>
+                  <label htmlFor="fileToUpload">{"Image: "}</label>
                   <input
                     type="file"
                     accept="image/*"
@@ -311,16 +346,7 @@ class CreatePost extends Component {
                     id="fileToUpload"
                     onChange={(e) => this.handleImageChange(e)}
                   />
-                  <button
-                    type="submit"
-                    style={{
-                      position: "absolute",
-                      right: "10px"
-                    }}
-                    className="btn btn-primary"
-                  >
-                    Post
-                  </button>
+                  {this.showLoadingOnSubmit()}
                 </form>
               </div>
             </div>

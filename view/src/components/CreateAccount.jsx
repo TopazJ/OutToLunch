@@ -1,12 +1,31 @@
 import React, {Component} from "react";
 import CSRFToken from "./CSRFToken.jsx";
 import {Redirect} from "react-router";
+import Loader from "react-loader-spinner";
 
 class CreateAccount extends Component{
     constructor(props) {
         super(props);
-        this.state = {form:{email:'', username: '', password: '', FName:'', LName:'', imageFile: null}, created:false};
+        this.state = {form:{email:'', username: '', password: '', FName:'', LName:'', imageFile: null}, created:false, submitted:false};
     }
+
+    showLoadingOnSubmit(){
+      if (this.state.submitted){
+          return(
+              <Loader
+                 type="Oval"
+                 color="#17a2b8"
+                 height={30}
+                 width={30}
+                />
+          );
+      }
+      return(
+          <button type="submit" className="btn btn-primary">
+                        Create Account
+          </button>
+      );
+  }
 
     handleSubmit =(event)=>{
         event.preventDefault();
@@ -21,6 +40,7 @@ class CreateAccount extends Component{
         };
         data.append('content', JSON.stringify(values));
         let url = this.props.props.url + '/auth/create/';
+        this.setState({submitted:true});
         fetch(url, {
             method: 'POST',
             body: data,
@@ -29,6 +49,7 @@ class CreateAccount extends Component{
             }
         }).then(res => res.json())
         .then(data => {
+            this.setState({submitted:false});
             if (data.status!=='success'){
                 alert(data.message);
             }
@@ -149,9 +170,7 @@ class CreateAccount extends Component{
                             onChange={(e) => this.handleImageChange(e)}
                         />
                     </div>
-                    <button type="submit" className="btn btn-primary">
-                        Create Account
-                    </button>
+                    {this.showLoadingOnSubmit()}
                 </form>
             <p>{this.checkRedirect()}</p>
             </div>

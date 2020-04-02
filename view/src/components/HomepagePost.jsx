@@ -75,6 +75,23 @@ class HomepagePost extends Component {
         });
   };
 
+  showEditButton(){
+      if (this.props.currentUser.userId === this.props.userId.replace(/-/g,"")){
+         return (
+             <div className="btn-group">
+                <Link to={'/post/'+this.props.postId+'/edit/'}>
+                        <button className="btn btn-primary"
+                                style={{
+                                      right: "10px"
+                                }}>
+                            Edit
+                        </button>
+                </Link>
+             </div>
+         );
+      }
+  }
+
   render() {
     const { postId } = this.props;
     return (
@@ -103,12 +120,12 @@ class HomepagePost extends Component {
                 >
                     <form onSubmit={this.postUpvote}>
                         <CSRFToken/>
-                        <button type="submit" style={{ width: "50px" }} disabled={this.state.upVote === 1}>🍽{this.props.upvotes + this.state.upVote}</button>
+                        <button data-toggle="tooltip" title="Upvote" type="submit" style={{ width: "50px" }} disabled={this.state.upVote === 1}>🍽{this.props.upvotes + this.state.upVote}</button>
                     </form>
 
                     <form onSubmit={this.postDownvote}>
                         <CSRFToken/>
-                        <button type="submit" style={{ width: "50px" }} disabled={this.state.downVote === 1}>🤮{this.props.downvotes + this.state.downVote}</button>
+                        <button data-toggle="tooltip" title="Downvote" type="submit" style={{ width: "50px" }} disabled={this.state.downVote === 1}>🤮{this.props.downvotes + this.state.downVote}</button>
                     </form>
                 </div>
               </div>
@@ -133,6 +150,7 @@ class HomepagePost extends Component {
                   value={this.props.rating}
                 />
                 <p>{this.postContentLength()}</p>
+                  {this.showEditButton()}
                  <Link to ={"/post/" + postId + "/"}>
                 <button
                   className="btn btn-secondary"

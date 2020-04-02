@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import CSRFToken from "./CSRFToken.jsx";
+import Loader from "react-loader-spinner";
 
 class CreateEstablishment extends Component {
   state = {
@@ -8,7 +10,8 @@ class CreateEstablishment extends Component {
           location: '',
           description: '',
           imageFile: null
-      }
+      },
+      submitted:false
   };
 
   constructor(props) {
@@ -47,7 +50,6 @@ class CreateEstablishment extends Component {
 
   handleSubmit(e) {
        e.preventDefault();
-       let createForm = document.forms.createEstablishment;
        let data = new FormData();
        data.append('image', this.state.form.imageFile);
        const content = {
@@ -56,6 +58,7 @@ class CreateEstablishment extends Component {
          description: this.state.form.description,
        };
        data.append('content', JSON.stringify(content));
+       this.setState({submitted:true});
        fetch(this.props.request + '/establishments/create/', {
             method: 'POST',
             body: data,
@@ -64,23 +67,47 @@ class CreateEstablishment extends Component {
             }
         }).then(res => res.json())
        .then(data => {
+           this.setState({submitted: false});
             if (data.success === "success"){
                 alert("Successfully created establishment!");
-                this.setState({
-                    form: {
-                      name: '',
-                      location: '',
-                      description: '',
-                      imageFile: null
-                    }
-                });
-                createForm.fileToUpload.value = '';
+                this.props.history.push('/establishments/');
             }
        })
        .catch(err => {
             console.error("Error:", err)
        });
   };
+
+  showLoadingOnSubmit(){
+      if (this.state.submitted){
+          return(
+               <div style={{
+                  position: "absolute",
+                  right: "10px"
+                }}
+               >
+                  <Loader
+                     type="Oval"
+                     color="#17a2b8"
+                     height={30}
+                     width={30}
+	                />
+              </div>
+          );
+      }
+      return(
+          <button
+            type="submit"
+            style={{
+              position: "absolute",
+              right: "10px"
+            }}
+            className="btn btn-primary"
+          >
+            Create
+          </button>
+      );
+  }
 
 
   render() {
@@ -132,6 +159,8 @@ class CreateEstablishment extends Component {
                     value={this.state.form.description}
                   />
                   <br />
+                  <label htmlFor="fileToUpload">Image (Not Required)</label>
+                    <br/>
                   <input
                     type="file"
                     accept="image/*"
@@ -139,16 +168,7 @@ class CreateEstablishment extends Component {
                     id="fileToUpload"
                     onChange={(e) => this.handleImageChange(e)}
                   />
-                  <button
-                    type="submit"
-                    style={{
-                      position: "absolute",
-                      right: "10px"
-                    }}
-                    className="btn btn-primary"
-                  >
-                    Create
-                  </button>
+                  {this.showLoadingOnSubmit()}
                 </form>
               </div>
             </div>
@@ -160,4 +180,4 @@ class CreateEstablishment extends Component {
   }
 }
 
-export default CreateEstablishment;
+export default withRouter(CreateEstablishment);

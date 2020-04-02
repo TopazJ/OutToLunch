@@ -11,5 +11,5 @@ urlpatterns = [
     path('update/', views.update, name='update'),
     path('delete/', views.delete, name='delete'),
     path('search/<str:search_params>/', views.search, name='search'),
-    path('flag/', views.flag, name='search')
+    path('flag/', views.flag, name='flag')
 ]

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import StarRatingComponent from "react-star-rating-component";
 import Comment from "./Comment.jsx";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import Loader from 'react-loader-spinner'
 import CSRFToken from "./CSRFToken.jsx";
 
@@ -22,15 +22,19 @@ class Post extends Component {
     postEditForm: {
         subject:'',
         content: '',
+        oldRating: 0,
         rating: 0,
         imageFile: null,
-    }
-
+        imageUrl: ''
+    },
+    submitted: false
   };
   abortController = new window.AbortController();
 
   constructor(props){
     super(props);
+    this.handleUpdateSubmit = this.handleUpdateSubmit.bind(this);
+    this.handleDeleteSubmit = this.handleDeleteSubmit.bind(this);
     if (this.props.post){
         this.state.post = this.props.post;
         this.state.postEditForm = {
@@ -39,7 +43,7 @@ class Post extends Component {
             subject: this.props.post.subject,
             imageFile: null,
             imageUrl: this.props.post.photo
-        }
+        };
     }
     else{
         this.state.post.postId = this.props.id;
@@ -58,10 +62,10 @@ class Post extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-      if (this.props.id!== prevProps.id) {
+      if (this.props.user!== prevProps.user || this.props.edit !== prevProps.edit) {
           this.page = 0;
           this.moreData = true;
-          this.setState({post: {postId: this.props.id}, comments:[], loading:true});
+          this.setState({post: {postId: this.props.id, comments:0}, comments:[], loading:true});
           this.retrievePost();
           this.retrieveComments(this.state.post.postId);
       }
@@ -81,12 +85,12 @@ class Post extends Component {
         .then(data => {
             if (data.data.length > 0) {
                 data.data.map(x => {
-                    console.log(data.data);
                     this.setState({
                         post:
                             {
                                 postId: x.post_id,
                                 userId: x.user_id,
+                                establishmentId: x.establishment_id,
                                 username: x.username,
                                 userImage: x.user_image,
                                 establishmentName: x.establishment_name,
@@ -102,6 +106,7 @@ class Post extends Component {
                         postEditForm:{
                             content: x.post_content,
                             rating: x.post_rating,
+                            oldRating: x.post_rating,
                             subject: x.post_subject,
                             imageFile: null,
                             imageUrl: x.post_photo_location
@@ -163,61 +168,335 @@ class Post extends Component {
       }
   }
 
-  renderPostOnLoad(){
-      if (Object.keys(this.state.post).length > 1){
+  showEditButton(){
+      if (!this.props.edit && this.props.currentUser.userId === this.state.post.userId.replace(/-/g,"")){
          return (
-        <div style={{ background: "aliceblue" }}>
-          <div
-            style={{
-              position: "absolute",
-              paddingTop: "10px",
-              paddingLeft: "20px"
-            }}
-          >
-            <img
-              style={{ width: "100px", height: "100px" }}
-              src={this.state.post.userImage}
-            />
+             <div className="btn-group">
+                <Link to='./edit/'>
+                        <button className="btn btn-primary" style={{
+                                      right: "10px"
+                                    }}>Edit</button>
+                </Link>
+             </div>
+                 );
+      }
+  }
 
-            <Link to={'/user/'+this.state.post.userId+'/'}>
-                <p>{this.state.post.username}</p>
-            </Link>
-            <div className="btn-group" role="group" aria-label="Basic example">
-                <form onSubmit={this.postUpvote}>
-                        <CSRFToken/>
-                        <button type="submit" style={{ width: "50px" }} disabled={this.state.upVote === 1}>🍽{this.state.post.upvotes + this.state.upVote}</button>
-                </form>
-                <form onSubmit={this.postDownvote}>
-                        <CSRFToken/>
-                        <button type="submit" style={{ width: "50px" }} disabled={this.state.downVote === 1}>🤮{this.state.post.downvotes + this.state.downVote}</button>
-                </form>
-            </div>
-          </div>
+  showLoadingOnSubmit(){
+      if (this.state.submitted){
+          return(
+               <div style={{
+                  right: "10px"
+                }}
+               >
+                  <Loader
+                     type="Oval"
+                     color="#17a2b8"
+                     height={30}
+                     width={30}
+	                />
+              </div>
+          );
+      }
+      return(
+              <button
+                type="submit"
+                style={{
+                  right: "10px"
+                }}
+                className="btn btn-primary"
+                >
+                    Update
+              </button>
+      );
+  }
 
-          <div
-            style={{
-              paddingLeft: "150px",
-              paddingRight: "100px"
-            }}
-          >
-            <h1>{this.state.post.subject}</h1>
-            {this.state.post.establishmentName}
-            <br/>
-            <img
-              src={this.state.post.photo}
-              style={{height: "200px" }}
-            />
-            <br />
-            <StarRatingComponent
-              name="rate1"
-              editing={false}
-              starCount={10}
-              value={this.state.post.rating}
-            />
-            <p>{this.state.post.content}</p>
-            <br />
-          </div>
-        </div>);
+  showDeleteButton(){
+      if (!this.state.submitted){
+          return(
+              <div>
+                  <br/>
+                  <form onSubmit={this.handleDeleteSubmit}>
+                      <CSRFToken/>
+                      <button type="submit"
+                              className="btn btn-danger">
+                          Delete Post
+                      </button>
+                  </form>
+              </div>
+          );
+      }
+  }
+
+  handleInputChange = (event) => {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+
+        this.setState(state => ({
+            postEditForm: {
+                ...state.postEditForm,
+                [name]: value
+            }
+        }));
+  };
+
+  onStarClick(nextValue, prevValue, name) {
+    this.setState(state => (
+        {
+            postEditForm:{
+                ...state.postEditForm,
+                rating: nextValue
+            }
+        }
+    ));
+  }
+
+  handleImageChange(e) {
+        e.preventDefault();
+        let reader = new FileReader();
+        let file = e.target.files[0];
+        reader.onloadend = () => {
+            this.setState(state => ({
+                postEditForm:{
+                    ...state.postEditForm,
+                    imageFile: file,
+                    imageUrl: reader.result
+                }
+            }));
+        };
+        reader.readAsDataURL(file)
+  }
+
+  handleUpdateSubmit(e) {
+       e.preventDefault();
+       if (this.state.postEditForm.rating < 1 || this.state.postEditForm.rating > 10){
+           alert("Please provide a valid rating!");
+           return;
+       }
+       let content = {
+           post_user: this.state.post.userId,
+           post_id: this.state.post.postId,
+           establishment_id: this.state.post.establishmentId,
+       };
+       if (this.state.postEditForm.rating !== this.state.post.rating){
+           content["post_rating"] = this.state.postEditForm.rating;
+           content["oldRating"] = this.state.postEditForm.oldRating;
+       }
+       if (this.state.postEditForm.subject !== this.state.post.subject){
+           content["post_subject"] = this.state.postEditForm.subject;
+       }
+       if (this.state.postEditForm.content !== this.state.post.content){
+           content["post_content"] = this.state.postEditForm.content;
+       }
+       if (Object.keys(content).length < 4 && this.state.postEditForm.imageFile == null){
+          alert("You must modify the post before you can update it!");
+       }
+       else {
+           let data = new FormData();
+           data.append('image', this.state.postEditForm.imageFile);
+           data.append('content', JSON.stringify(content));
+           this.setState({submitted: true});
+           fetch(this.props.request + '/posts/update/', {
+               method: 'POST',
+               body: data,
+               headers: {
+                   'X-CSRFToken': e.target.csrfmiddlewaretoken.value
+               }
+           }).then(res => res.json())
+               .then(data => {
+                   this.setState({submitted:false});
+                   if (data.success === "success") {
+                       this.props.history.push('/post/' + this.state.post.postId + '/');
+                   }
+                   else{
+                       alert(data.error);
+                   }
+               })
+               .catch(err => {
+                   console.error("Error:", err)
+               });
+       }
+  };
+
+  handleDeleteSubmit(e) {
+       e.preventDefault();
+       const content = {
+           post_user: this.state.post.userId,
+           post_id: this.state.post.postId,
+           establishment_id: this.state.post.establishmentId,
+           rating: this.state.post.rating
+       };
+       this.setState({submitted: true});
+       fetch(this.props.request + '/posts/delete/', {
+           method: 'POST',
+           body: JSON.stringify(content),
+           headers: {
+               'Content-Type': 'application/json',
+               'X-CSRFToken': e.target.csrfmiddlewaretoken.value
+           }
+       }).then(res => res.json())
+       .then(data => {
+           this.setState({submitted:false});
+           if (data.success === "success") {
+               this.props.history.push('/');
+           }
+           else{
+               alert(data.error);
+           }
+       })
+       .catch(err => {
+           console.error("Error:", err)
+       });
+  }
+
+  renderPostOnLoad(){
+      if (Object.keys(this.state.post).length > 2){
+          if (this.props.edit) {
+              if (this.props.currentUser.userId === this.state.post.userId.replace(/-/g, "")) {
+                  return (
+                      <div style={{background: "aliceblue"}}>
+                      <div
+                          style={{
+                              position: "absolute",
+                              paddingTop: "10px",
+                              paddingLeft: "20px"
+                          }}
+                      >
+                          <img
+                              style={{width: "100px", height: "100px"}}
+                              src={this.props.currentUser.image}
+                          />
+
+                          <Link to={'/user/' + this.state.post.userId + '/'}>
+                              <p>{this.state.post.username}</p>
+                          </Link>
+                          <div className="btn-group" role="group" aria-label="Basic example">
+                              <form onSubmit={this.postUpvote}>
+                                  <CSRFToken/>
+                                  <button data-toggle="tooltip" title="Upvote" type="submit" style={{width: "50px"}}
+                                          disabled={this.state.upVote === 1}>🍽{this.state.post.upvotes + this.state.upVote}</button>
+                              </form>
+                              <form onSubmit={this.postDownvote}>
+                                  <CSRFToken/>
+                                  <button data-toggle="tooltip" title="Downvote" type="submit" style={{width: "50px"}}
+                                          disabled={this.state.downVote === 1}>🤮{this.state.post.downvotes + this.state.downVote}</button>
+                              </form>
+                          </div>
+                      </div>
+
+                      <div
+                            style={{
+                              paddingLeft: "150px",
+                              paddingRight: "100px"
+                           }}
+                      >
+                          <form name="updatePost" onSubmit={this.handleUpdateSubmit}>
+                              <CSRFToken/>
+                              <input
+                                className="form-control"
+                                type="text"
+                                required
+                                style={{ width: "500px" }}
+                                placeholder="Title"
+                                name="subject"
+                                onChange={this.handleInputChange}
+                                value={this.state.postEditForm.subject}
+                              />
+                              <img
+                                  src={this.state.postEditForm.imageUrl}
+                                  style={{height: "200px"}}
+                              />
+                              <StarRatingComponent
+                                name="rating"
+                                starCount={10}
+                                value={this.state.postEditForm.rating}
+                                onStarClick={this.onStarClick.bind(this)}
+                              />
+                              <br/>
+                              <textarea
+                                className="form-control"
+                                name="content"
+                                required
+                                style={{ width: "500px", height: "200px", resize:"none"}}
+                                placeholder="Write your review..."
+                                onChange={this.handleInputChange}
+                                value={this.state.postEditForm.content}
+                              />
+                              <br/>
+                              <input
+                                type="file"
+                                accept="image/*"
+                                name="fileToUpload"
+                                id="fileToUpload"
+                                onChange={(e) => this.handleImageChange(e)}
+                              />
+                              {this.showLoadingOnSubmit()}
+                            </form>
+                          {this.showDeleteButton()}
+                      </div>
+                  </div>);
+              }
+              this.props.history.push('/post/'+this.state.post.postId+'/');
+          }
+          else {
+              return (
+                  <div style={{background: "aliceblue"}}>
+                      <div
+                          style={{
+                              position: "absolute",
+                              paddingTop: "10px",
+                              paddingLeft: "20px"
+                          }}
+                      >
+                          <img
+                              style={{width: "100px", height: "100px"}}
+                              src={this.state.post.userImage}
+                          />
+
+                          <Link to={'/user/' + this.state.post.userId + '/'}>
+                              <p>{this.state.post.username}</p>
+                          </Link>
+                          <div className="btn-group" role="group" aria-label="Basic example">
+                              <form onSubmit={this.postUpvote}>
+                                  <CSRFToken/>
+                                  <button data-toggle="tooltip" title="Upvote" type="submit" style={{width: "50px"}}
+                                          disabled={this.state.upVote === 1}>🍽{this.state.post.upvotes + this.state.upVote}</button>
+                              </form>
+                              <form onSubmit={this.postDownvote}>
+                                  <CSRFToken/>
+                                  <button data-toggle="tooltip" title="Downvote" type="submit" style={{width: "50px"}}
+                                          disabled={this.state.downVote === 1}>🤮{this.state.post.downvotes + this.state.downVote}</button>
+                              </form>
+                          </div>
+                      </div>
+
+                      <div
+                          style={{
+                              paddingLeft: "150px",
+                              paddingRight: "100px"
+                          }}
+                      >
+                          <h1>{this.state.post.subject}</h1>
+                          {this.state.post.establishmentName}
+                          <br/>
+                          <img
+                              src={this.state.post.photo}
+                              style={{height: "200px"}}
+                          />
+                          <br/>
+                          <StarRatingComponent
+                              name="rate1"
+                              editing={false}
+                              starCount={10}
+                              value={this.state.post.rating}
+                          />
+                          <p>{this.state.post.content}</p>
+                          <br/>
+                      </div>
+                      {this.showEditButton()}
+                  </div>);
+          }
       }
       return (
           <Loader
@@ -229,7 +508,7 @@ class Post extends Component {
   }
 
    postUpvote = (event) =>
-  {
+   {
       event.preventDefault();
       const values = {
           postId: this.state.post.postId,
@@ -243,19 +522,19 @@ class Post extends Component {
                 'Content-Type': 'application/json',
                 'X-CSRFToken':event.target.csrfmiddlewaretoken.value
             }
-        }).then(res => res.json())
-        .then(data => {
+      }).then(res => res.json())
+      .then(data => {
             if (data.success!=='success'){
                 alert(data.error);
             }
             else{
                 this.setState({upVote:1, downVote:0});
             }
-        })
-        .catch(err => {
+      })
+      .catch(err => {
             console.error(err);
-        });
-  };
+      });
+   };
 
   postDownvote = (event) =>
   {
@@ -392,4 +671,4 @@ class Post extends Component {
   }
 }
 
-export default Post;
+export default withRouter(Post);

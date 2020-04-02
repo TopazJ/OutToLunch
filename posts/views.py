@@ -85,7 +85,7 @@ def create(request):
                                type='PostCreatedEvent',
                                timestamp=datetime.now(),
                                data=Post(post_id=post_id,
-                                         user_id=content['userId'],
+                                         post_user=content['userId'],
                                          post_rating=content['rating'],
                                          post_subject=content['subject'],
                                          establishment_id=content['establishmentId'],
@@ -106,21 +106,35 @@ def create(request):
 
 
 def update(request):
-    # pynamo db - tested
-    # TODO: validation
     if request.method == "POST":
         if request.user.is_authenticated:
-            data = json.loads(request.body)
+            data = json.loads(request.POST['content'])
             if validate_post(data["post_id"], request.user.id):
+                if 'image' in request.FILES:
+                    request.FILES['image'].name = uuid.uuid4().__str__()
+                    try:
+                        image = Image.objects.get(uuid=data['post_id'], type='P')
+                        image.file = request.FILES['image']
+                        image.save()
+                        data['post_photo_location'] = image.file.url
+                    except Image.DoesNotExist:
+                        image = Image(file=request.FILES['image'], type='P', uuid=data['post_id'])
+                        image.save()
+                        data['post_photo_location'] = image.file.url
                 instance = Post(post_id=data["post_id"])
-                for attr, value in data["data"].items():
-                        setattr(instance, attr, value)
-                comment = Event(event_id=uuid.uuid4().__str__(),
-                                type='PostUpdatedEvent',
-                                timestamp=datetime.now(),
-                                data=instance
-                                )
-                comment.save()
+                for attr, value in data.items():
+                    setattr(instance, attr, value)
+                post_update_event = Event(event_id=uuid.uuid4().__str__(),
+                                          type=PostUpdatedEvent,
+                                          timestamp=datetime.now(),
+                                          data=instance
+                                          )
+                post_update_event.save()
+                if 'post_rating' in data.keys():
+                    establishment = Establishment.objects.get(establishment_id=data['establishment_id'])
+                    establishment.rating = ((establishment.rating * establishment.rating_count) - data['oldRating'] + data['post_rating'])/establishment.rating_count
+                    print(establishment.rating)
+                    establishment.save()
                 return JsonResponse({'success': 'success'})
             else:
                 return JsonResponse({'error': "You don't have permissions to modify this post!"})
@@ -171,18 +185,29 @@ def create_post_vote(post_id, user_id, vote_result):
 
 
 def delete(request):
-    # pynamo db - tested
-    # TODO: validation
+    # TODO Need to modify micro-service so that deleted posts become owned by the deleted user and ratings become 0.
     if request.method == "POST":
         if request.user.is_authenticated:
             data = json.loads(request.body)
             if validate_post(data["post_id"], request.user.id):
-                comment = Event(event_id=uuid.uuid4().__str__(),
-                                type='PostDeletedEvent',
-                                timestamp=datetime.now(),
-                                data=Post(post_id=data["post_id"])
-                                )
-                comment.save()
+                post_delete_event = Event(event_id=uuid.uuid4().__str__(),
+                                          type=PostDeletedEvent,
+                                          timestamp=datetime.now(),
+                                          data=Post(post_id=data["post_id"], post_user=data["post_user"], establishment_id=data["establishment_id"])
+                                          )
+                post_delete_event.save()
+                try:
+                    image = Image.objects.get(uuid=data['post_id'], type='P')
+                    image.delete()
+                except Image.DoesNotExist:
+                    print("No image to delete!")
+                establishment = Establishment.objects.get(establishment_id=data['establishment_id'])
+                establishment.rating_count -= 1
+                divider = 1
+                if establishment.rating_count > 0:
+                    divider = establishment.rating_count
+                establishment.rating = ((establishment.rating * (establishment.rating_count + 1)) - data['rating']) / divider
+                establishment.save()
                 return JsonResponse({'success': 'success'})
             else:
                 return JsonResponse({'error': "You don't have permissions to delete this post!"})

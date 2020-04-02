@@ -74,6 +74,7 @@ class Homepage extends Component {
                             {
                                 postId: x.post_id,
                                 userId: x.user_id,
+                                establishmentId: x.establishment_id,
                                 username: x.username,
                                 userImage: x.user_image,
                                 date: x.post_date,
@@ -118,12 +119,22 @@ class Homepage extends Component {
   render() {
     return (
         <Switch>
+          <Route path="/post/:id/edit/" render={(props) => {
+              const post = this.state.posts.find(post => post.postId === props.match.params.id);
+              return (<Post post={post}
+                            id={props.match.params.id}
+                            request={this.props.request}
+                            currentUser={this.props.user}
+                            edit={true}
+                        />);
+          }}/>
           <Route path="/post/:id/" render={(props) => {
               const post = this.state.posts.find(post => post.postId === props.match.params.id);
               return (<Post post={post}
                             id={props.match.params.id}
                             request={this.props.request}
                             currentUser={this.props.user}
+                            edit={false}
                         />);
           }}/>
           <Route>

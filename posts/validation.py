@@ -18,7 +18,9 @@ def validate_create_save(user_id, post_content,
 def validate_post(post_id, user_id):
     url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/posts/validate/'+str(post_id)
     r = requests.get(url)
-    if r.json()['user_id'] == user_id:
+    valid_user_id = r.json()['user_id'].__str__().replace('-', '')
+    sent_user_id = user_id.__str__().replace('-', '')
+    if valid_user_id == sent_user_id:
         return True
     return False
 

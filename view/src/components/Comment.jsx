@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import Loader from "react-loader-spinner";
 import CSRFToken from "./CSRFToken.jsx";
 
@@ -15,13 +15,23 @@ class Comment extends Component {
         loading:false,
         commentForm:{
             content:''
-        }
+        },
+        editCommentForm:{
+            content:''
+        },
+        newContent:'',
+        editMode:false,
+        canEdit:true
     };
     abortController = new window.AbortController();
 
     constructor(props){
         super(props);
+        this.handleUpdateSubmit = this.handleUpdateSubmit.bind(this);
+        this.handleDeleteSubmit = this.handleDeleteSubmit.bind(this);
         this.state.childrenInfo.numChildren = this.props.numChildren;
+        this.state.editCommentForm.content = this.props.content;
+        this.state.newContent = this.props.content;
     }
 
     componentWillUnmount() {
@@ -176,6 +186,155 @@ class Comment extends Component {
 
     };
 
+
+    handleEditCommentInputChange = (event) => {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+        this.setState(state => ({
+            editCommentForm: {
+                ...state.editCommentForm,
+                [name]: value
+            }
+        }));
+    };
+
+    handleUpdateSubmit(e) {
+       e.preventDefault();
+       if (this.state.editCommentForm.content === this.props.content){
+           alert("You must change your comment first!");
+           return;
+       }
+       const content = {
+           commentID: this.props.commentId,
+           userID: this.props.currentUser.userId,
+           content: this.state.editCommentForm.content,
+           numChildren: this.state.childrenInfo.numChildren
+       };
+       this.setState({submitted: true});
+       fetch(this.props.request + '/comments/update/', {
+           method: 'POST',
+           body: JSON.stringify(content),
+           headers: {
+               'Content-Type': 'application/json',
+               'X-CSRFToken': e.target.csrfmiddlewaretoken.value
+           }
+       }).then(res => res.json())
+           .then(data => {
+               this.setState({submitted:false});
+               if (data.success === "success") {
+                   this.setState({newContent:content.content, editMode:false})
+               }
+               else{
+                   alert(data.error);
+               }
+       })
+       .catch(err => {
+           console.error("Error:", err)
+       });
+  };
+
+  handleDeleteSubmit(e) {
+       e.preventDefault();
+       const content = {
+           commentID: this.props.commentId,
+           numChildren: this.state.childrenInfo.numChildren
+       };
+       this.setState({submitted: true});
+       fetch(this.props.request + '/comments/delete/', {
+           method: 'POST',
+           body: JSON.stringify(content),
+           headers: {
+               'Content-Type': 'application/json',
+               'X-CSRFToken': e.target.csrfmiddlewaretoken.value
+           }
+       }).then(res => res.json())
+       .then(data => {
+           this.setState({submitted:false});
+           if (data.success === "success") {
+               alert("Successfully removed comment");
+               this.setState( {newContent:'[deleted]', editMode:false, canEdit:false});
+           }
+           else{
+               alert(data.error);
+           }
+       })
+       .catch(err => {
+           console.error("Error:", err)
+       });
+  }
+
+    showEditButton(){
+        if (!this.state.editMode && this.props.currentUser.userId === this.props.userId.replace(/-/g, "")&&this.state.canEdit){
+            return (
+              <button onClick={()=>{this.setState({editMode:true})}} className="btn btn-primary btn-sm">
+                    Edit
+              </button>
+            );
+        }
+    }
+
+    showUpdateButton() {
+        if (this.state.submitted) {
+            return (
+                <Loader
+                    type="Oval"
+                    color="#17a2b8"
+                    height={30}
+                    width={30}
+                />
+            );
+        }
+        return (
+             <button type="submit"
+                     className="btn btn-primary btn-sm">
+                    Update Comment
+            </button>
+        );
+    }
+
+    showDeleteButton() {
+        if (!this.state.submitted) {
+            return (
+                 <button type="submit"
+                         className="btn btn-danger btn-sm">
+                     Delete Comment
+                 </button>
+            );
+        }
+    }
+
+    showEditWindow(){
+        if (this.state.editMode&&this.state.canEdit){
+            return(
+                <div>
+                    <form onSubmit={this.handleUpdateSubmit}>
+                        <CSRFToken/>
+                        <textarea
+                            name="content"
+                            required
+                            style={{ width: "450px", height: "50px" }}
+                            placeholder="Respond to this comment"
+                            className="form-control"
+                            value={this.state.editCommentForm.content}
+                            onChange={this.handleEditCommentInputChange}
+                        />
+                        {this.showUpdateButton()}
+                    </form>
+                    <form onSubmit={this.handleDeleteSubmit}>
+                        <CSRFToken/>
+                        {this.showDeleteButton()}
+                    </form>
+                </div>
+            );
+        }
+        return(
+            <p>{this.state.newContent}
+                <br/>
+            </p>
+        );
+    }
+
     render() {
         return (
            <div style={{ background: "#fff0f1", paddingLeft: "20px"}} className="border">
@@ -199,10 +358,8 @@ class Comment extends Component {
                 paddingLeft: "150px"
               }}
             >
-              <p>{this.props.content}
-                <br/>
-
-              </p>
+                {this.showEditWindow()}
+                {this.showEditButton()}
               <form onSubmit={this.createComment}>
                   <CSRFToken/>
                   <textarea
@@ -228,4 +385,4 @@ class Comment extends Component {
       }
 }
 
-export default Comment;
+export default withRouter(Comment);
