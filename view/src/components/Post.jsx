@@ -20,7 +20,10 @@ class Post extends Component {
         content: '',
     },
     postEditForm: {
-
+        subject:'',
+        content: '',
+        rating: 0,
+        imageFile: null,
     }
 
   };
@@ -30,6 +33,13 @@ class Post extends Component {
     super(props);
     if (this.props.post){
         this.state.post = this.props.post;
+        this.state.postEditForm = {
+            content: this.props.post.content,
+            rating: this.props.post.rating,
+            subject: this.props.post.subject,
+            imageFile: null,
+            imageUrl: this.props.post.photo
+        }
     }
     else{
         this.state.post.postId = this.props.id;
@@ -88,7 +98,14 @@ class Post extends Component {
                                 upvotes: x.upvote,
                                 downvotes: x.downvote,
                                 comments: x.count,
-                            }
+                            },
+                        postEditForm:{
+                            content: x.post_content,
+                            rating: x.post_rating,
+                            subject: x.post_subject,
+                            imageFile: null,
+                            imageUrl: x.post_photo_location
+                        }
                     });
                 });
             }

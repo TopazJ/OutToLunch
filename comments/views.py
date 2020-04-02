@@ -55,7 +55,7 @@ def create(request):
             comment.save()
             return JsonResponse({'success': 'success', 'commentId': comment_id})
         else:
-            return JsonResponse({'error': 'You have to login first in order to post!'})
+            return JsonResponse({'error': 'You have to login first in order to post a comment!'})
     else:
         return redirect('/')
 

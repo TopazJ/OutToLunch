@@ -115,7 +115,9 @@ class App extends Component {
              return (
                  <Route path="/account-settings/">
                      <div className="homepage">
-                         <AccountSettings user={this.state.user}/>
+                         <AccountSettings user={this.state.user}
+                                          request={this.state.url}
+                         />
                      </div>
                  </Route>
              );
