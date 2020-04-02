@@ -27,7 +27,7 @@ class Post(MapAttribute):
 
 class PostVote(MapAttribute):
     user_id = UnicodeAttribute(null=False)
-    post_user = UnicodeAttribute(null=False)
+    post_id = UnicodeAttribute(null=False)
     vote = UnicodeAttribute(null=False)
 
 
