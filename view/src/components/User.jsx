@@ -76,6 +76,7 @@ class User extends Component {
                             {
                                 postId: x.post_id,
                                 userId: x.user_id,
+                                establishmentId: x.establishment_id,
                                 username: x.username,
                                 userImage: x.user_image,
                                 date: x.post_date,
@@ -119,14 +120,6 @@ class User extends Component {
 
   render() {
     return (
-        <Switch>
-          <Route path="/post/:id/" render={(props) => {
-              const post = this.state.posts.find(post => post.postId === props.match.params.id);
-              return (<Post post={post}
-                            id={props.match.params.id}
-                            request={this.props.request}/>);
-          }}/>
-          <Route>
               <div className="background">
                 <b style={{ paddingLeft: "350px" }}>{this.props.header + this.state.username}</b>
                 {this.showThePostReviewButtonIfLoggedIn()}
@@ -134,6 +127,7 @@ class User extends Component {
                 {this.state.posts.map((post, index) => (
                   <HomepagePost
                     key={index}
+                    currentUser={this.props.user}
                     postId={post.postId}
                     userId = {post.userId}
                     username={post.username}
@@ -147,12 +141,11 @@ class User extends Component {
                     upvotes = {post.upvotes}
                     downvotes = {post.downvotes}
                     comments = {post.comments}
+                    request = {this.props.request}
                   />
                 ))}
                 {this.spinnerWhenLoading()}
               </div>
-          </Route>
-        </Switch>
     );
   }
 }

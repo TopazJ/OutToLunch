@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 import json
 from datetime import datetime
 from .models import *
-from event.PynamoDBModels import *
+from images.models import Image
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 
@@ -23,15 +23,48 @@ def status(request):
 
 def create_account(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
-        return register_user(data['username'], data['password'], data['email'], data['FName'], data['LName'])
+        content = json.loads(request.POST['content'])
+        user_id = uuid.uuid4()
+        image_url = 'https://outtolunchstatic.s3.amazonaws.com/media/images/download.png'
+        if 'image' in request.FILES:
+            request.FILES['image'].name = uuid.uuid4().__str__()
+            image = Image(file=request.FILES['image'], type='U', uuid=user_id)
+            image.save()
+            image_url = image.file.url
+        return register_user(user_id, content['username'], content['password'], content['email'], content['FName'], content['LName'], image_url)
     else:
         return redirect('/')
 
 
-def register_user(username, password, email, f_name, l_name):
+def update(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            if 'image' in request.FILES:
+                request.FILES['image'].name = uuid.uuid4().__str__()
+                try:
+                    image = Image.objects.get(uuid=request.user.id, type='U')
+                    image.file = request.FILES['image']
+                    image.save()
+                    request.user.image = image.file.url
+                    request.user.save()
+                except Image.DoesNotExist:
+                    request.FILES['image'].name = uuid.uuid4().__str__()
+                    image = Image(file=request.FILES['image'], type='U', uuid=request.user.id)
+                    image.save()
+                    request.user.image = image.file.url
+                    request.user.save()
+                return successful_message({})
+            else:
+                return error_message("No image provided!")
+        else:
+            return error_message("You must be signed in!")
+    else:
+        return redirect('/')
+
+
+def register_user(user_id, username, password, email, f_name, l_name, image):
     if not SiteUser.objects.filter(username=username).exists():
-        user = SiteUser.objects.create(username=username, email=email, first_name=f_name, last_name=l_name)
+        user = SiteUser.objects.create(id=user_id, username=username, email=email, first_name=f_name, last_name=l_name, image=image)
         user.set_password(password)
         user.save()
         return successful_message({})

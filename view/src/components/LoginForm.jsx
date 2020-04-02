@@ -64,6 +64,13 @@ class LoginForm extends React.Component {
                 </div>
               );
       }
+      else{
+        return (
+            <button type="submit" className="btn btn-primary">
+            Sign in
+          </button>
+        );
+      }
   }
 
   render() {
@@ -96,11 +103,8 @@ class LoginForm extends React.Component {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary">
-            Sign in
-          </button>
+          {this.spinnerWhenLoading()}
         </form>
-              {this.spinnerWhenLoading()}
         </div>
             </div>
           </div>

@@ -49,12 +49,20 @@
   border: 1px solid #5d6063;
 }
 
+.create-account {
+  background: aliceblue;
+  padding-top: 10px;
+  height: 570px;
+  width: 800px;
+  border: 1px solid #5d6063;
+}
+
 .sidenav {
   position: fixed; /* Fixed Sidebar (stay in place on scroll) */
   height: 100%;
   background-color: #fff;
   z-index: 1; /* Stay on top */
-  top: 50; /* Stay at the top */
+  /*top: 50; !* Stay at the top *!*/
   left: 0;
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 20px;

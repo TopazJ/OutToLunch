@@ -1,5 +1,5 @@
 from users.views import error_message, successful_message, validate_user
-
+import requests
 
 def validate_create_save(user_id, post_content,
                          post_photo_location):
@@ -16,9 +16,13 @@ def validate_create_save(user_id, post_content,
 
 
 def validate_post(post_id, user_id):
-    # TODO Janna with her database
-    # request the post
-    return True
+    url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/posts/validate/'+str(post_id)
+    r = requests.get(url)
+    valid_user_id = r.json()['user_id'].__str__().replace('-', '')
+    sent_user_id = user_id.__str__().replace('-', '')
+    if valid_user_id == sent_user_id:
+        return True
+    return False
 
 
 def validate_update_save(post_id, user_id, post_content,

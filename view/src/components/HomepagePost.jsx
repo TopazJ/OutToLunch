@@ -1,14 +1,95 @@
 import React, { Component } from "react";
 import StarRatingComponent from "react-star-rating-component";
 import { Link } from "react-router-dom";
+import CSRFToken from "./CSRFToken.jsx";
 
 class HomepagePost extends Component {
+
+  state = {
+     upVote: 0,
+     downVote: 0,
+  };
 
   postContentLength(){
      if (this.props.content.length>50){
          return this.props.content.substring(0,50) + "...";
      }
      return this.props.content;
+  }
+
+  postUpvote = (event) =>
+  {
+      event.preventDefault();
+      const values = {
+          postId: this.props.postId,
+          userId: this.props.currentUser.userId,
+          vote: 1
+      };
+      fetch(this.props.request + '/posts/vote/', {
+            method: 'POST',
+            body: JSON.stringify(values),
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken':event.target.csrfmiddlewaretoken.value
+            }
+        }).then(res => res.json())
+        .then(data => {
+            if (data.success!=='success'){
+                alert(data.error);
+            }
+            else{
+                this.setState({upVote:1, downVote:0});
+            }
+        })
+        .catch(err => {
+            console.error(err);
+        });
+  };
+
+  postDownvote = (event) =>
+  {
+      event.preventDefault();
+      const values = {
+          postId: this.props.postId,
+          userId: this.props.currentUser.userId,
+          vote: -1
+      };
+      fetch(this.props.request + '/posts/vote/', {
+            method: 'POST',
+            body: JSON.stringify(values),
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken':event.target.csrfmiddlewaretoken.value
+            }
+        }).then(res => res.json())
+        .then(data => {
+            if (data.success!=='success'){
+                alert(data.error);
+            }
+            else{
+                this.setState({downVote:1, upVote:0});
+            }
+        })
+        .catch(err => {
+            console.error(err);
+        });
+  };
+
+  showEditButton(){
+      if (this.props.currentUser.userId === this.props.userId.replace(/-/g,"")){
+         return (
+             <div className="btn-group">
+                <Link to={'/post/'+this.props.postId+'/edit/'}>
+                        <button className="btn btn-primary"
+                                style={{
+                                      right: "10px"
+                                }}>
+                            Edit
+                        </button>
+                </Link>
+             </div>
+         );
+      }
   }
 
   render() {
@@ -37,9 +118,15 @@ class HomepagePost extends Component {
                   role="group"
                   aria-label="Basic example"
                 >
-                  <button style={{ width: "50px" }}>🍽{this.props.upvotes}</button>
+                    <form onSubmit={this.postUpvote}>
+                        <CSRFToken/>
+                        <button data-toggle="tooltip" title="Upvote" type="submit" style={{ width: "50px" }} disabled={this.state.upVote === 1}>🍽{this.props.upvotes + this.state.upVote}</button>
+                    </form>
 
-                  <button style={{ width: "50px" }}>🤮{this.props.downvotes}</button>
+                    <form onSubmit={this.postDownvote}>
+                        <CSRFToken/>
+                        <button data-toggle="tooltip" title="Downvote" type="submit" style={{ width: "50px" }} disabled={this.state.downVote === 1}>🤮{this.props.downvotes + this.state.downVote}</button>
+                    </form>
                 </div>
               </div>
               <div
@@ -50,11 +137,12 @@ class HomepagePost extends Component {
                 <h1>{this.props.subject}</h1>
                 {this.props.establishmentName}
                 <br/>
+                <div style={{ height: "200px", width: '500px'}}>
                 <img
-                  src="https://www.ucalgary.ca/news/sites/default/files/styles/ucws_news_hero_image_desktop/public/2019-06/bookstore_011a0796_f.jpg?itok=aE9ylKnp"
-                  //TODO the image url stuff goes here when I figure that out.
-                  style={{ width: "500px", height: "200px" }}
+                  src={this.props.photo}
+                  style={{ height: "200px" }}
                 />
+                </div>
                 <StarRatingComponent
                   name="rate1"
                   editing={false}
@@ -62,6 +150,7 @@ class HomepagePost extends Component {
                   value={this.props.rating}
                 />
                 <p>{this.postContentLength()}</p>
+                  {this.showEditButton()}
                  <Link to ={"/post/" + postId + "/"}>
                 <button
                   className="btn btn-secondary"
