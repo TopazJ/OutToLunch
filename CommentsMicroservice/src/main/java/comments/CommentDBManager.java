@@ -449,9 +449,9 @@ public class CommentDBManager
 		int numChildren = Integer.parseInt(values.get(2));
 	
 		if(mode=='c' || mode=='b')
-			content = "[comment deleted]";
+			content = "[deleted]";
 		if(mode=='u' || mode=='b')
-			userID = "[user deleted]";
+			userID = "[deleted]";
 		updateCommentByCommentID(commentID, userID, content, numChildren);
 	}
 	

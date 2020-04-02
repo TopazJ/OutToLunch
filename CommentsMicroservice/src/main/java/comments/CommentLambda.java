@@ -167,7 +167,7 @@ public class CommentLambda implements RequestHandler<Comment, String>
 		
 		//wipe comment
 		char mode = 'e';
-		boolean userWipe = request.getUserID().equals("wipe");
+		boolean userWipe = request.getUserID().equals("00000000000000000000000000000000");
 		boolean contentWipe = request.getContent().equals("wipe");
 		if(userWipe && contentWipe)mode = 'b';
 		else if(userWipe)mode = 'u';
