@@ -451,7 +451,7 @@ public class CommentDBManager
 		if(mode=='c' || mode=='b')
 			content = "[deleted]";
 		if(mode=='u' || mode=='b')
-			userID = "[deleted]";
+			userID = "00000000000000000000000000000000";
 		updateCommentByCommentID(commentID, userID, content, numChildren);
 	}
 	
