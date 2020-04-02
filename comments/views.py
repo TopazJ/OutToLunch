@@ -114,7 +114,7 @@ def delete(request):
                                 type='CommentWipedEvent',
                                 timestamp=datetime.now(),
                                 data=WipeComment(commentID=data['commentID'],
-                                                 userID=00000000000000000000000000000000,
+                                                 userID='00000000000000000000000000000000',
                                                  content='wipe',
                                                  )
                                 )
