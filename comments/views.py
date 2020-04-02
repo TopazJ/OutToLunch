@@ -14,7 +14,7 @@ from event.PynamoDBModels import CreateComment, Event, UpdateComment, WipeCommen
 
 def index(request, post_id, page):
     url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/readCommentLambda'
-    payload = {'parentID': post_id, 'content': '[n:20,offset:'+str(page.__int__()*20)+']'}
+    payload = {'parentID': post_id, 'content': '[n:20,offset:' + str(page.__int__() * 20) + ']'}
     r = requests.get(url, params=payload)
     to_return = {'data': []}
     try:
@@ -32,6 +32,9 @@ def get_comment_count(post_id):
     url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/readCommentLambda'
     payload = {'parentID': post_id, 'content': '[count]'}
     r = requests.get(url, params=payload)
+    # TODO: Shamez this sends {'message': 'Internal server error'}
+    if r.json() == {'message': 'Internal server error'}:
+        return json.loads('{"count": "ERROR"}')
     return json.loads(r.json())
 
 
@@ -117,4 +120,3 @@ def delete(request):
             return JsonResponse({'error': 'You have to login first in order to post!'})
     else:
         return redirect('/')
-

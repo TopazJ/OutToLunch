@@ -37,7 +37,7 @@ def user_posts(request, user_id, page):
 
 def post_details(request, post_id):
     url = 'https://i7hv4g41ze.execute-api.us-west-2.amazonaws.com/alpha/posts/'
-    r = requests.get(url+str(post_id))
+    r = requests.get(url + str(post_id))
     return JsonResponse(compile_data(r.json()))
 
 
@@ -96,7 +96,8 @@ def create(request):
             post_event.save()
             establishment = Establishment.objects.get(establishment_id=content['establishmentId'])
             establishment.rating_count += 1
-            establishment.rating = ((establishment.rating * (establishment.rating_count - 1)) + content['rating']) / establishment.rating_count
+            establishment.rating = ((establishment.rating * (establishment.rating_count - 1)) + content[
+                'rating']) / establishment.rating_count
             establishment.save()
             return JsonResponse({'success': 'success'})
         else:
@@ -132,7 +133,8 @@ def update(request):
                 post_update_event.save()
                 if 'post_rating' in data.keys():
                     establishment = Establishment.objects.get(establishment_id=data['establishment_id'])
-                    establishment.rating = ((establishment.rating * establishment.rating_count) - data['oldRating'] + data['post_rating'])/establishment.rating_count
+                    establishment.rating = ((establishment.rating * establishment.rating_count) - data['oldRating'] +
+                                            data['post_rating']) / establishment.rating_count
                     print(establishment.rating)
                     establishment.save()
                 return JsonResponse({'success': 'success'})
@@ -162,7 +164,8 @@ def vote(request):
                 else:
                     return JsonResponse({'error': 'You already voted for this post!'})
             except EloTracker.DoesNotExist:
-                elo = EloTracker(voter=data['userId'], votee=r.json()['user_id'], post=data['postId'], vote=data['vote'])
+                elo = EloTracker(voter=data['userId'], votee=r.json()['user_id'], post=data['postId'],
+                                 vote=data['vote'])
                 elo.save()
                 user.elo += data['vote']
                 user.save()
@@ -193,7 +196,8 @@ def delete(request):
                 post_delete_event = Event(event_id=uuid.uuid4().__str__(),
                                           type=PostDeletedEvent,
                                           timestamp=datetime.now(),
-                                          data=Post(post_id=data["post_id"], post_user=data["post_user"], establishment_id=data["establishment_id"])
+                                          data=Post(post_id=data["post_id"], post_user=data["post_user"],
+                                                    establishment_id=data["establishment_id"])
                                           )
                 post_delete_event.save()
                 try:
@@ -206,7 +210,8 @@ def delete(request):
                 divider = 1
                 if establishment.rating_count > 0:
                     divider = establishment.rating_count
-                establishment.rating = ((establishment.rating * (establishment.rating_count + 1)) - data['rating']) / divider
+                establishment.rating = ((establishment.rating * (establishment.rating_count + 1)) - data[
+                    'rating']) / divider
                 establishment.save()
                 return JsonResponse({'success': 'success'})
             else:
