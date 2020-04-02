@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 import json
 from datetime import datetime
 from .models import *
+from .user_verification import send_email
 from images.models import Image
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
@@ -67,7 +68,10 @@ def register_user(user_id, username, password, email, f_name, l_name, image):
         user = SiteUser.objects.create(id=user_id, username=username, email=email, first_name=f_name, last_name=l_name, image=image)
         user.set_password(password)
         user.save()
-        return successful_message({})
+        verifier = Confirmation.objects.create(user=user)
+        verifier.save()
+        send_email(verifier.code, email)
+        return successful_message({'message': 'Success! You must now verify your email before you can log in.'})
     else:
         return error_message("That username already exists!")
 
@@ -77,17 +81,34 @@ def login_user(request):
         data = json.loads(request.body)
         user = authenticate(username=data['username'], password=data['password'])
         if user is not None:
-            response_data = {'status': 'success',
-                             'user': {'elo': user.elo,
-                                      'id': user.id,
-                                      'image': user.image,
-                                      'username': user.username}}
-            if user.is_active:
+            if user.is_active and user.is_confirmed:
                 login(request, user)
+                response_data = {'status': 'success',
+                                 'user': {'elo': user.elo,
+                                          'id': user.id,
+                                          'image': user.image,
+                                          'username': user.username}}
+            else:
+                response_data = {'status': "You haven't confirmed your account", 'redirect': '/confirm/'}
         else:
             response_data = {'status': "Couldn't log you in, account might not exist!"}
 
         return JsonResponse(response_data)
+    else:
+        return redirect('/')
+
+
+def verify(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        try:
+            confirm = Confirmation.objects.get(code=data['code'])
+            confirm.user.is_confirmed = True
+            confirm.user.save()
+            confirm.delete()
+            return JsonResponse({'status': "success", 'message': 'Email confirmed successfully!'})
+        except Confirmation.DoesNotExist:
+            return JsonResponse({'status': "fail", 'message': 'Invalid code'})
     else:
         return redirect('/')
 

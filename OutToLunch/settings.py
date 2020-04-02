@@ -20,6 +20,8 @@ if 'UsingEB' in os.environ:
     StaticBucketName = os.environ['StaticBucketAWSName']
     StaticBucketKey = os.environ['StaticBucketAWSKeyID']
     StaticBucketAccess = os.environ['StaticBucketAWSAccessID']
+    EmailUser = os.environ['EmailAccess']
+    EmailPass = os.environ['EmailSecret']
 else:
     from .config import *
     DbUser = DatabaseUser
@@ -29,6 +31,8 @@ else:
     StaticBucketName = StaticBucketAWSName
     StaticBucketKey = StaticBucketAWSKeyID
     StaticBucketAccess = StaticBucketAWSAccessID
+    EmailUser = EmailAccess
+    EmailPass = EmailSecret
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -177,3 +181,10 @@ MEDIAFILES_LOCATION = 'media'
 DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 
 AWS_DEFAULT_ACL = None
+
+EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+EMAIL_HOST = 'email-smtp.us-west-2.amazonaws.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = EmailUser
+EMAIL_HOST_PASSWORD = EmailPass
+EMAIL_USE_TLS = True

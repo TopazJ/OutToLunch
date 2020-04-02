@@ -22,5 +22,5 @@ urlpatterns = [
     path('establishments/', include('establishments.urls')),
     path('posts/', include('posts.urls')),
     path('comments/', include('comments.urls')),
-    re_path(r'^(?:.*)/?$', include('view.urls')),
+    re_path(r'^(?:.*)/?', include('view.urls')),
 ]

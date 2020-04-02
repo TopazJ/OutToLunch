@@ -54,6 +54,7 @@ class CreateAccount extends Component{
                 alert(data.message);
             }
             else{
+                alert(data.message);
                 this.setState({created:true});
             }
         })
@@ -62,7 +63,6 @@ class CreateAccount extends Component{
             console.error(err);
         });
     };
-
 
     handleInputChange = (event) => {
         const target = event.target;
@@ -94,7 +94,7 @@ class CreateAccount extends Component{
 
     checkRedirect(){
         if(this.state.created===true) {
-            return <Redirect to={'/login'}/>; //TODO change this to ask for email confirmation.
+            return <Redirect to={'/confirm/'}/>;
         }
     }
 
@@ -109,10 +109,11 @@ class CreateAccount extends Component{
                         <label htmlFor="username">Email</label>
                         <input
                             type="email"
+                            pattern="^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(ucalgary)\.ca$"
                             className="form-control"
                             id="email"
                             name="email"
-                            placeholder="example@example.com"
+                            placeholder="firstname.lastname(#)@ucalgary.ca"
                             onChange={this.handleInputChange}
                             required
                         />
@@ -147,6 +148,7 @@ class CreateAccount extends Component{
                             type="text"
                             className="form-control"
                             id="first-name"
+                            placeholder="First Name"
                             name="FName"
                             onChange={this.handleInputChange}
                             required
@@ -156,6 +158,7 @@ class CreateAccount extends Component{
                             type="text"
                             className="form-control"
                             id="last-name"
+                            placeholder="Last Name"
                             name="LName"
                             onChange={this.handleInputChange}
                             required

@@ -1,7 +1,7 @@
 import React from "react";
 import CSRFToken from "./CSRFToken.jsx";
 import Loader from 'react-loader-spinner'
-import { Redirect } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 class LoginForm extends React.Component {
   state = {
@@ -46,6 +46,9 @@ class LoginForm extends React.Component {
           this.props.props.login(data.user);
         } else {
           alert(data.status);
+          if (data.redirect){
+              this.props.history.push(data.redirect);
+          }
         }
       })
       .catch(err => console.error("Error:", err));
@@ -113,4 +116,4 @@ class LoginForm extends React.Component {
   }
 }
 
-export default LoginForm;
+export default withRouter(LoginForm);

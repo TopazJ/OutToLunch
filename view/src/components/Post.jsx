@@ -339,7 +339,8 @@ class Post extends Component {
        .then(data => {
            this.setState({submitted:false});
            if (data.success === "success") {
-               this.props.history.push('/');
+               alert("Successfully removed review.");
+               location.reload();
            }
            else{
                alert(data.error);

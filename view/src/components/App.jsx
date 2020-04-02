@@ -14,6 +14,7 @@ import SideBar from "./navigation/SideBar.jsx";
 import EstablishmentsPage from "./EstablishmentsPage.jsx";
 import CreateEstablishment from "./CreateEstablishment.jsx";
 import AccountSettings from "./AccountSettings.jsx";
+import Confirmation from "./Confirmation.jsx"
 
 class App extends Component {
 
@@ -149,6 +150,13 @@ class App extends Component {
                                 )}
                             />
                         ))}
+                        <Route path="/confirm/">
+                            <div className="homepage">
+                                <Confirmation request={this.state.url}
+                                />
+                                />
+                            </div>
+                        </Route>
                         {this.createRouteForCreateEstablishment()}
                         {this.createRouteForCreatePost()}
                         {this.createRouteForAccountSettings()}
