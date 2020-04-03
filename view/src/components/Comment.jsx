@@ -162,6 +162,7 @@ class Comment extends Component {
                         loadedChildren: loaded+1,
                         numChildren: numChildren+1,
                         children:[
+                            ...state.childrenInfo.children,
                             {
                                 commentId: data.commentId,
                                 userId: this.props.currentUser.userId,
@@ -171,8 +172,7 @@ class Comment extends Component {
                                 date: 0,
                                 content: this.state.commentForm.content,
                                 numChildren: 0
-                            },
-                            ...state.childrenInfo.children
+                            }
                         ]
                     },
                 }));
